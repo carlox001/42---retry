@@ -1,47 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 15:24:01 by cazerini          #+#    #+#             */
-/*   Updated: 2024/12/02 12:25:06 by cazerini         ###   ########.fr       */
+/*   Created: 2024/11/25 09:57:21 by cazerini          #+#    #+#             */
+/*   Updated: 2024/12/01 14:20:04 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char	*dst, const char *src, size_t size)
+void	ft_striteri(char *s, void (*f)(unsigned int, char*))
 {
 	size_t	i;
 
-	if (src == NULL)
-	{
-		if (size > 0)
-			dst[0] = '\0';
-		return (0);
-	}
+	if (s == NULL || f == NULL)
+		return ;
 	i = 0;
-	if (size > 0)
+	while (s[i] != '\0')
 	{
-		while (src[i] != '\0' && i < size - 1)
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
+		f(i, &s[i]);
+		i++;
 	}
-	i = ft_strlen(src);
-	return (i);
+}
+/* 
+void	f(unsigned int i, char *c)
+{
+	i += 0;
+	*c = (char)ft_toupper((unsigned int)*c);
 }
 
-/* int	main(void)
+int	main(void)
 {
-	char	dst[] = "Messi";
-	char	src[] = "ciao";
+	char	s[] = "Hello Wordl";
 
-	printf("len: %ld\n", strlcpy(dst, src, 0));
-	printf("dst: %s", dst);
+	ft_striteri(s, f);
+	printf("%s\n", s);
 	return (0);
 } */

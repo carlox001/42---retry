@@ -1,47 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 15:24:01 by cazerini          #+#    #+#             */
-/*   Updated: 2024/12/02 12:25:06 by cazerini         ###   ########.fr       */
+/*   Created: 2024/11/27 20:24:10 by cazerini          #+#    #+#             */
+/*   Updated: 2024/12/01 10:37:00 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char	*dst, const char *src, size_t size)
+void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
-	size_t	i;
-
-	if (src == NULL)
-	{
-		if (size > 0)
-			dst[0] = '\0';
-		return (0);
-	}
-	i = 0;
-	if (size > 0)
-	{
-		while (src[i] != '\0' && i < size - 1)
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
-	}
-	i = ft_strlen(src);
-	return (i);
+	del(lst->content);
+	free(lst);
 }
 
-/* int	main(void)
+/* static void	del(void *content)
 {
-	char	dst[] = "Messi";
-	char	src[] = "ciao";
+	ft_calloc(ft_strlen((char *)content), sizeof(content));
+}
 
-	printf("len: %ld\n", strlcpy(dst, src, 0));
-	printf("dst: %s", dst);
+int	main(void)
+{
+	t_list	*node;
+
+	node = ft_lstnew("ciao");
+	if (node == NULL)
+		return (1);
+	printf("%p : %s\n", node->content, (char *)node->content);
+	ft_lstdelone(node, *del);
+	printf("%p : %s\n", node->content, (char *)node->content);
 	return (0);
 } */

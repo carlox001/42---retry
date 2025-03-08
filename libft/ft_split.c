@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 16:54:51 by cazerini          #+#    #+#             */
-/*   Updated: 2024/11/21 17:52:06 by cazerini         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:33:28 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,10 @@ static char	*cpy_wd(const char *s, char c, char *arr)
 	i = 0;
 	while (s[len] != '\0' && s[len] != c)
 		len++;
-	arr = (char *)malloc(sizeof(char) * len);
+	arr = (char *)malloc(sizeof(char) * len + 1);
 	if (arr == NULL)
 		return (NULL);
-	while (i < len)
-	{
-		arr[i] = s[i];
-		i++;
-	}
-	arr[i] = '\0';
+	ft_strlcpy(arr, s, len + 1);
 	return (arr);
 }
 
@@ -58,14 +53,16 @@ char	**ft_split(char const *s, char c)
 	int		nb_wd;
 	char	**arr;
 
+	if (s == NULL)
+		return (NULL);
 	i = 0;
 	nb_wd = memory_count_wd(s, c);
-	arr = (char **)malloc(sizeof(char *) * nb_wd);
+	arr = (char **)malloc(sizeof(char *) * (nb_wd + 1));
 	if (arr == NULL)
 		return (NULL);
 	while (i < nb_wd)
 	{
-		if (*s == c)
+		while (*s == c && c != '\0')
 			s++;
 		if (*s != '\0')
 			arr[i] = cpy_wd(s, c, arr[i]);
@@ -81,13 +78,13 @@ char	**ft_split(char const *s, char c)
 
 /* int	main(void)
 {
-	const char	str[15] = "iaiciao";
-	char	c = 'c';
+	const char	*str = "";
+	char	c = 'z';
 	char	**arr;
 	int		i = 0;
 
 	arr = ft_split(str, c);
-	while (i < 3)
+	while (arr[i])
 	{
 		printf("%s\n", arr[i]);
 		i++;
@@ -100,4 +97,5 @@ char	**ft_split(char const *s, char c)
 	}
 	free(arr);
 	return (0);
+	
 } */

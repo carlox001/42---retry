@@ -1,47 +1,50 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 15:24:01 by cazerini          #+#    #+#             */
-/*   Updated: 2024/12/02 12:25:06 by cazerini         ###   ########.fr       */
+/*   Created: 2024/11/23 13:52:32 by cazerini          #+#    #+#             */
+/*   Updated: 2024/11/25 15:19:21 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char	*dst, const char *src, size_t size)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
+	char	*str;
 	size_t	i;
+	size_t	j;
 
-	if (src == NULL)
+	if (s1 == NULL || s2 == NULL)
+		return (NULL);
+	j = 0;
+	i = ft_strlen(s1) + ft_strlen(s2) + 1;
+	str = (char *)malloc(sizeof(char) * i);
+	if (str == NULL)
+		return (NULL);
+	while (s1[j] != '\0')
 	{
-		if (size > 0)
-			dst[0] = '\0';
-		return (0);
+		str[j] = s1[j];
+		j++;
 	}
 	i = 0;
-	if (size > 0)
+	while (s2[i] != '\0')
 	{
-		while (src[i] != '\0' && i < size - 1)
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
+		str[i + j] = s2[i];
+		i++;
 	}
-	i = ft_strlen(src);
-	return (i);
+	str[i + j] = '\0';
+	return (str);
 }
 
 /* int	main(void)
 {
-	char	dst[] = "Messi";
-	char	src[] = "ciao";
+	const char	*s2 = NULL;
+	const char	s1[] = "";
 
-	printf("len: %ld\n", strlcpy(dst, src, 0));
-	printf("dst: %s", dst);
+	printf("%s\n", ft_strjoin(s1, s2));
 	return (0);
 } */

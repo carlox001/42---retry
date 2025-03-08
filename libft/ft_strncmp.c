@@ -1,47 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 15:24:01 by cazerini          #+#    #+#             */
-/*   Updated: 2024/12/02 12:25:06 by cazerini         ###   ########.fr       */
+/*   Created: 2024/11/22 19:25:41 by cazerini          #+#    #+#             */
+/*   Updated: 2024/12/02 14:43:33 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char	*dst, const char *src, size_t size)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	size_t	i;
+	unsigned char	*str1;
+	unsigned char	*str2;
+	size_t			i;
 
-	if (src == NULL)
-	{
-		if (size > 0)
-			dst[0] = '\0';
+	str1 = (unsigned char *)s1;
+	str2 = (unsigned char *)s2;
+	if (n == 0)
 		return (0);
-	}
 	i = 0;
-	if (size > 0)
-	{
-		while (src[i] != '\0' && i < size - 1)
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
-	}
-	i = ft_strlen(src);
-	return (i);
+	while (str1[i] == str2[i] && i < n && str1[i] != '\0' && str2[i] != '\0')
+		i++;
+	if (i == n)
+		return (0);
+	return (str1[i] - str2[i]);
 }
 
 /* int	main(void)
 {
-	char	dst[] = "Messi";
-	char	src[] = "ciao";
+	const char	*s1 = "t";
+	const char *s2 = "";
 
-	printf("len: %ld\n", strlcpy(dst, src, 0));
-	printf("dst: %s", dst);
+	printf("%d\n", strncmp(s1, s2, 0));
+	printf("%d\n", ft_strncmp(s1, s2, 0));
 	return (0);
 } */

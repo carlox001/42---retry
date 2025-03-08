@@ -1,47 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 15:24:01 by cazerini          #+#    #+#             */
-/*   Updated: 2024/12/02 12:25:06 by cazerini         ###   ########.fr       */
+/*   Created: 2024/11/23 12:17:20 by cazerini          #+#    #+#             */
+/*   Updated: 2024/11/25 16:26:06 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char	*dst, const char *src, size_t size)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	size_t	i;
+	void	*ptr;
 
-	if (src == NULL)
-	{
-		if (size > 0)
-			dst[0] = '\0';
-		return (0);
-	}
-	i = 0;
-	if (size > 0)
-	{
-		while (src[i] != '\0' && i < size - 1)
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
-	}
-	i = ft_strlen(src);
-	return (i);
+	ptr = (void *)malloc(nmemb * size);
+	if (ptr == NULL)
+		return (NULL);
+	ft_bzero(ptr, nmemb * size);
+	return (ptr);
 }
 
 /* int	main(void)
 {
-	char	dst[] = "Messi";
-	char	src[] = "ciao";
+	int	i = 0;
+	int	*arr = (int *)ft_calloc(0, 0);
 
-	printf("len: %ld\n", strlcpy(dst, src, 0));
-	printf("dst: %s", dst);
+	if (arr == NULL)
+		return (1);
+	i = 0;
+	while (arr[i])
+	{
+		printf("%d", arr[i]);
+		i++;
+	}
+	printf("\n");
+	free(arr);
 	return (0);
 } */

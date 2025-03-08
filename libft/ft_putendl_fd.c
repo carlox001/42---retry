@@ -1,47 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 15:24:01 by cazerini          #+#    #+#             */
-/*   Updated: 2024/12/02 12:25:06 by cazerini         ###   ########.fr       */
+/*   Created: 2024/11/25 10:54:21 by cazerini          #+#    #+#             */
+/*   Updated: 2024/11/25 11:16:06 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char	*dst, const char *src, size_t size)
+void	ft_putendl_fd(char *s, int fd)
 {
-	size_t	i;
-
-	if (src == NULL)
-	{
-		if (size > 0)
-			dst[0] = '\0';
-		return (0);
-	}
-	i = 0;
-	if (size > 0)
-	{
-		while (src[i] != '\0' && i < size - 1)
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
-	}
-	i = ft_strlen(src);
-	return (i);
+	ft_putstr_fd(s, fd);
+	ft_putchar_fd('\n', fd);
 }
 
 /* int	main(void)
 {
-	char	dst[] = "Messi";
-	char	src[] = "ciao";
+	int		fd;
+	char	c[] = "HELLO WORLD";
 
-	printf("len: %ld\n", strlcpy(dst, src, 0));
-	printf("dst: %s", dst);
+	fd = open("a.txt", O_WRONLY | O_CREAT , S_IRUSR | S_IWUSR);
+	if (fd == -1)
+	{
+		printf("Errore nell'apertura\n");
+		return (1);
+	}
+	ft_putendl_fd(c, fd);
+	if (close(fd) == -1)
+	{
+		printf("Error nella scrittura\n");
+		return (1);
+	}
 	return (0);
 } */

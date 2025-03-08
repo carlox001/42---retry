@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 19:07:33 by cazerini          #+#    #+#             */
-/*   Updated: 2024/11/21 19:34:21 by cazerini         ###   ########.fr       */
+/*   Updated: 2024/11/22 17:58:00 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	temp_d = dest;
 	temp_s = src;
 	i = 0;
-	if(temp_d <= temp_s)
+	if (temp_d <= temp_s)
 		ft_memcpy(temp_d, temp_s, n);
 	else
 	{

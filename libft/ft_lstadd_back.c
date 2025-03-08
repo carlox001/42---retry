@@ -1,47 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 15:24:01 by cazerini          #+#    #+#             */
-/*   Updated: 2024/12/02 12:25:06 by cazerini         ###   ########.fr       */
+/*   Created: 2024/11/27 20:08:58 by cazerini          #+#    #+#             */
+/*   Updated: 2024/12/03 19:53:04 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char	*dst, const char *src, size_t size)
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	size_t	i;
+	t_list	*node;
 
-	if (src == NULL)
+	if (*lst == NULL)
+		*lst = new;
+	else
 	{
-		if (size > 0)
-			dst[0] = '\0';
-		return (0);
+		node = ft_lstlast(*lst);
+		node->next = new;
 	}
-	i = 0;
-	if (size > 0)
-	{
-		while (src[i] != '\0' && i < size - 1)
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
-	}
-	i = ft_strlen(src);
-	return (i);
 }
 
 /* int	main(void)
 {
-	char	dst[] = "Messi";
-	char	src[] = "ciao";
+	t_list	*node;
+	t_list	*node1;
+	t_list	*node2;
+	t_list	*node3;
 
-	printf("len: %ld\n", strlcpy(dst, src, 0));
-	printf("dst: %s", dst);
+	node = ft_lstnew("ciao");
+	node1 = ft_lstnew("mondo");
+	node2 = ft_lstnew("cutto");
+	node3 = ft_lstnew("cu");
+	ft_lstadd_front(&node2, node1);
+	ft_lstadd_front(&node1, node);
+	ft_lstadd_back(&node, node3);
+	printf("%p\n", node2->next);
+	printf("%p\n", node3);
 	return (0);
 } */

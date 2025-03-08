@@ -1,47 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 15:24:01 by cazerini          #+#    #+#             */
-/*   Updated: 2024/12/02 12:25:06 by cazerini         ###   ########.fr       */
+/*   Created: 2024/11/23 10:30:11 by cazerini          #+#    #+#             */
+/*   Updated: 2024/12/03 17:51:32 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char	*dst, const char *src, size_t size)
+char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
 	size_t	i;
+	size_t	j;
 
-	if (src == NULL)
-	{
-		if (size > 0)
-			dst[0] = '\0';
-		return (0);
-	}
 	i = 0;
-	if (size > 0)
+	if (little[0] == '\0')
+		return ((char *)big);
+	while (i < len && big[i] != '\0')
 	{
-		while (src[i] != '\0' && i < size - 1)
+		j = 0;
+		while (big[i + j] == little[j] && i + j < len)
 		{
-			dst[i] = src[i];
-			i++;
+			j++;
+			if (j == ft_strlen(little))
+				return ((char *)&big[i]);
 		}
-		dst[i] = '\0';
+		i++;
 	}
-	i = ft_strlen(src);
-	return (i);
+	return (NULL);
 }
 
 /* int	main(void)
 {
-	char	dst[] = "Messi";
-	char	src[] = "ciao";
+	char	lil[20] = "";
+	char	big[20] = "world hello";
+	char	*s;
+	s = strnstr(big, lil, 5);
 
-	printf("len: %ld\n", strlcpy(dst, src, 0));
-	printf("dst: %s", dst);
+	printf("og :%s\n", s);
+	printf("%s\n", ft_strnstr(big, lil, 5));
 	return (0);
 } */

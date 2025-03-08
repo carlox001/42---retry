@@ -1,47 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/18 15:24:01 by cazerini          #+#    #+#             */
-/*   Updated: 2024/12/02 12:25:06 by cazerini         ###   ########.fr       */
+/*   Created: 2024/11/25 10:47:54 by cazerini          #+#    #+#             */
+/*   Updated: 2024/11/25 15:27:52 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char	*dst, const char *src, size_t size)
+void	ft_putstr_fd(char *s, int fd)
 {
-	size_t	i;
-
-	if (src == NULL)
+	while (*s != '\0')
 	{
-		if (size > 0)
-			dst[0] = '\0';
-		return (0);
+		ft_putchar_fd(*s, fd);
+		s++;
 	}
-	i = 0;
-	if (size > 0)
-	{
-		while (src[i] != '\0' && i < size - 1)
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
-	}
-	i = ft_strlen(src);
-	return (i);
 }
 
 /* int	main(void)
 {
-	char	dst[] = "Messi";
-	char	src[] = "ciao";
+	int		fd;
+	char	*c = NULL;
 
-	printf("len: %ld\n", strlcpy(dst, src, 0));
-	printf("dst: %s", dst);
+	fd = open("a.txt", O_WRONLY | O_CREAT , S_IRUSR | S_IWUSR);
+	if (fd == -1)
+	{
+		printf("Errore nell'apertura\n");
+		return (1);
+	}
+	ft_putstr_fd(c, fd);
+	if (close(fd) == -1)
+	{
+		printf("Error nella scrittura\n");
+		return (1);
+	}
 	return (0);
 } */
