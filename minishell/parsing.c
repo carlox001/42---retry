@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:45:00 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/29 17:07:38 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/03/31 16:05:34 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// invalid read con ""
 
 int	parsing(char *str, t_program *shell)
 {
@@ -22,23 +23,26 @@ int	parsing(char *str, t_program *shell)
 	if (check_quotes(str) == 1)
 	{
 		printf("shell: syntax error: open quotes\n");
+		shell->exit_code = 0;
 		return (0);
 	}
-	if (check_operators(str) == 1)
+	if (check_operators(str, shell) == 1)
 	{
 		printf("shell: syntax error: operators error\n");
+		shell->exit_code = 0;
 		return (0);
 	}
 	if (matrix_handler(str, shell) == 1)
 	{
 		printf("Error\nfailed allocation\n");
+		shell->exit_code = 0;
 		return (1);
 	}
 	print_matrix(shell->mtx_line);
 	return (1);
 }
 
-int	print_parsing_errors(int flag)
+int	print_parsing_errors(int flag, t_program *shell)
 {
 	if (flag == 1)
 		printf("shell: parse error near `|'\n");
@@ -52,6 +56,7 @@ int	print_parsing_errors(int flag)
 		printf("shell: parse error near `||'\n");
 	if (flag == 6)
 		printf("shell: syntax error\n");
+	shell->exit_code = 1;
 	return (1);
 }
 
@@ -160,7 +165,7 @@ int	double_operators(char *str)
 }
 
 
-int	check_operators(char *str)
+int	check_operators(char *str, t_program *shell)
 {
 	int	i;
 	int	check;
@@ -169,26 +174,26 @@ int	check_operators(char *str)
 	check = only_operator(str);
 	if (check != 0)
 	{
-		print_parsing_errors(check);
+		print_parsing_errors(check, shell);
 		return (1);
 	}
 	if (str[0] == '|' || str[ft_strlen(str) - 1] == '|')
 	{
-		print_parsing_errors(1);
+		print_parsing_errors(1, shell);
 		return (1);
 	}
 	while (str[i])
 	{
 		if (str[i] == '|' && str[i + 1] == '|')
 		{
-			print_parsing_errors(5);
+			print_parsing_errors(5, shell);
 			return (1);
 		}
 		i++;
 	}
 	if (double_operators(str) == 1)
 	{
-		print_parsing_errors(6);
+		print_parsing_errors(6, shell);
 		return (1);
 	}
 	

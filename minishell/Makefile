@@ -20,6 +20,10 @@ SRC = errors.c \
 	  exec.c \
 	  ft_export.c \
 	  ft_export_utils.c \
+	  ft_unset.c \
+	  ft_unset_utils.c \
+	  ft_echo.c \
+	  ft_echo_utils.c \
 
 all: $(NAME)
 

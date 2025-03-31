@@ -3,7 +3,8 @@
 		"cctype": "cpp",
 		"random": "c",
 		"minishell.h": "c",
-		"sstream": "c"
+		"sstream": "c",
+		"ctype.h": "c"
 	},
 	"C_Cpp.errorSquiggles": "disabled"
 }

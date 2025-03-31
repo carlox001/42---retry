@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:23:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/30 19:11:02 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/03/31 18:50:12 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ typedef struct s_program
 	int		exit_code;
 	char	**env;
 	char	**mtx_line;
+	char	*curr_dir;
+	char	*pwd;
+	char	*user_path;
 
 	// utils
 	int		i;
@@ -45,6 +48,7 @@ typedef struct s_program
 	int		words;
 	int		len;
 	int		flag;
+	int		nflag;
 
 	//mhanz
 }	t_program;
@@ -62,11 +66,14 @@ char	*expansion_variable(char *old_str, t_program *shell);
 void	ft_unset(t_program *shell);
 
 // builtin_command_2.c
+void	ft_cd(t_program *shell);
 char	*remove_external_quotes(char *old_str);
 void	ft_echo(t_program *shell);
 int		check_dollar(char *str);
-void	exec_dollar(char *str, t_program *shell);
+void	exec_dollar(char *str, t_program *shell, int i2, int len2);
 void	search_env(char *env_str, t_program *shell);
+int		check_nflag(char *str, t_program *shell);
+int		count_args(char **mtx, int i);
 
 // commands_hub.c
 int	check_commands(char *cmd, t_program *shell);
@@ -95,8 +102,14 @@ int		only_export(t_program *shell);
 int		is_there_in_env(t_program *shell, int len, char *str, int *flag);
 char	*remove_plus(char *old_str);
 
+// ft_unset.c
+void	ft_unset(t_program *shell);
+char	*search_env_and_allocate(char *env_str, t_program *shell);
+char	*expansion_variable(char *old_str, t_program *shell);
+char	*split_dollar(char *old_str, t_program *shell);
 // main.c
 void	sig_handler(int sig);
+void	free_all(t_program *shell);
 int		main_core(t_program *shell);
 
 // matrix_utils.c
@@ -114,11 +127,11 @@ int		operators_allocation(char *str, t_program *shell, int i, int j);
 
 // parsing.c
 int		parsing(char *str, t_program *shell);
-int		print_parsing_errors(int flag);
+int		print_parsing_errors(int flag, t_program *shell);
 int		only_operator(char *str);
 int		near_operators(char *str);
 int		double_operators(char *str);
-int		check_operators(char *str);
+int		check_operators(char *str, t_program *shell);
 int		check_quotes(char *str);
 
 // parsing_utils.c

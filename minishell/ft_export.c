@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 13:52:42 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/29 18:40:55 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/03/31 15:18:42 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ int	export_parsing(t_program *shell)
 			str[i] != '\'' && str[i] != '"')
 		{
 			printf("shell: export: `%s': not a valid identifier\n", str);
-			printf("ci arrivo\n");
 			free(str);
 			return (1);
 		}
@@ -90,7 +89,6 @@ int	export_parsing(t_program *shell)
 	if (export_parsing_quote(str) == 1)
 	{
 		printf("shell: export: `%s': not a valid identifier\n", str);
-		printf("ci arrivo\n");
 		free(str);
 		return (1);
 	}

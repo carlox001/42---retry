@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:21:55 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/28 10:44:24 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/03/31 18:38:36 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 //things to do:
 // 1: parsing del comando
-
+int	signals = 0;
 
 void sig_handler(int sig)
 {
@@ -31,6 +31,7 @@ void sig_handler(int sig)
 	//aggiungere exit code 130 e sul control \ inserire 0
 	if (sig == SIGINT)
 	{
+		signals = SIGINT;
 		printf("\n");
 		rl_on_new_line();
 		rl_redisplay();
@@ -57,23 +58,63 @@ int	main(int ac, char **av, char **env)
 	return (0);
 }
 
+void	print_directory(t_program *shell)
+{
+	
+	if (shell->curr_dir)
+		printf("shell:~%s", shell->curr_dir);
+	else
+		printf("shell:~");
+	
+}
+
+
+int	initialize(t_program *shell)
+{
+	shell->exit_code = 0;
+
+	shell->pwd = ft_strdup(getenv("PWD"));
+	shell->user_path = ft_strdup(getenv("USER_ZDOTDIR"));
+	shell->curr_dir = ft_substr(shell->pwd, ft_strlen(shell->user_path), \
+		(ft_strlen(shell->pwd) - ft_strlen(shell->user_path)));
+	return (0);
+}
+
+
+void	free_all(t_program *shell)
+{
+	if (shell->mtx_line != NULL)
+		free_matrix(shell->mtx_line);
+	if (shell->env != NULL)
+		free_matrix(shell->env);
+	free(shell->pwd);
+	free(shell->user_path);
+	free(shell->curr_dir);
+}
+
 int	main_core(t_program *shell)
 {
 	char	*str;
 	int		flag;
 
+	if (initialize(shell) == 1)
+		return (1);
 	while (1)
 	{
-		str = readline("shell:~$ ");
+		shell->mtx_line = NULL;
+		print_directory(shell);
+		str = readline("$ ");
 		if (!str)
-			return (printf("exit\n"), free_matrix(shell->env), 0);
+			return (printf("exit\n"), free_all(shell), 0);
+		if (signals == SIGINT)
+			shell->exit_code = 130;
 		add_history(str);
 		flag = parsing(str, shell);
 		free(str);
 		if (flag != 0)
 		{
 			if (exec(shell) == 1)
-				return (1);
+				return (free_all(shell), 1);
 			if (flag == 1)
 				free_matrix(shell->mtx_line);
 		}			
