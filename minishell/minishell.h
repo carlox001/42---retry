@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:23:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/31 18:50:12 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/01 18:07:59 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_program
 	char	**mtx_line;
 	char	*curr_dir;
 	char	*pwd;
-	char	*user_path;
+	char	*home_path;
 
 	// utils
 	int		i;
@@ -67,6 +67,12 @@ void	ft_unset(t_program *shell);
 
 // builtin_command_2.c
 void	ft_cd(t_program *shell);
+int		no_char(char *str);
+int		only_backslash(char *str);
+void	only_cd(t_program *shell);
+void	cd_no_char(char *str, t_program *shell);
+void	cd_root(t_program *shell);
+void	cd_back(t_program *shell);
 char	*remove_external_quotes(char *old_str);
 void	ft_echo(t_program *shell);
 int		check_dollar(char *str);

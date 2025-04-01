@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:21:55 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/31 18:38:36 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/01 16:41:26 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,15 @@ int	main(int ac, char **av, char **env)
 void	print_directory(t_program *shell)
 {
 	
-	if (shell->curr_dir)
-		printf("shell:~%s", shell->curr_dir);
+	if (ft_strlen(shell->pwd) < ft_strlen(shell->home_path))
+		printf("shell:%s", shell->pwd);
 	else
-		printf("shell:~");
+	{
+		if (shell->curr_dir)
+			printf("shell:~%s", shell->curr_dir);
+		else
+			printf("shell:~");
+	}
 	
 }
 
@@ -74,9 +79,9 @@ int	initialize(t_program *shell)
 	shell->exit_code = 0;
 
 	shell->pwd = ft_strdup(getenv("PWD"));
-	shell->user_path = ft_strdup(getenv("USER_ZDOTDIR"));
-	shell->curr_dir = ft_substr(shell->pwd, ft_strlen(shell->user_path), \
-		(ft_strlen(shell->pwd) - ft_strlen(shell->user_path)));
+	shell->home_path = ft_strdup(getenv("HOME"));
+	shell->curr_dir = ft_substr(shell->pwd, ft_strlen(shell->home_path), \
+		(ft_strlen(shell->pwd) - ft_strlen(shell->home_path)));
 	return (0);
 }
 
@@ -88,7 +93,7 @@ void	free_all(t_program *shell)
 	if (shell->env != NULL)
 		free_matrix(shell->env);
 	free(shell->pwd);
-	free(shell->user_path);
+	free(shell->home_path);
 	free(shell->curr_dir);
 }
 
