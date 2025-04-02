@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:21:55 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/01 16:41:26 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/02 18:28:28 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	// shell = (t_program *)malloc(sizeof(t_program) * 1);
 	shell.env = matrix_dup(env);
+	shell.export_env = matrix_dup(env);
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 	if (main_core(&shell) == 1)
@@ -58,19 +59,24 @@ int	main(int ac, char **av, char **env)
 	return (0);
 }
 
-void	print_directory(t_program *shell)
+char	*print_directory(t_program *shell)
 {
-	
+	char	*str;
+	char	*tmp;
+
 	if (ft_strlen(shell->pwd) < ft_strlen(shell->home_path))
-		printf("shell:%s", shell->pwd);
+		str = ft_strjoin("shell:", shell->pwd);
 	else
 	{
 		if (shell->curr_dir)
-			printf("shell:~%s", shell->curr_dir);
+			str = ft_strjoin("shell:~", shell->curr_dir);
 		else
-			printf("shell:~");
+			str = ft_strdup("shell:~");
 	}
-	
+	tmp = str;
+	str = ft_strjoin(str, "$ ");
+	free(tmp);
+	return (str);
 }
 
 
@@ -79,6 +85,7 @@ int	initialize(t_program *shell)
 	shell->exit_code = 0;
 
 	shell->pwd = ft_strdup(getenv("PWD"));
+	shell->old_pwd = ft_strdup(getenv("OLDPWD"));
 	shell->home_path = ft_strdup(getenv("HOME"));
 	shell->curr_dir = ft_substr(shell->pwd, ft_strlen(shell->home_path), \
 		(ft_strlen(shell->pwd) - ft_strlen(shell->home_path)));
@@ -95,20 +102,24 @@ void	free_all(t_program *shell)
 	free(shell->pwd);
 	free(shell->home_path);
 	free(shell->curr_dir);
+	free(shell->old_pwd);
+	free_matrix(shell->export_env);
 }
 
 int	main_core(t_program *shell)
 {
 	char	*str;
+	char	*print_str;
 	int		flag;
 
 	if (initialize(shell) == 1)
 		return (1);
 	while (1)
 	{
+		print_str = print_directory(shell);
 		shell->mtx_line = NULL;
-		print_directory(shell);
-		str = readline("$ ");
+		str = readline(print_str);
+		free(print_str);
 		if (!str)
 			return (printf("exit\n"), free_all(shell), 0);
 		if (signals == SIGINT)

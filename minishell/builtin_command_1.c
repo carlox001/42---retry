@@ -6,18 +6,15 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:30:14 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/31 18:36:02 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/02 12:46:08 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(void)
+int	ft_pwd(t_program *shell)
 {
-	char *str;
-
-	str = getenv("OLDPWD");
-	printf("%s\n", str);
+	printf("%s\n", shell->pwd);
 	return (0);
 }
 

@@ -24,6 +24,9 @@ SRC = errors.c \
 	  ft_unset_utils.c \
 	  ft_echo.c \
 	  ft_echo_utils.c \
+	  ft_cd_utils_1.c \
+	  ft_cd_utils_2.c \
+	  ft_cd_utils_3.c \
 
 all: $(NAME)
 

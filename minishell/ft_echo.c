@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:16:28 by cazerini          #+#    #+#             */
-/*   Updated: 2025/03/31 15:53:51 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/02 18:44:25 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,14 +121,12 @@ void	search_env(char *env_str, t_program *shell)
 	j = 0;
 	while (shell->env[i])
 	{
-		//DEVE ESSERE SICUROP IL CHECK DAJE
-		if (ft_strncmp(shell->env[i], env_str, ft_strlen(env_str)) == 0 /* && \
-			shell->env[i][ft_strlen(env_str) + 1] == '=' */)
+		if (ft_strncmp(shell->env[i], env_str, ft_strlen(env_str)) == 0)
 		{
 			while (shell->env[i][j] != '=' && shell->env[i][j])
 				j++;
 			j++;
-			new_str = ft_substr(shell->env[i], j, ft_strlen(shell->env[i]));
+			new_str = ft_substr(shell->env[i], j, ft_strlen(shell->env[i]) - j);
 			printf("%s", new_str);
 			free(new_str);
 		}

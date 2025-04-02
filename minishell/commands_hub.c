@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/31 18:47:45 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/02 12:57:21 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	check_builtin(char *cmd, t_program *shell)
 	if (ft_strncmp(cmd, "cd", 2) == 0 && ft_strlen(cmd) == 2)
 		ft_cd(shell);
 	else if (ft_strncmp(cmd, "pwd", 3) == 0 && ft_strlen(cmd) == 3)
-		ft_pwd();
+		ft_pwd(shell);
 	else if (ft_strncmp(cmd, "export", 6) == 0 && ft_strlen(cmd) == 6)
 		ft_export(shell);
 	else if (ft_strncmp(cmd, "unset", 5) == 0 && ft_strlen(cmd) == 5)
