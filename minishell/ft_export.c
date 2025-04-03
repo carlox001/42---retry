@@ -58,11 +58,9 @@ void	add_to_export_env(char *str, t_program *shell)
 
 void	ft_export(t_program *shell)
 {
-	char	*str;
 	char	*dup;
 	int		i;
 	int		flag;
-	int		value;
 
 	if (only_export(shell) == 1)
 		return ;
@@ -71,24 +69,24 @@ void	ft_export(t_program *shell)
 		return ;
 	dup = ft_strdup(shell->mtx_line[shell->i + 1]);
 	printf("dup: %s\n", dup);
-	str = remove_all_quotes(dup);
+	shell->export_arg = remove_all_quotes(dup);
 	free(dup);
-	value = 0;
 	flag =  0;
-	while (str[i] && flag == 0)
+	while (shell->export_arg[i] && flag == 0)
 	{
-		if (str[i] == '=')
+		if (shell->export_arg[i] == '=')
 			flag = 1;
-		if (str[i] == '>' || str[i] == '<')
+		if (shell->export_arg[i] == '>' || shell->export_arg[i] == '<')
 			break ;
 		i++;
 	}
 	if (flag == 0)
 	{
-		add_to_export_env(str, shell);
-		return (free(str));
+		//sub
+		add_to_export_env(shell->export_arg, shell);
+		return (free(shell->export_arg));
 	}
-	export_core(shell, value, i, str);
+	export_core(shell, i, shell->export_arg);
 }
 
 int	only_export(t_program *shell)
@@ -162,6 +160,7 @@ int	export_parsing(t_program *shell)
 	// 	printf("culo\n");
 	free(str);
 	return (0);
+
 }
 
 int	export_parsing_quote(char *str)
@@ -196,12 +195,13 @@ int	export_parsing_quote(char *str)
 }
 
 // il cuore della funzione export
-void	export_core(t_program *shell, int value, int i, char *str)
+void	export_core(t_program *shell, int i, char *str)
 {
 	char	*err;
-	int		value2;
+	int		value;
 
 	shell->flag = 0;
+	//rimuovere str dalle funz in cui si passa shell
 	value = is_there_in_env(shell, i, str, &shell->flag);
 	if (value == -2)
 	{
@@ -216,8 +216,8 @@ void	export_core(t_program *shell, int value, int i, char *str)
 		if (realloc_env(shell, str) == 1)
 			return (free(str));
 	}
-	value2 = is_there_in_export_env(shell, i, str, &shell->flag);
-	if (value2 >= 0)
+	value = is_there_in_export_env(shell, i, str, &shell->flag);
+	if (value >= 0)
 		change_export_env_value(shell, i, value, str);
 	else
 	{
@@ -227,6 +227,8 @@ void	export_core(t_program *shell, int value, int i, char *str)
 	printf("ho aggiunto\n");
 }
 
+//str = export_arg
+//len = i = 
 int	is_there_in_export_env(t_program *shell, int len, char *str, int *flag)
 {
 	int		i;
@@ -266,7 +268,7 @@ void	change_export_env_value(t_program *shell, int i, int value, char *str)
 	{
 		dup = ft_strdup(shell->export_env[value]);
 		free(shell->export_env[value]);
-		dup2 = ft_substr(str, i, ft_strlen(str));
+		dup2 = ft_substr(str, i, ft_strlen(str) - i);
 		shell->export_env[value] = ft_strjoin(dup, dup2);
 		free(str);
 		free(dup);

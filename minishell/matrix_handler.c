@@ -60,7 +60,7 @@ int	in_word(char *str, int *i)
 	}
 	else
 	{
-		if ((str[*i] >= 33 && str[*i] <= 127) && str[*i] && \
+		if ((str[*i] >= 33 && str[*i] < 127) && str[*i] && \
 		(str[*i] == '|' && str[*i] == '>' && str[*i] == '<'))
 			return (1);
 		else
@@ -80,14 +80,14 @@ int	matrix_handler_core(char *str, t_program *shell, int *i, int *j)
 	flag = 1;
 	while (flag == 1)
 	{
-		while (((str[*i] >= 33 && str[*i] <= 127) && str[*i] && \
+		while (((str[*i] >= 33 && str[*i] < 127) && str[*i] && \
 				(str[*i] != '|' && str[*i] != '>' && str[*i] != '<' && \
 			str[*i] != '"' && str[*i] != '\'')) && (str[*i]))
 			(*i)++;
 		
 		flag = in_word(str, i);
 	}
-	while (((str[*i] >= 33 && str[*i] <= 127) && str[*i] && \
+	while (((str[*i] >= 33 && str[*i] < 127) && str[*i] && \
 				(str[*i] != '|' && str[*i] != '>' && str[*i] != '<' && \
 			str[*i] != '"' && str[*i] != '\'')) && (str[*i]))
 			(*i)++;

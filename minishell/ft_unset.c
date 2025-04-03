@@ -15,7 +15,7 @@
 
 void	ft_unset(t_program *shell)
 {
-	char	*str;
+	//char	*str;
 	char	*arg;
 	char	**env_tmp;
 	int		k;
@@ -23,7 +23,7 @@ void	ft_unset(t_program *shell)
 
 	k = 0;
 	j = 0;
-	str = NULL;
+	//str = NULL;
 	arg = NULL;
 	if (shell->mtx_line[shell->i + 1] == NULL)
 		return ;

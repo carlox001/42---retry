@@ -40,7 +40,7 @@ int	count_words(char *str, t_program *shell)
 
 void	count_char(char *str, t_program *shell, int *words, int *flag)
 {
-	while (((str[shell->i] >=  33 && str[shell->i] <= 127) && str[shell->i] && \
+	while (((str[shell->i] >=  33 && str[shell->i] < 127) && str[shell->i] && \
 			(str[shell->i] != '|' && str[shell->i] != '>' && str[shell->i] != '<' && \
 			str[shell->i] != '"' && str[shell->i] != '\'')) && (str[shell->i]))					
 	{

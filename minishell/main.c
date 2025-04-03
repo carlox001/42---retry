@@ -85,7 +85,7 @@ int	initialize(t_program *shell)
 	shell->exit_code = 0;
 
 	shell->pwd = ft_strdup(getenv("PWD"));
-	shell->old_pwd = ft_strdup(getenv("OLDPWD"));
+	shell->old_pwd = ft_strdup(getenv("PWD"));
 	shell->home_path = ft_strdup(getenv("HOME"));
 	shell->curr_dir = ft_substr(shell->pwd, ft_strlen(shell->home_path), \
 		(ft_strlen(shell->pwd) - ft_strlen(shell->home_path)));
@@ -99,11 +99,16 @@ void	free_all(t_program *shell)
 		free_matrix(shell->mtx_line);
 	if (shell->env != NULL)
 		free_matrix(shell->env);
-	free(shell->pwd);
-	free(shell->home_path);
-	free(shell->curr_dir);
-	free(shell->old_pwd);
-	free_matrix(shell->export_env);
+	if (shell->pwd != NULL)
+		free(shell->pwd);
+	if (shell->home_path != NULL)
+		free(shell->home_path);
+	if (shell->curr_dir != NULL)
+		free(shell->curr_dir);
+	if (shell->old_pwd != NULL)	
+		free(shell->old_pwd);
+	if (shell->export_env != NULL)
+		free_matrix(shell->export_env);
 }
 
 int	main_core(t_program *shell)

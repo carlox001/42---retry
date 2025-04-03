@@ -51,6 +51,7 @@ typedef struct s_program
 	int		len;
 	int		flag;
 	int		nflag;
+	char	*export_arg;
 
 	//mhanz
 }	t_program;
@@ -122,7 +123,7 @@ int		is_there_in_export_env(t_program *shell, int len, char *str, int *flag);
 void	ft_export(t_program *shell);
 int		export_parsing(t_program *shell);
 int		export_parsing_quote(char *str);
-void	export_core(t_program *shell, int value, int i, char *str);
+void	export_core(t_program *shell, int i, char *str);
 void	change_export_value(t_program *shell, int i, int value, char *str);
 int		realloc_env(t_program *shell, char *str);
 int		only_export(t_program *shell);

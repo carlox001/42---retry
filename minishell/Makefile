@@ -4,7 +4,7 @@ UTILS = utils/utils.a
 UTILS_DIR = utils/
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g -lreadline
+CFLAGS = -Wall -Werror -Wextra -g
 
 SRC = errors.c \
 	  main.c \
@@ -37,7 +37,7 @@ $(UTILS):
 	$(MAKE) -C $(UTILS_DIR)
 
 $(NAME): $(PRINTF) $(UTILS)
-	$(CC) $(CFLAGS) $(SRC) $(UTILS) -o $(NAME)
+	$(CC) $(CFLAGS) $(SRC) $(UTILS) -lreadline -o $(NAME)
 
 clean:
 	rm -f
