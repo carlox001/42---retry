@@ -3,35 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 13:55:44 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/29 15:56:57 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/04/04 10:55:11 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_there_in_env(t_program *shell, int len, char *str, int *flag)
+int	is_there_in_env(t_program *shell, int len, char **env, int *flag)
 {
 	int		i;
 	char	*dup;
 
 	i = 0;
-	if (str[len - 2] == '+')
+	if (shell->export_arg[len - 2] == '+')
 	{
 		(*flag) = 1;
-		dup = remove_plus(str);
+		dup = remove_plus(shell->export_arg);
 		len--;
 	}
 	else
-		dup = ft_strdup(str);
+		dup = ft_strdup(shell->export_arg);
 	// printf("sono str di len %c\n", dup[len - 1]);
 	if (ft_isalnum(dup[len - 2]) != 1 && dup[len - 2] != '+')
 		return (free(dup), -2);
-	while (shell->env[i])
+	while (env[i])
 	{
-		if (ft_strncmp(shell->env[i], dup, len) == 0)
+		if (ft_strncmp(env[i], dup, len) == 0)
 			return (free(dup), i);
 		i++;
 	}

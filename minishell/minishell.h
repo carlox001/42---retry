@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:23:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/02 19:18:38 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:31:24 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,19 +117,16 @@ int		check_dollar(char *str);
 
 // ft_export.c
 void	add_to_export_env(char *str, t_program *shell);
-int		realloc_export_env(t_program *shell, char *str);
-void	change_export_env_value(t_program *shell, int i, int value, char *str);
-int		is_there_in_export_env(t_program *shell, int len, char *str, int *flag);
 void	ft_export(t_program *shell);
 int		export_parsing(t_program *shell);
 int		export_parsing_quote(char *str);
-void	export_core(t_program *shell, int i, char *str);
-void	change_export_value(t_program *shell, int i, int value, char *str);
-int		realloc_env(t_program *shell, char *str);
+void	export_core(t_program *shell, int i, char **env, int flag);
+void	change_export_value(t_program *shell, int i, int value, char **env);
+int		realloc_env(t_program *shell, char **env, int flag);
 int		only_export(t_program *shell);
 
 // ft_export_utils.c
-int		is_there_in_env(t_program *shell, int len, char *str, int *flag);
+int		is_there_in_env(t_program *shell, int len, char **env, int *flag);
 char	*remove_plus(char *old_str);
 
 // ft_unset.c

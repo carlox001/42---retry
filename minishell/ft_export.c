@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 13:52:42 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/02 19:42:39 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/04 12:34:03 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,157 @@ void	ft_export(t_program *shell)
 		add_to_export_env(shell->export_arg, shell);
 		return (free(shell->export_arg));
 	}
-	export_core(shell, i, shell->export_arg);
+	export_core(shell, i, shell->env, 0);
+	// export_core(shell, i, shell->export_env, 1);
+	free(shell->export_arg);
+}
+
+void	export_core(t_program *shell, int i, char **env, int flag)
+{
+	char	*err;
+	int		value;
+
+	shell->flag = 0;
+	value = is_there_in_env(shell, i, env, &shell->flag);
+	printf("calee: %d\n", value);
+	if (value == -2)
+	{
+		err = ft_substr(shell->export_arg, 0, i);
+		printf("shell: export: `%s': not a valid identifier\n", err);
+		shell->exit_code = 1;
+		free(err);
+	}
+	if (value >= 0)
+		change_export_value(shell, i, value, env);
+	else
+	{
+		if (realloc_env(shell, env, flag) == 1)
+			return ;
+	}
+	printf("ho aggiunto\n");
+}
+
+// cambia il valore inserito all'interno 
+// di env senza la riallocazione
+void	change_export_value(t_program *shell, int i, int value, char **env)
+{
+	char	*dup2;
+	char	*dup;
+
+	if (shell->flag == 1)
+	{
+		dup = ft_strdup(env[value]);
+		free(env[value]);
+		dup2 = ft_substr(shell->export_arg, i, ft_strlen(shell->export_arg));
+		env[value] = ft_strjoin(dup, dup2);
+		free(dup);
+		free(dup2);
+	}
+	else
+	{
+		free(env[value]);
+		env[value] = ft_strdup(shell->export_arg);
+	}
+}
+
+// rialloca env poiche' la nuova stringa non esiste
+int	realloc_env(t_program *shell, char **env, int flag)
+{
+	char	**mtx_dup;
+	int		i;
+
+	mtx_dup = matrix_dup(env);
+	if (mtx_dup == NULL)
+		return (1);
+	// free_matrix(env);
+	env = (char **)malloc(sizeof(char *) * (matrix_len(mtx_dup) + 2));
+	if (env == NULL)
+		return (1);
+	i = 0;
+	while (mtx_dup[i])
+	{
+		env[i] = ft_strdup(mtx_dup[i]);
+		i++;
+	}
+	env[i] = shell->export_arg;
+	env[i + 1] = NULL;
+	free_matrix(mtx_dup);
+	if (flag == 0)
+		free_matrix(shell->env);
+	else
+		free_matrix(shell->export_env);
+	return (0);
+}
+
+
+// esegue del parsing aggiuntivo peril comando export
+int	export_parsing(t_program *shell)
+{
+	int		i;
+	char	*str;
+
+	
+	// printf("shell->mtx_line[shell->i + 1]: %s\n", shell->mtx_line[shell->i + 1]);
+	str = ft_strdup(shell->mtx_line[shell->i + 1]);
+	i = 0;
+	while (str[i] != '=' && str[i])
+	{
+		if (str[i] == '+' && str[i + 1] == '=')
+			break ;
+		if (ft_isalnum(str[i]) != 1  && str[i] != '_' && \
+			str[i] != '\'' && str[i] != '"')
+		{
+			printf("shell: export: `%s': not a valid identifier\n", str);
+			shell->exit_code = 1;
+			free(str);
+			return (1);
+		}
+		i++;
+	}
+	if (export_parsing_quote(str) == 1)
+	{
+		printf("shell: export: `%s': not a valid identifier\n", str);
+		shell->exit_code = 1;
+		free(str);
+		return (1);
+	}
+	// if (i == ((int)ft_strlen(str) + 1)) //nn ho cpt
+	// 	printf("culo\n");
+	free(str);
+	return (0);
+
+}
+
+int	export_parsing_quote(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '=')
+	{
+		if (str[i] == '"')
+		{
+
+			while (str[i] && (str[i] != '=' || str[i] != '"'))
+			{
+				if (str[i] == '\'')
+					return (1);
+				i++;
+			}
+		}
+		else if (str[i] == '\'')
+		{
+			while (str[i] && (str[i] != '=' || str[i] != '\''))
+			{
+				if (str[i] == '"')
+					return (1);
+				i++;
+			}
+		}
+		else
+			i++;
+	}
+	return (0);
 }
 
 int	only_export(t_program *shell)
@@ -127,232 +277,3 @@ int	only_export(t_program *shell)
 	return (0);
 }
 
-// esegue del parsing aggiuntivo peril comando export
-int	export_parsing(t_program *shell)
-{
-	int		i;
-	char	*str;
-
-	
-	// printf("shell->mtx_line[shell->i + 1]: %s\n", shell->mtx_line[shell->i + 1]);
-	str = ft_strdup(shell->mtx_line[shell->i + 1]);
-	i = 0;
-	while (str[i] != '=' && str[i])
-	{
-		if (str[i] == '+' && str[i + 1] == '=')
-			break ;
-		if (ft_isalnum(str[i]) != 1  && str[i] != '_' && \
-			str[i] != '\'' && str[i] != '"')
-		{
-			printf("shell: export: `%s': not a valid identifier\n", str);
-			free(str);
-			return (1);
-		}
-		i++;
-	}
-	if (export_parsing_quote(str) == 1)
-	{
-		printf("shell: export: `%s': not a valid identifier\n", str);
-		free(str);
-		return (1);
-	}
-	// if (i == ((int)ft_strlen(str) + 1)) //nn ho cpt
-	// 	printf("culo\n");
-	free(str);
-	return (0);
-
-}
-
-int	export_parsing_quote(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] && str[i] != '=')
-	{
-		if (str[i] == '"')
-		{
-			while (str[i] && (str[i] != '=' || str[i] != '"'))
-			{
-				if (str[i] == '\'')
-					return (1);
-				i++;
-			}
-		}
-		else if (str[i] == '\'')
-		{
-			while (str[i] && (str[i] != '=' || str[i] != '\''))
-			{
-				if (str[i] == '"')
-					return (1);
-				i++;
-			}
-		}
-		else
-			i++;
-	}
-	return (0);
-}
-
-// il cuore della funzione export
-void	export_core(t_program *shell, int i, char *str)
-{
-	char	*err;
-	int		value;
-
-	shell->flag = 0;
-	//rimuovere str dalle funz in cui si passa shell
-	value = is_there_in_env(shell, i, str, &shell->flag);
-	if (value == -2)
-	{
-		err = ft_substr(str, 0, i);
-		printf("shell: export: `%s': not a valid identifier\n", err);
-		free(err);
-	}
-	if (value >= 0)
-		change_export_value(shell, i, value, str);
-	else
-	{
-		if (realloc_env(shell, str) == 1)
-			return (free(str));
-	}
-	value = is_there_in_export_env(shell, i, str, &shell->flag);
-	if (value >= 0)
-		change_export_env_value(shell, i, value, str);
-	else
-	{
-		if (realloc_export_env(shell, str) == 1)
-			return ;
-	}
-	printf("ho aggiunto\n");
-}
-
-//str = export_arg
-//len = i = 
-int	is_there_in_export_env(t_program *shell, int len, char *str, int *flag)
-{
-	int		i;
-	char	*dup;
-
-	i = 0;
-	if (str[len - 2] == '+')
-	{
-		(*flag) = 1;
-		dup = remove_plus(str);
-		len--;
-	}
-	else
-		dup = ft_strdup(str);
-	// printf("sono str di len %c\n", dup[len - 1]);
-	if (ft_isalnum(dup[len - 2]) != 1 && dup[len - 2] != '+')
-		return (free(dup), -2);
-	while (shell->export_env[i])
-	{
-		if (ft_strncmp(shell->export_env[i], dup, len) == 0)
-			return (free(dup), i);
-		i++;
-	}
-	free(dup);
-	return (-1);
-}
-
-
-// cambia il valore inserito all'interno 
-// di export_env senza la riallocazione
-void	change_export_env_value(t_program *shell, int i, int value, char *str)
-{
-	char	*dup2;
-	char	*dup;
-
-	if (shell->flag == 1)
-	{
-		dup = ft_strdup(shell->export_env[value]);
-		free(shell->export_env[value]);
-		dup2 = ft_substr(str, i, ft_strlen(str) - i);
-		shell->export_env[value] = ft_strjoin(dup, dup2);
-		free(str);
-		free(dup);
-		free(dup2);
-	}
-	else
-	{
-		free(shell->export_env[value]);
-		shell->export_env[value] = ft_strdup(str);
-		free(str);
-	}
-}
-
-// rialloca export_env poiche' la nuova stringa non esiste
-int	realloc_export_env(t_program *shell, char *str)
-{
-	char	**mtx_dup;
-	int		i;
-
-	mtx_dup = matrix_dup(shell->export_env);
-	if (mtx_dup == NULL)
-		return (1);
-	free_matrix(shell->export_env);
-	shell->export_env = (char **)malloc(sizeof(char *) * (matrix_len(mtx_dup) + 2));
-	if (shell->export_env == NULL)
-		return (1);
-	i = 0;
-	while (mtx_dup[i])
-	{
-		shell->export_env[i] = ft_strdup(mtx_dup[i]);
-		i++;
-	}
-	shell->export_env[i] = str;
-	shell->export_env[i + 1] = NULL;
-	free_matrix(mtx_dup);
-	return (0);
-}
-
-
-
-// cambia il valore inserito all'interno 
-// di env senza la riallocazione
-void	change_export_value(t_program *shell, int i, int value, char *str)
-{
-	char	*dup2;
-	char	*dup;
-
-	if (shell->flag == 1)
-	{
-		dup = ft_strdup(shell->env[value]);
-		free(shell->env[value]);
-		dup2 = ft_substr(str, i, ft_strlen(str));
-		shell->env[value] = ft_strjoin(dup, dup2);
-		free(dup);
-		free(dup2);
-	}
-	else
-	{
-		free(shell->env[value]);
-		shell->env[value] = ft_strdup(str);
-	}
-}
-
-// rialloca env poiche' la nuova stringa non esiste
-int	realloc_env(t_program *shell, char *str)
-{
-	char	**mtx_dup;
-	int		i;
-
-	mtx_dup = matrix_dup(shell->env);
-	if (mtx_dup == NULL)
-		return (1);
-	free_matrix(shell->env);
-	shell->env = (char **)malloc(sizeof(char *) * (matrix_len(mtx_dup) + 2));
-	if (shell->env == NULL)
-		return (1);
-	i = 0;
-	while (mtx_dup[i])
-	{
-		shell->env[i] = ft_strdup(mtx_dup[i]);
-		i++;
-	}
-	shell->env[i] = str;
-	shell->env[i + 1] = NULL;
-	free_matrix(mtx_dup);
-	return (0);
-}
