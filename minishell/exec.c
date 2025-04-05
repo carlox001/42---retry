@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:53:39 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/26 15:12:10 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/04/05 18:13:55 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 int	exec(t_program *shell)
 {
