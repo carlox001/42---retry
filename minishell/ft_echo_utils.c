@@ -6,14 +6,14 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:16:28 by cazerini          #+#    #+#             */
-/*   Updated: 2025/03/31 15:28:54 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/05 14:55:50 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-char	*remove_external_quotes(char *old_str)
+char	*remove_external_quotes(char *old_str, char q)
 {
 	int		count_left;
 	int		count_right;
@@ -25,13 +25,13 @@ char	*remove_external_quotes(char *old_str)
 	i = 0;
 	count_left = 0;
 	count_right = 0;
-	while (old_str[i] == '\'' || old_str[i] == '"')
+	while (old_str[i] == q)
 	{
 		i++;
 		count_left++;
 	}
 	i = ft_strlen(old_str) - 1;
-	while (old_str[i] == '\'' || old_str[i] == '"')
+	while (old_str[i] == q)
 	{
 		i--;
 		count_right++;
@@ -59,7 +59,7 @@ int	count_args(char **mtx, int i)
 	int	len;
 
 	len = 0;
-	while (mtx[i] && only_operator(mtx[i]) == 0)
+	while (mtx[i] && mtx[i][0] != '|')
 	{
 		len++;
 		i++;

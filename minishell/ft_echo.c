@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:16:28 by cazerini          #+#    #+#             */
-/*   Updated: 2025/04/02 18:44:25 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/05 17:06:56 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,28 +34,41 @@ void	ft_echo(t_program *shell)
 		return ;
 	}
 	shell->nflag = check_nflag(shell->mtx_line[shell->i + 1], shell);
-	len = count_args(shell->mtx_line, shell->i + 1);
+	len = count_args(shell->mtx_line, shell->i + 1) - 1;
 	i = 0;
-	while (i < len)
+	// printf();
+	while (i <= len)
 	{
 		str = ft_strdup(shell->mtx_line[shell->i + 1]);
-		str2 = remove_external_quotes(str);
+		str2 = remove_external_quotes(str, '"');
 		if (str2 == NULL)
 			str2 = ft_strdup(str);
 		free(str);
 		if (check_dollar(str2) == 1)
 			exec_dollar(str2, shell, i, len);
-		else if (str2)
+		if (str2[0] != '>')
 		{
-			if (i != len)
-				printf("%s ", str2);
-			else
-				printf("%s", str2);
-			
+			if (str2)
+			{
+				if (i != len)
+					printf("%s ", str2);
+				else
+					printf("%s", str2);
+			}
+			free(str2);
+			i++;
+			shell->i++;
 		}
-		free(str2);
-		i++;
-		shell->i++;
+		else
+		{
+			i++;
+			shell->i++;
+			if (shell->mtx_line[shell->i + 1] != NULL)
+			{
+				i++;
+				shell->i++;
+			}
+		}
 	}
 	//metti il check sul meno n qui
 	if (shell->nflag != 1)
@@ -81,11 +94,14 @@ void	exec_dollar(char *str, t_program *shell, int i2, int len2)
 				printf("$");
 				return ;
 			}
-			if (str[i] == '?')
+			else if (str[i] == '?')
 			{
 				printf("%d", shell->exit_code);
 				i++;
+				printf("DOLLAEO: %d\n", str[i]);
 			}
+			else if (str[i] == '"' || str[i] == '\'')
+				i++;
 			else
 			{
 				j = i;
@@ -103,8 +119,11 @@ void	exec_dollar(char *str, t_program *shell, int i2, int len2)
 		}
 		else
 		{
+			if (str[i] == '"' || str[i] == '\'')
+				i++;
 			printf("%c", str[i]);
-			i++;
+			if (str[i] != '\0')
+				i++;
 		}
 	}
 	if (i2 != len2)

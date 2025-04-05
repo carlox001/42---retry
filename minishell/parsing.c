@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:45:00 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/31 16:05:34 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/05 17:21:45 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@ int	parsing(char *str, t_program *shell)
 	// aggiungere gli exit code
 	if (str[0] == '\0')
 		return (0);
+	if (str[ft_strlen(str) - 1] == '>' || str[ft_strlen(str) - 1] == '<')
+	{
+		printf("shell: syntax error near unexpected token `newline'\n");
+		shell->exit_code = 2;
+		return (0);
+	}
 	if (check_quotes(str) == 1)
 	{
 		printf("shell: syntax error: open quotes\n");
@@ -36,9 +42,9 @@ int	parsing(char *str, t_program *shell)
 	{
 		printf("Error\nfailed allocation\n");
 		shell->exit_code = 0;
-		return (1);
+		return (0);
 	}
-	print_matrix(shell->mtx_line);
+	// print_matrix(shell->mtx_line);
 	return (1);
 }
 

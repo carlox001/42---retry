@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:21:55 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/04 11:27:03 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/05 16:05:57 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 //make re && clear && valgrind --leak-check=full --show-leak-kinds=all --suppressions=supp.supp ./minishell
 
+// inseriamo le guardie alle allocazione
 
-//things to do:
-// 1: parsing del comando
 int	signals = 0;
 
 void sig_handler(int sig)
@@ -47,7 +46,6 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	// shell = (t_program *)malloc(sizeof(t_program) * 1);
 	shell.env = matrix_dup(env);
-	shell.export_env = matrix_dup(env);
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 	if (main_core(&shell) == 1)
@@ -58,37 +56,60 @@ int	main(int ac, char **av, char **env)
 	// clear_history();
 	return (0);
 }
-
 char	*print_directory(t_program *shell)
 {
 	char	*str;
 	char	*tmp;
 
-	if (ft_strlen(shell->pwd) < ft_strlen(shell->home_path))
-		str = ft_strjoin("shell:", shell->pwd);
+	if (shell->home_path != NULL)
+	{
+		if (ft_strlen(shell->pwd) < ft_strlen(shell->home_path))
+			str = ft_strjoin("shell:", shell->pwd);
+		else
+		{
+			if (shell->curr_dir)
+				str = ft_strjoin("shell:~", shell->curr_dir);
+			else
+				str = ft_strdup("shell:~");
+		}
+		tmp = str;
+		str = ft_strjoin(str, "$ ");
+		free(tmp);
+	}
 	else
 	{
-		if (shell->curr_dir)
-			str = ft_strjoin("shell:~", shell->curr_dir);
-		else
-			str = ft_strdup("shell:~");
+		str = ft_strjoin("shell:", shell->pwd);
+		tmp = str;
+		str = ft_strjoin(str, "$ ");
+		free(tmp);
 	}
-	tmp = str;
-	str = ft_strjoin(str, "$ ");
-	free(tmp);
 	return (str);
 }
 
 
 int	initialize(t_program *shell)
 {
-	shell->exit_code = 0;
+	char	*str;
 
-	shell->pwd = ft_strdup(getenv("PWD"));
-	shell->old_pwd = ft_strdup(getenv("PWD"));
-	shell->home_path = ft_strdup(getenv("HOME"));
-	shell->curr_dir = ft_substr(shell->pwd, ft_strlen(shell->home_path), \
-		(ft_strlen(shell->pwd) - ft_strlen(shell->home_path)));
+	shell->exit_code = 0;
+	// if (!str)
+		// return (1);
+	str = getcwd(NULL, 1000);
+	shell->pwd = ft_strdup(str);
+	shell->old_pwd = ft_strdup(str);
+	free(str);
+	str = getenv("HOME");
+	if (str == NULL)
+	{
+		shell->home_path = NULL;
+		shell->curr_dir = ft_strdup(shell->pwd);	
+	}
+	else
+	{
+		shell->home_path = ft_strdup(getenv("HOME"));
+		shell->curr_dir = ft_substr(shell->pwd, ft_strlen(shell->home_path), \
+			(ft_strlen(shell->pwd) - ft_strlen(shell->home_path)));
+	}
 	return (0);
 }
 
@@ -107,15 +128,13 @@ void	free_all(t_program *shell)
 		free(shell->curr_dir);
 	if (shell->old_pwd != NULL)	
 		free(shell->old_pwd);
-	if (shell->export_env != NULL)
-		free_matrix(shell->export_env);
 }
 
 int	main_core(t_program *shell)
 {
 	char	*str;
-	char	*print_str;
 	int		flag;
+	char	*print_str;
 
 	if (initialize(shell) == 1)
 		return (1);
@@ -138,7 +157,7 @@ int	main_core(t_program *shell)
 				return (free_all(shell), 1);
 			if (flag == 1)
 				free_matrix(shell->mtx_line);
-		}			
+		}
 	}
 	return (0);
 }

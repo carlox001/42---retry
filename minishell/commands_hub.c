@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/02 12:57:21 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/05 17:37:33 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,163 @@
 
 int	check_commands(char *cmd, t_program *shell) 
 {
-	if (check_builtin(cmd, shell) == 1)
+	int	check;
+
+	check = check_builtin(cmd, shell);
+	if (check == 1)
 		return (1);
-	// if (check_non_builtin(cmd, shell) == 1)
+	if (check == 2)
+		return (0);
+	else if (exec_non_builtin(cmd, shell) == 1)
+		return (1);
 	return (0);
 }
 
 int	check_builtin(char *cmd, t_program *shell)
 {
 	if (ft_strncmp(cmd, "echo", 4) == 0 && ft_strlen(cmd) == 4)
-		ft_echo(shell);
+		return (ft_echo(shell), 2);
 	if (ft_strncmp(cmd, "cd", 2) == 0 && ft_strlen(cmd) == 2)
-		ft_cd(shell);
+		return (ft_cd(shell), 2);
 	else if (ft_strncmp(cmd, "pwd", 3) == 0 && ft_strlen(cmd) == 3)
-		ft_pwd(shell);
+		return (ft_pwd(), 2);
 	else if (ft_strncmp(cmd, "export", 6) == 0 && ft_strlen(cmd) == 6)
-		ft_export(shell);
+		return (ft_export(shell), 2);
 	else if (ft_strncmp(cmd, "unset", 5) == 0 && ft_strlen(cmd) == 5)
-		ft_unset(shell);
+		return (ft_unset(shell), 2);
 	else if (ft_strncmp(cmd, "env", 3) == 0 && ft_strlen(cmd) == 3)
-		ft_env(shell);
+		return (ft_env(shell), 2);
 	else if (ft_strncmp(cmd, "exit", 4) == 0 && ft_strlen(cmd) == 4)
-		ft_exit(shell);
+		return (ft_exit(shell), 2);
 	return (0);
 }
 
+int	exec_non_builtin(char *cmd, t_program *shell)
+{
+	char	*path;
+	char	**full_cmd;
+	int		id;
+
+	if (is_there_a_backslash(cmd) == 1)
+		path = ft_strdup(cmd);
+	else
+	{
+		path = path_find(shell->env, cmd);
+		if (path == NULL)
+		{
+			printf("%s: command not found\n", cmd);
+			shell->exit_code = 127;
+			shell->i = matrix_len(shell->mtx_line);
+			return (0);
+		}
+	}
+	full_cmd = get_full_cmd(shell);
+	id = fork();
+	if (id == 0)
+	{
+		if (execve(path, full_cmd, shell->env) == -1)
+		{
+			free(path);
+			free_matrix(full_cmd);
+			shell->exit_code = 127;
+			return (1);
+		}
+	}
+	else
+	{
+		free(path);
+		free_matrix(full_cmd);
+	}
+	while (wait(NULL) > 0)
+		;
+	return (0);
+}
+
+char	*getpath(char **envp)
+{
+	char	*path;
+	int		i;
+
+	path = NULL;
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		if (ft_strncmp(envp[i], "PATH", 4) == 0)
+			path = envp[i];
+		i++;
+	}
+	return (path);
+}
+
+char	*path_find(char **envp, char *command)
+{
+	int		i;
+	char	*path;
+	char	**paths;
+	char	*path_joined;
+
+	if (command[0] == '/')
+		return (command);
+	i = 0;
+	path = getpath(envp);
+	if (path == NULL)
+		return (NULL);
+	paths = ft_split(&path[5], ':');
+	while (paths[i])
+	{
+		path_joined = ft_strjoin(paths[i], "/");
+		path = ft_strjoin(path_joined, command);
+		if (access(path, F_OK) == 0)
+			return (free(path_joined), free_matrix(paths), path);
+		free(path);
+		free(path_joined);
+		i++;
+	}
+	free_matrix(paths);
+	return (NULL);
+}
+	
+char	**get_full_cmd(t_program *shell)
+{
+	int		len;
+	int		i;
+	char	**full_cmd;
+
+	len = 1;
+	while (shell->mtx_line[shell->i + len])
+	{
+		if (shell->mtx_line[shell->i + len][0] != '<' && \
+			shell->mtx_line[shell->i + len][0] != '>' && \
+			shell->mtx_line[shell->i + len][0] != '|')
+			len++;
+		else
+			break ;
+	}
+	shell->i += len;
+	full_cmd = (char **)malloc(sizeof(char *) * (len + 1));
+	if (full_cmd == NULL)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		full_cmd[i] = ft_strdup(shell->mtx_line[i]);
+		i++;
+	}
+	full_cmd[i] = NULL;
+	return (full_cmd);
+}
+
+	
+int	is_there_a_backslash(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '=')
+			return (1);
+		i++;
+	}
+	return (0);
+}

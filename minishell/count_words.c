@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   count_words.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:49:48 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/29 15:51:22 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/04/05 12:00:11 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,18 @@ int	count_words(char *str, t_program *shell)
 	return (words);
 }
 
+int	isvalid(char *str, int i)
+{
+	if (((str[i] >=  33 && str[i] < 127) && str[i] && \
+		(str[i] != '|' && str[i] != '>' && str[i] != '<' && \
+		str[i] != '"' && str[i] != '\'')) && (str[i]))
+		return (1);
+	return (0);
+}
+
 void	count_char(char *str, t_program *shell, int *words, int *flag)
 {
-	while (((str[shell->i] >=  33 && str[shell->i] < 127) && str[shell->i] && \
-			(str[shell->i] != '|' && str[shell->i] != '>' && str[shell->i] != '<' && \
-			str[shell->i] != '"' && str[shell->i] != '\'')) && (str[shell->i]))					
+	while (isvalid(str, shell->i) == 1)					
 	{
 		shell->i++;
 		if ((*flag) == 0)
@@ -56,23 +63,28 @@ void	count_char(char *str, t_program *shell, int *words, int *flag)
 
 void	count_quotes(char *str, t_program *shell, int *words)
 {
+	int	diff;
+
+	diff = (shell->i - 1);
 	if (str[shell->i] == '"')
 	{
 		shell->i++;
+		if (diff >= 0 && str[shell->i] != '"')
+			(*words)++;
 		while (str[shell->i] && str[shell->i] != '"')
 			shell->i++;
 		if (shell->i < shell->len)
 			shell->i++;
-		(*words)++;
 	}
 	if (str[shell->i] == '\'')
 	{
 		shell->i++;
+		if (diff >= 0 && str[shell->i] != '\'' && str[diff] == ' ')
+			(*words)++;
 		while (str[shell->i] && str[shell->i] != '\'')
 			shell->i++;
 		if (shell->i < shell->len)
 			shell->i++;
-		(*words)++;
 	}
 }
 

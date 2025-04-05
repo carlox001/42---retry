@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 14:12:01 by cazerini          #+#    #+#             */
-/*   Updated: 2025/04/02 18:44:11 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/05 17:13:48 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	ft_unset(t_program *shell)
 {
-	//char	*str;
+	char	*str;
 	char	*arg;
 	char	**env_tmp;
 	int		k;
@@ -23,7 +23,7 @@ void	ft_unset(t_program *shell)
 
 	k = 0;
 	j = 0;
-	//str = NULL;
+	str = NULL;
 	arg = NULL;
 	if (shell->mtx_line[shell->i + 1] == NULL)
 		return ;
@@ -66,8 +66,11 @@ void	ft_unset(t_program *shell)
 		if (arg != NULL)
 			free(arg);
 	}
+	shell->i++;
 }
 
+
+// copiata da modificare
 char	*search_env_and_allocate(char *env_str, t_program *shell)
 {
 	int		i;
@@ -78,12 +81,14 @@ char	*search_env_and_allocate(char *env_str, t_program *shell)
 	j = 0;
 	while (shell->env[i])
 	{
-		if (ft_strncmp(shell->env[i], env_str, ft_strlen(env_str)) == 0)
+		//DEVE ESSERE SICUROP IL CHECK DAJE
+		if (ft_strncmp(shell->env[i], env_str, ft_strlen(env_str)) == 0 /* && \
+			shell->env[i][ft_strlen(env_str) + 1] == '=' */)
 		{
 			while (shell->env[i][j] != '=' && shell->env[i][j])
 				j++;
 			j++;
-			new_str = ft_substr(shell->env[i], j, ft_strlen(shell->env[i]) - j);
+			new_str = ft_substr(shell->env[i], j, ft_strlen(shell->env[i]));
 		}
 		i++;
 	}

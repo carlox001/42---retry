@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 10:22:24 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/29 17:48:41 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/04/05 17:21:50 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 int	matrix_handler(char *str, t_program *shell)
 {
 	shell->words = count_words(str, shell);
-	printf("shell->words: %d\n", shell->words);
+	// printf("shell->words: %d\n", shell->words);
 	shell->mtx_line = (char **)ft_calloc(sizeof(char *), (shell->words + 1));
 	if (!shell->mtx_line)
 		return (1);
@@ -46,7 +46,8 @@ int	matrix_handler(char *str, t_program *shell)
 	return (0);
 }
 
-int	in_word(char *str, int *i)
+// guarda se ci sono quotes nella parola
+int	quotes_in_word(char *str, int *i)
 {
 	if (str[*i] == '"' || str[*i] == '\'')
 	{
@@ -80,16 +81,11 @@ int	matrix_handler_core(char *str, t_program *shell, int *i, int *j)
 	flag = 1;
 	while (flag == 1)
 	{
-		while (((str[*i] >= 33 && str[*i] < 127) && str[*i] && \
-				(str[*i] != '|' && str[*i] != '>' && str[*i] != '<' && \
-			str[*i] != '"' && str[*i] != '\'')) && (str[*i]))
+		while (isvalid(str, *i) == 1)
 			(*i)++;
-		
-		flag = in_word(str, i);
+		flag = quotes_in_word(str, i);
 	}
-	while (((str[*i] >= 33 && str[*i] < 127) && str[*i] && \
-				(str[*i] != '|' && str[*i] != '>' && str[*i] != '<' && \
-			str[*i] != '"' && str[*i] != '\'')) && (str[*i]))
+	while (isvalid(str, *i) == 1)
 			(*i)++;
 	if (((*i - shell->i_p) != 0) && (str[*i] != '"' && str[*i] != '\''))
 	{

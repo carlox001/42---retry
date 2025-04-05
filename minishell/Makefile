@@ -4,7 +4,7 @@ UTILS = utils/utils.a
 UTILS_DIR = utils/
 
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS = -Wall -Werror -Wextra -g -lreadline
 
 SRC = errors.c \
 	  main.c \
@@ -19,7 +19,8 @@ SRC = errors.c \
 	  parsing_utils.c \
 	  exec.c \
 	  ft_export.c \
-	  ft_export_utils.c \
+	  ft_export_utils_1.c \
+	  ft_export_utils_2.c \
 	  ft_unset.c \
 	  ft_unset_utils.c \
 	  ft_echo.c \
@@ -37,7 +38,7 @@ $(UTILS):
 	$(MAKE) -C $(UTILS_DIR)
 
 $(NAME): $(PRINTF) $(UTILS)
-	$(CC) $(CFLAGS) $(SRC) $(UTILS) -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(SRC) $(UTILS) -o $(NAME)
 
 clean:
 	rm -f
