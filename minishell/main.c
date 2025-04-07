@@ -6,13 +6,13 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:21:55 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/05 16:05:57 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/07 19:09:04 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//make re && clear && valgrind --leak-check=full --show-leak-kinds=all --suppressions=supp.supp ./minishell
+//make re && clear && valgrind --leak-check=full --show-leak-kinds=all --suppressions=supp.supp --quiet ./minishell
 
 // inseriamo le guardie alle allocazione
 
@@ -155,8 +155,6 @@ int	main_core(t_program *shell)
 		{
 			if (exec(shell) == 1)
 				return (free_all(shell), 1);
-			if (flag == 1)
-				free_matrix(shell->mtx_line);
 		}
 	}
 	return (0);

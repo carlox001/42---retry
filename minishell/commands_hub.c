@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/05 17:37:33 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/07 18:28:10 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,19 @@ int	check_commands(char *cmd, t_program *shell)
 int	check_builtin(char *cmd, t_program *shell)
 {
 	if (ft_strncmp(cmd, "echo", 4) == 0 && ft_strlen(cmd) == 4)
-		return (ft_echo(shell), 2);
+		return (ft_echo(shell), free_all(shell), 1);
 	if (ft_strncmp(cmd, "cd", 2) == 0 && ft_strlen(cmd) == 2)
-		return (ft_cd(shell), 2);
+		return (ft_cd(shell), free_all(shell), 1);
 	else if (ft_strncmp(cmd, "pwd", 3) == 0 && ft_strlen(cmd) == 3)
-		return (ft_pwd(), 2);
+		return (ft_pwd(), free_all(shell), 1);
 	else if (ft_strncmp(cmd, "export", 6) == 0 && ft_strlen(cmd) == 6)
-		return (ft_export(shell), 2);
+		return (ft_export(shell), free_all(shell), 1);
 	else if (ft_strncmp(cmd, "unset", 5) == 0 && ft_strlen(cmd) == 5)
-		return (ft_unset(shell), 2);
+		return (ft_unset(shell), free_all(shell), 1);
 	else if (ft_strncmp(cmd, "env", 3) == 0 && ft_strlen(cmd) == 3)
-		return (ft_env(shell), 2);
+		return (ft_env(shell), free_all(shell), 1);
 	else if (ft_strncmp(cmd, "exit", 4) == 0 && ft_strlen(cmd) == 4)
-		return (ft_exit(shell), 2);
+		return (ft_exit(shell), free_all(shell), 1);
 	return (0);
 }
 
@@ -49,7 +49,7 @@ int	exec_non_builtin(char *cmd, t_program *shell)
 {
 	char	*path;
 	char	**full_cmd;
-	int		id;
+	// int		id;
 
 	if (is_there_a_backslash(cmd) == 1)
 		path = ft_strdup(cmd);
@@ -61,28 +61,22 @@ int	exec_non_builtin(char *cmd, t_program *shell)
 			printf("%s: command not found\n", cmd);
 			shell->exit_code = 127;
 			shell->i = matrix_len(shell->mtx_line);
-			return (0);
+			free(path);
+			shell->exit_code = 127;
+			free_all(shell);
+			return(1);
 		}
 	}
 	full_cmd = get_full_cmd(shell);
-	id = fork();
-	if (id == 0)
-	{
-		if (execve(path, full_cmd, shell->env) == -1)
-		{
-			free(path);
-			free_matrix(full_cmd);
-			shell->exit_code = 127;
-			return (1);
-		}
-	}
-	else
+	if (execve(path, full_cmd, shell->env) == -1)
 	{
 		free(path);
 		free_matrix(full_cmd);
+		shell->exit_code = 127;
+		free_all(shell);
+		exit(2);
+		return (1);
 	}
-	while (wait(NULL) > 0)
-		;
 	return (0);
 }
 
@@ -136,7 +130,11 @@ char	**get_full_cmd(t_program *shell)
 	int		i;
 	char	**full_cmd;
 
-	len = 1;
+	len = 0;
+	shell->i = 0;
+	// printf("i: %d\n", shell->i);
+	// printf("mtx_line: %s\n", shell->mtx_line[shell->i]);
+	// printf("len: %d\n", len);
 	while (shell->mtx_line[shell->i + len])
 	{
 		if (shell->mtx_line[shell->i + len][0] != '<' && \
