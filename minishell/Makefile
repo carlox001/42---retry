@@ -6,8 +6,7 @@ UTILS_DIR = utils/
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -g 
 
-SRC = errors.c \
-	  main.c \
+SRC = main.c \
 	  matrix_utils.c \
 	  parsing.c \
 	  count_words.c \

@@ -6,13 +6,13 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:21:55 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/07 19:09:04 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:14:45 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//make re && clear && valgrind --leak-check=full --show-leak-kinds=all --suppressions=supp.supp --quiet ./minishell
+//make re && clear && valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=supp.supp --quiet ./minishell
 
 // inseriamo le guardie alle allocazione
 
@@ -153,9 +153,45 @@ int	main_core(t_program *shell)
 		free(str);
 		if (flag != 0)
 		{
+			// printf("prima di exec\n");
+			// if (is_there_a_redirection(shell->mtx_line) == 1)
+			// {
+			// 	change_in_out();
+			// }
+			// print_matrix(shell->mtx_line);
 			if (exec(shell) == 1)
 				return (free_all(shell), 1);
 		}
 	}
 	return (0);
 }
+
+int	is_there_a_redirection(char **mtx)
+{
+	int	i;
+
+	i = 0;
+	while (mtx[i])
+	{
+		if (mtx[i][0] == '>' || mtx[i][0] == '<')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+// int	change_in(char *mtx)
+// {
+// 	int	i;
+// 	// int	counter_out;
+// 	// int	counter_in;
+
+// 	// counter_in = counter_in_out('<', mtx);
+// 	// counter_out = counter_in_out('>', mtx);
+// 	i = 0;
+	
+	
+
+// }
+
+

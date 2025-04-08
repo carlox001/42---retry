@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:23:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/05 16:43:57 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:13:57 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,11 @@ typedef struct s_program
 	int		flag;
 	int		nflag;
 	int		equal;
+	int		output;
+	int		input;
+	int		fd[2];
+	int		*in;
+	int		*out;
 
 	//mhanz
 }	t_program;
@@ -88,7 +93,15 @@ void	count_operators(char *str, t_program *shell, int *words);
 
 // errors.c
 // exec.c
-int	exec(t_program *shell);
+char	***alloc_mtx(int num_commands, t_program *shell);
+int		count_commands(char **mtx_line);
+int		exec(t_program *shell);
+int		exec_core(t_program *shell, int j, int num_cmd, char ***mtx_hub);
+void	child(t_program *shell, int i, int j, char ***mtx_hub);
+void	father(t_program *shell, int j);
+void	free_matrix_pointer(char ***mtx_hub);
+void	close_fds(int *fd, int flag, int input);
+void	close_all_files(int *fd, int output, int input);
 
 ////////////////////////////////////////////////////////////////////////////////
 // ft_cd_utils_1.c

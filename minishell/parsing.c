@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:45:00 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/06 18:24:46 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/04/08 17:18:30 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// invalid read con ""
+// invalid read con es (pipe | )
 
 int	parsing(char *str, t_program *shell)
 {
@@ -42,6 +42,20 @@ int	parsing(char *str, t_program *shell)
 	{
 		printf("Error\nfailed allocation\n");
 		shell->exit_code = 0;
+		return (0);
+	}
+	if (shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '<' || \
+		shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '>')
+	{
+		printf("shell: syntax error near unexpected token `newline'\n");
+		shell->exit_code = 2;
+		return (0);
+	}
+	if (shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '|')
+	{
+		printf("shell: open quotes near `|'\n");
+		free_matrix(shell->mtx_line);
+		shell->exit_code = 1;
 		return (0);
 	}
 	// print_matrix(shell->mtx_line);
@@ -138,7 +152,8 @@ int	near_operators(char *str)
 			if (op > 2)
 				return (1);
 		}
-		i++;
+		if (str[i] != '\0')
+			i++;
 	}
 	return (0);
 }
@@ -165,7 +180,8 @@ int	double_operators(char *str)
 					return (1);
 			}
 		}
-		i++;
+		if (str[i] != '\0')
+			i++;
 	}
 	return (0);
 }
