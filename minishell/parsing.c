@@ -3,20 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:45:00 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/08 17:18:30 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/17 18:46:48 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// invalid read con es (pipe | )
+// invalid read con es ("ls")
 
 int	parsing(char *str, t_program *shell)
 {
-	// char	**commands;
+	char **mtx_tmp;
+	int	k;
+	char *tmp;
+	int	check;
+
 	// aggiungere gli exit code
 	if (str[0] == '\0')
 		return (0);
@@ -38,28 +42,192 @@ int	parsing(char *str, t_program *shell)
 		shell->exit_code = 0;
 		return (0);
 	}
-	if (matrix_handler(str, shell) == 1)
+	check = matrix_handler(str, shell);
+	if (check > 0)
 	{
-		printf("Error\nfailed allocation\n");
-		shell->exit_code = 0;
+		if (check == 1)
+		{
+			printf("Error\nfailed allocation\n");
+			shell->exit_code = 0;
+		}
 		return (0);
 	}
-	if (shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '<' || \
-		shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '>')
+	if (matrix_len(shell->mtx_line) != 0 && (shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '<' || \
+		shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '>'))
 	{
+		print_matrix(shell->mtx_line);
 		printf("shell: syntax error near unexpected token `newline'\n");
 		shell->exit_code = 2;
 		return (0);
 	}
-	if (shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '|')
+	if (matrix_len(shell->mtx_line) != 0 && shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '|')
 	{
 		printf("shell: open quotes near `|'\n");
 		free_matrix(shell->mtx_line);
 		shell->exit_code = 1;
 		return (0);
 	}
+	// printf("pre espansione\n");
 	// print_matrix(shell->mtx_line);
+
+	k = 0;
+	while (shell->mtx_line[k])
+	{
+		if (shell->mtx_line[k][0] == '\0' && shell->mtx_line[k + 1] != NULL)
+		{
+			free(shell->mtx_line[k]);
+			shell->mtx_line[k] = ft_strdup("\"\"");
+		}
+		k++;
+	}
+	k = 0;
+	while (shell->mtx_line[k])
+	{
+		if (check_dollar(shell->mtx_line[k]) == 1)
+		{
+			tmp = shell->mtx_line[k];
+			shell->mtx_line[k] = expansion_variable2(tmp);
+			free(tmp);
+		}
+		k++;
+	}
+	if (shell->mtx_line[0] == NULL && k == 1)
+	{
+		free_matrix(shell->mtx_line);
+		return (0);
+	}
+
+	mtx_tmp = realloc_mtx_parsing(shell->mtx_line, k);
+	free_matrix_len(shell->mtx_line, k);
+	shell->mtx_line = matrix_dup(mtx_tmp);
+	free_matrix(mtx_tmp);
+
+	// printf("post espansione\n");
+	// print_matrix(shell->mtx_line);
+	
 	return (1);
+}
+
+char	**realloc_mtx_parsing(char **old_mtx, int len)
+{
+	char	**new_mtx;
+	int		i;
+	int		j;
+	int		count;
+
+	i = 0;
+	count = 0;
+	while (i < len)
+	{
+		if (old_mtx != NULL)
+			count++;
+		i++;
+	}
+	new_mtx = (char **)malloc(sizeof(char *) * (count + 1));
+	if (new_mtx == NULL)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (i < len)
+	{
+		if (old_mtx[i] != NULL)
+		{
+			new_mtx[j] = ft_strdup(old_mtx[i]);
+			j++;
+		}
+		i++;
+	}
+	new_mtx[j] = NULL;
+	return (new_mtx);
+}
+
+int	only_dollar(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != '$')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+//se null riaalloca shiftando i null
+char	*expansion_variable2(char *old_str)
+{
+	char	*new_str;
+	char	*sub_str;
+	char	*tmp;
+	char	*path; 
+	char	*chr;
+	int		i;
+	int		len;
+
+	i = 0;
+	new_str = NULL;
+	if (only_dollar(old_str) == 1)
+		return (ft_strdup(old_str));
+	while (old_str[i])
+	{
+		if (old_str[i] == '$' && old_str[i + 1] != '\0')
+		{
+			while (old_str[i] && old_str[i] == '$')
+				i++;
+			if (((old_str[i] == '\"' && old_str[i + 1] == '\"' ) || \
+				(old_str[i] == '\'' && old_str[i + 1] == '\'' )) && \
+				ft_strlen(old_str) == 3)
+					return (ft_strdup("\" \""));
+			if (old_str[i] == '\0')
+				new_str = ft_strdup("\"\"");
+			if (old_str[i] == '?')
+			{
+				new_str = ft_strdup("$?");
+				return (new_str);
+			}
+			len = 0;
+			while (old_str[i + len] && old_str[i + len] != '\"' && old_str[i + len] != '\'' && old_str[i + len] != '$' && old_str[i + len] != '\\')
+				len++;
+			sub_str = ft_substr(old_str, i, len);
+			path = getenv(sub_str);
+			if (path != NULL)
+			{
+				if (new_str == NULL)
+					new_str = ft_strdup(path);
+				else
+				{
+					tmp = new_str;
+					new_str = ft_strjoin(new_str, path);
+					free(tmp);
+				}
+			}
+			free(sub_str);
+			if (len == 0 && old_str[i + len] != '\"' && old_str[i + len] != '\'')
+				i--;
+			else
+				i += len;
+		}
+		else
+		{
+			chr = malloc(sizeof(char) * 2);
+			chr[0] = old_str[i];
+			chr[1] = '\0';
+			if (new_str == NULL)
+				new_str = ft_strdup(chr);
+			else
+			{
+				tmp = new_str;
+				new_str = ft_strjoin(new_str, chr);
+				free(tmp);
+			}
+			free(chr);
+		}
+		if (old_str[i] != '\0' && old_str[i] != '$')
+			i++;
+	}
+	return (new_str);
 }
 
 int	print_parsing_errors(int flag, t_program *shell)
@@ -78,174 +246,4 @@ int	print_parsing_errors(int flag, t_program *shell)
 		printf("shell: syntax error\n");
 	shell->exit_code = 1;
 	return (1);
-}
-
-int	only_operator(char *str)
-{
-	int	i;
-	int	flag;
-
-	i = 0;
-	flag = 0;
-	if (ft_strlen(str) == 2)
-	{
-		if (str[0] == '<' && str[1] == '<')
-			return (4);
-		if (str[0] == '>' && str[1] == '>')
-			return (4);
-	}
-	while (str[i])
-	{
-		if (str[i] == '|')
-			flag = 1;
-		if (str[i] == '>')
-			flag = 2;
-		if (str[i] == '<')
-			flag = 3;
-		else if (str[i] != '|' && str[i] != '>' && str[i] != '<' && str[i] != ' ' && str[i] != '\0')
-			return (0);
-		i++;
-	}
-	return (flag);
-}
-
-int	near_operators(char *str)
-{
-	int	i;
-	int	op;
-
-	i = 0;
-	while (str[i])
-	{
-		op = 0;
-		if (str[i] == '|' || str[i] == '<' || str[i] == '>')
-		{
-			op++;
-			i++;
-			while ((str[i] == '|' || str[i] == '<' || str[i] == '>' || str[i] == ' ') &&  str[i])
-			{
-				if (str[i] != ' ')
-				{
-					if (str[i] == '>')
-					{
-						i++;
-						op++;
-						if (str[i] == '>')
-							i++;
-					}
-					else if (str[i] == '<')
-					{
-						i++;
-						op++;
-						if (str[i] == '<')
-							i++;
-					}
-					else
-					{
-						op++;
-						i++;
-					}
-				}
-				else
-					i++;
-			}
-			if (op > 2)
-				return (1);
-		}
-		if (str[i] != '\0')
-			i++;
-	}
-	return (0);
-}
-
-int	double_operators(char *str)
-{
-	int		i;
-	char	a;
-
-	if (near_operators(str) == 1)
-		return (1);
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '|' || str[i] == '<' || str[i] == '>')
-		{
-			a = str[i];
-			i++;
-			while (str[i] && str[i] == ' ')
-				i++;
-			if ((str[i] == '|' || str[i] == '<' || str[i] == '>') && a != '|')
-			{
-				if (!(str[i] == '>' && str[i - 1] == '>') && !(str[i] == '<' && str[i - 1] == '<'))
-					return (1);
-			}
-		}
-		if (str[i] != '\0')
-			i++;
-	}
-	return (0);
-}
-
-
-int	check_operators(char *str, t_program *shell)
-{
-	int	i;
-	int	check;
-
-	i = 0;
-	check = only_operator(str);
-	if (check != 0)
-	{
-		print_parsing_errors(check, shell);
-		return (1);
-	}
-	if (str[0] == '|' || str[ft_strlen(str) - 1] == '|')
-	{
-		print_parsing_errors(1, shell);
-		return (1);
-	}
-	while (str[i])
-	{
-		if (str[i] == '|' && str[i + 1] == '|')
-		{
-			print_parsing_errors(5, shell);
-			return (1);
-		}
-		i++;
-	}
-	if (double_operators(str) == 1)
-	{
-		print_parsing_errors(6, shell);
-		return (1);
-	}
-	
-	return (0);
-}
-
-int	check_quotes(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '"')
-		{
-			i++;
-			while (str[i] && str[i] != '"')
-				i++;
-			if (str[i] == '\0')
-				return (1);
-		}
-		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] && str[i] != '\'')
-				i++;
-			if (str[i] == '\0')
-				return (1);
-		}
-		i++;
-	}
-	return (0);
 }

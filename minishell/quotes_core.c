@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_core.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:04:58 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/05 14:26:39 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/15 18:07:04 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,16 +71,21 @@ int	alloc_quote(t_program *shell, int flag, char *str, char q)
 		shell->mtx_line[shell->j] = ft_substr(str, shell->i_p, (shell->i - shell->i_p + 1));
 		if (shell->mtx_line[shell->j] == NULL)
 			return (1);
+		print_matrix(shell->mtx_line);
 		shell->j++;
 	}
 	else if ((shell->i - shell->i_p) != 0)
 	{
 		if (str[shell->i] == q && str[shell->i - 1] == q)
 			shell->i_p -= 2;
-		shell->mtx_line[shell->j] = ft_substr(str, shell->i_p, (shell->i - shell->i_p));
-		if (shell->mtx_line[shell->j] == NULL)
-			return (1);
-		shell->j++;
+		else
+		{
+			shell->mtx_line[shell->j] = ft_substr(str, shell->i_p, (shell->i - shell->i_p));
+			printf("matrix_line: %s\n", shell->mtx_line[shell->j]);
+			if (shell->mtx_line[shell->j] == NULL)
+				return (1);
+			shell->j++;
+		}
 	}
 	shell->i_p = shell->i;
 	return (0);

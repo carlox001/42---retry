@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 10:22:24 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/05 17:21:50 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/16 10:51:40 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,15 @@
 int	matrix_handler(char *str, t_program *shell)
 {
 	shell->words = count_words(str, shell);
-	// printf("shell->words: %d\n", shell->words);
+	if (shell->words == 0)
+	{
+		printf("%s: comamnd not found\n", str);
+		shell->exit_code = 127;
+		return (2);
+	}
+	printf("shell->words: %d\n", shell->words);
 	shell->mtx_line = (char **)ft_calloc(sizeof(char *), (shell->words + 1));
-	if (!shell->mtx_line)
+	if (shell->mtx_line == NULL)
 		return (1);
 	shell->i = 0;
 	shell->j = 0;
@@ -41,8 +47,8 @@ int	matrix_handler(char *str, t_program *shell)
 		else if (shell->i < shell->len)
 			shell->i++;
 		shell->i_p = shell->i;
-	}
-	shell->mtx_line[shell->j] = NULL;
+	}	
+	shell->mtx_line[shell->words] = NULL;
 	return (0);
 }
 
@@ -51,8 +57,10 @@ int	quotes_in_word(char *str, int *i)
 {
 	if (str[*i] == '"' || str[*i] == '\'')
 	{
-		if (str[*i + 1] != ' ' && str[*i - 1] != ' ' && str[*i + 1] != '\0')
+		if (*i != 0 && str[*i + 1] != ' ' && str[*i - 1] != ' ' && str[*i + 1] != '\0')
 		{
+			if (str[*i + 1] == '\'' || str[*i + 1] == '\"')
+				(*i)++;
 			(*i)++;
 			return (1);
 		}
@@ -90,7 +98,7 @@ int	matrix_handler_core(char *str, t_program *shell, int *i, int *j)
 	if (((*i - shell->i_p) != 0) && (str[*i] != '"' && str[*i] != '\''))
 	{
 		shell->mtx_line[*j] = ft_substr(str, shell->i_p, (*i - shell->i_p));
-		if (shell->mtx_line == NULL)
+		if (shell->mtx_line[*j] == NULL)
 			return (1);
 		(*j)++;
 	}

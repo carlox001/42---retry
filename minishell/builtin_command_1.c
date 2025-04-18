@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+				/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   builtin_command_1.c                                :+:      :+:    :+:   */
@@ -11,6 +11,9 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// extern int	signals = 0;
+
 
 int	ft_pwd()
 {
@@ -45,23 +48,23 @@ int	ft_env(t_program *shell)
 	return (0);
 }
 
-void	ft_exit(t_program *shell)
-{
-	printf("exit\n");
-	free_all(shell);
-	exit(0);
-}
-
 int	is_there_an_equal(char *str)
 {
 	int	i;
-
+	
 	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '=')
-			return (1);
+		return (1);
 		i++;
 	}
 	return (0);
+}
+
+void	ft_exit(t_program *shell)
+{
+	printf("exit\n");
+	free_all(shell, 0);
+	exit(0);
 }

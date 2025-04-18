@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   count_words.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:49:48 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/05 12:00:11 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:08:34 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// se inserisci degli operatori 
-// attacati non funziona il count es (sfsdf|>sd)
 
 // Questa funzione conta il numero di 
 // token e li restituisce
@@ -63,13 +60,10 @@ void	count_char(char *str, t_program *shell, int *words, int *flag)
 
 void	count_quotes(char *str, t_program *shell, int *words)
 {
-	int	diff;
-
-	diff = (shell->i - 1);
 	if (str[shell->i] == '"')
 	{
 		shell->i++;
-		if (diff >= 0 && str[shell->i] != '"')
+		if (str[shell->i] != '"')
 			(*words)++;
 		while (str[shell->i] && str[shell->i] != '"')
 			shell->i++;
@@ -79,7 +73,7 @@ void	count_quotes(char *str, t_program *shell, int *words)
 	if (str[shell->i] == '\'')
 	{
 		shell->i++;
-		if (diff >= 0 && str[shell->i] != '\'' && str[diff] == ' ')
+		if (str[shell->i] != '\'')
 			(*words)++;
 		while (str[shell->i] && str[shell->i] != '\'')
 			shell->i++;
@@ -96,13 +90,9 @@ void	count_operators(char *str, t_program *shell, int *words)
 			(str[shell->i] == '<' && str[shell->i + 1] == '<'))
 		{
 			if (shell->i + 1 < shell->len)
-				shell->i = shell->i + 2;
+				shell->i++;
 		}
-		else if (shell->i < shell->len)
-			shell->i++;
 		(*words)++;
 	}
-	// if (shell->i < shell->len)
-	// 	shell->i++;
 }
 	

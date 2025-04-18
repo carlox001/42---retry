@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd_utils_3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 10:48:43 by cazerini          #+#    #+#             */
-/*   Updated: 2025/04/02 19:09:54 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/17 19:07:44 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-//vanno messi gli exit code
 
 int	cd_absolute_path(char *str, t_program *shell)
 {

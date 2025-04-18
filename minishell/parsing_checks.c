@@ -1,84 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   parsing_checks.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 18:45:00 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/08 17:18:30 by cazerini         ###   ########.fr       */
+/*   Created: 2025/04/17 18:46:05 by sfiorini          #+#    #+#             */
+/*   Updated: 2025/04/17 18:46:50 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// invalid read con es (pipe | )
-
-int	parsing(char *str, t_program *shell)
-{
-	// char	**commands;
-	// aggiungere gli exit code
-	if (str[0] == '\0')
-		return (0);
-	if (str[ft_strlen(str) - 1] == '>' || str[ft_strlen(str) - 1] == '<')
-	{
-		printf("shell: syntax error near unexpected token `newline'\n");
-		shell->exit_code = 2;
-		return (0);
-	}
-	if (check_quotes(str) == 1)
-	{
-		printf("shell: syntax error: open quotes\n");
-		shell->exit_code = 0;
-		return (0);
-	}
-	if (check_operators(str, shell) == 1)
-	{
-		printf("shell: syntax error: operators error\n");
-		shell->exit_code = 0;
-		return (0);
-	}
-	if (matrix_handler(str, shell) == 1)
-	{
-		printf("Error\nfailed allocation\n");
-		shell->exit_code = 0;
-		return (0);
-	}
-	if (shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '<' || \
-		shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '>')
-	{
-		printf("shell: syntax error near unexpected token `newline'\n");
-		shell->exit_code = 2;
-		return (0);
-	}
-	if (shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '|')
-	{
-		printf("shell: open quotes near `|'\n");
-		free_matrix(shell->mtx_line);
-		shell->exit_code = 1;
-		return (0);
-	}
-	// print_matrix(shell->mtx_line);
-	return (1);
-}
-
-int	print_parsing_errors(int flag, t_program *shell)
-{
-	if (flag == 1)
-		printf("shell: parse error near `|'\n");
-	if (flag == 2)
-		printf("shell: parse error near `>'\n");
-	if (flag == 3)
-		printf("shell: parse error near `<'\n");
-	if (flag == 4)
-		printf("shell: parse error near `\\n'\n");
-	if (flag == 5)
-		printf("shell: parse error near `||'\n");
-	if (flag == 6)
-		printf("shell: syntax error\n");
-	shell->exit_code = 1;
-	return (1);
-}
 
 int	only_operator(char *str)
 {
@@ -222,7 +154,7 @@ int	check_operators(char *str, t_program *shell)
 	return (0);
 }
 
-int	check_quotes(char *str)
+int	 check_quotes(char *str)
 {
 	int	i;
 

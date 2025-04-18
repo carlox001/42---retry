@@ -3,70 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 14:12:01 by cazerini          #+#    #+#             */
-/*   Updated: 2025/04/06 02:17:01 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/04/18 10:42:05 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
 void	ft_unset(t_program *shell)
 {
-	// char	*str;
 	char	*arg;
 	char	**env_tmp;
 	int		k;
 	int		j;
+	int		l;
 
-	k = 0;
-	j = 0;
-	// str = NULL;
 	arg = NULL;
 	if (shell->mtx_line[shell->i + 1] == NULL)
 		return ;
-	//tocca sapere se ce un dolalero
-	if (check_dollar(shell->mtx_line[shell->i + 1]) == 1)
-		arg = split_dollar(shell->mtx_line[shell->i + 1], shell);
-	else
+	//tocca sapere se ce un dolalero dolala
+	l = 1;
+	while (shell->mtx_line[shell->i + l] != NULL)
 	{
-		while (j < matrix_len(shell->env))
+		k = 0;
+		j = 0;
+		if (check_dollar(shell->mtx_line[shell->i + l]) == 1)
+			arg = split_dollar(shell->mtx_line[shell->i + l], shell);
+		else
 		{
-			if (ft_strncmp(shell->env[j], shell->mtx_line[shell->i + 1], ft_strlen(shell->mtx_line[shell->i + 1])) == 0)
+			while (j < matrix_len(shell->env))
 			{
-				arg = ft_strdup(shell->env[j]);
-				break ;	
-			}
-			j++;
-		}	
-	}
-	//parsing arg (printf errore)
-	//mi raccomando e' importante
-	j = 0;
-	if (arg != NULL)
-	{
-		env_tmp = (char **)ft_calloc(sizeof(char *), (matrix_len(shell->env) + 1));
-		if (env_tmp == NULL)
-			return ;
-		while (shell->env[k])
-		{
-			if (ft_strncmp(shell->env[k], arg, ft_strlen(arg)) != 0)
-			{
-				env_tmp[j] = ft_strdup(shell->env[k]); 
+				if (ft_strncmp(shell->env[j], shell->mtx_line[shell->i + l], ft_strlen(shell->mtx_line[shell->i + l])) == 0)
+				{
+					arg = ft_strdup(shell->env[j]);
+					break ;	
+				}
 				j++;
-			}
-			k++;
+			}	
 		}
-		env_tmp[j] = NULL;
-		free_matrix(shell->env);
-		shell->env = matrix_dup(env_tmp);
-		free_matrix(env_tmp);
+		//parsing arg (printf errore)
+		//mi raccomando e' importante
+		j = 0;
 		if (arg != NULL)
-			free(arg);
+		{
+			env_tmp = (char **)ft_calloc(sizeof(char *), (matrix_len(shell->env) + 1));
+			if (env_tmp == NULL)
+				return ;
+			while (shell->env[k])
+			{
+				if (ft_strncmp(shell->env[k], arg, ft_strlen(arg)) != 0)
+				{
+					env_tmp[j] = ft_strdup(shell->env[k]); 
+					j++;
+				}
+				k++;
+			}
+			env_tmp[j] = NULL;
+			free_matrix(shell->env);
+			shell->env = matrix_dup(env_tmp);
+			free_matrix(env_tmp);
+			if (arg != NULL)
+				free(arg);
+		}
+		l++;
 	}
-	shell->i++;
+	shell->i += l;
 }
 
 

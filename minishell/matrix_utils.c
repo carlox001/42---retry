@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 16:56:55 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/31 17:01:45 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/16 10:54:43 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,21 @@ void	free_matrix(char **matrix)
 	free(matrix);
 }
 
+void	free_matrix_len(char **matrix, int len)
+{
+	int	j;
+
+	// if (matrix == NULL)
+	// 	return ;
+	j = 0;
+	while (j < len)
+	{
+		free(matrix[j]);
+		j++;
+	}
+	free(matrix);
+}
+
 char	**matrix_dup(char **old_mtx)
 {
 	char	**new_mtx;
@@ -56,6 +71,8 @@ char	**matrix_dup(char **old_mtx)
 
 	j = 0;
 	new_mtx = (char **)malloc(sizeof(char *) * (matrix_len(old_mtx) + 1));
+	if (new_mtx == NULL)
+		return (NULL);
 	while (old_mtx[j])
 	{
 		new_mtx[j] = ft_strdup(old_mtx[j]);

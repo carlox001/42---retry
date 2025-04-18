@@ -6,7 +6,8 @@ UTILS_DIR = utils/
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -g 
 
-SRC = main.c \
+SRC = close.c \
+	  main.c \
 	  matrix_utils.c \
 	  parsing.c \
 	  count_words.c \
@@ -27,6 +28,12 @@ SRC = main.c \
 	  ft_cd_utils_1.c \
 	  ft_cd_utils_2.c \
 	  ft_cd_utils_3.c \
+	  global.c \
+	  here_doc.c \
+	  signals.c \
+	  main_utils.c \
+	  manage_in_out.c \
+	  parsing_checks.c \
 
 all: $(NAME)
 

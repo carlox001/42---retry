@@ -1,0 +1,8 @@
+< file > file
+ls"|" grep main (gestire il paring)
+unlink here_doc
+heredoc concatenati
+
+exit code con waitpid
+
+ctrl c e d con here doc 

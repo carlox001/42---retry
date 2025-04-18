@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 13:52:42 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/05 17:13:13 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/18 10:55:23 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,29 @@
 // famo gli exit code
 void	ft_export(t_program *shell)
 {
-	char	*str;
-	char	*dup;
 	int		i;
 	int		value;
+	int		j;
+	char	*str;
+	char	*dup;
 
 	if (only_export(shell) == 1)
 		return ;
-	i = 0;
 	if (export_parsing(shell) == 1)
 		return ;
-	dup = ft_strdup(shell->mtx_line[shell->i + 1]);
-	str = remove_all_quotes(dup);
-	free(dup);
-	value = 0;
-	i = export_cicle(str);
-	export_core(shell, value, i, str);
-	shell->i++;
+	j = 1;
+	while (shell->mtx_line[shell->i + j])
+	{
+		i = 0;
+		dup = ft_strdup(shell->mtx_line[shell->i + j]);
+		str = remove_all_quotes(dup);
+		free(dup);
+		value = 0;
+		i = export_cicle(str);
+		export_core(shell, value, i, str);
+		j++;
+	}
+	shell->i += j;
 }
 
 int	export_cicle(char *str)
@@ -124,7 +130,7 @@ void	export_core(t_program *shell, int value, int i, char *str)
 	if (value == -2)
 	{
 		err = ft_substr(str, 0, i);
-		printf("shell: export: `%s': not a valid identifier 3\n", err);
+		printf("shell: export: `%s': not a valid identifier\n", err);
 		shell->exit_code = 1;
 		free(err);
 		return ;

@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:16:08 by cazerini          #+#    #+#             */
-/*   Updated: 2025/04/04 18:30:26 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/18 10:58:55 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,25 @@ int	only_export(t_program *shell)
 int	export_parsing(t_program *shell)
 {
 	char	*str;
+	int		j;
 
 	// printf("shell->mtx_line[shell->i + 1]: %s\n", shell->mtx_line[shell->i + 1]);
-	str = ft_strdup(shell->mtx_line[shell->i + 1]);
-	if (export_parsing_2(shell, str) == -1)
-		return (-1);
-	if (export_parsing_quote(str) == 1)
+	j = 1;
+	while (shell->mtx_line[shell->i + j])
 	{
-		printf("shell: export: `%s': not a valid identifier 1\n", str);
-		shell->exit_code = 1;
+		str = ft_strdup(shell->mtx_line[shell->i + j]);
+		if (export_parsing_2(shell, str) == 1)
+			return (1);
+		if (export_parsing_quote(str) == 1)
+		{
+			printf("shell: export: `%s': not a valid identifier\n", str);
+			shell->exit_code = 1;
+			free(str);
+			return (1);
+		}
 		free(str);
-		return (1);
+		j++;
 	}
-	free(str);
 	return (0);
 }
 
@@ -56,6 +62,15 @@ int	export_parsing_2(t_program *shell, char *str)
 	int	i;
 
 	i = 0;
+	printf("str: %s\n", str);
+	if (str[0] == '=' || (ft_isalpha(str[0]) != 1 && str[0] != '_' && \
+		str[0] != '\'' && str[0] != '"' && str[0] != '/'))
+	{
+		printf("shell: export: `%s': not a valid identifier\n", str);
+		free(str);
+		shell->exit_code = 1;
+		return (1);
+	}
 	while (str[i] != '=' && str[i])
 	{
 		if (str[i] == '+' && str[i + 1] == '=')
@@ -63,10 +78,10 @@ int	export_parsing_2(t_program *shell, char *str)
 		if (ft_isalnum(str[i]) != 1  && str[i] != '_' && \
 			str[i] != '\'' && str[i] != '"')
 		{
-			printf("shell: export: `%s': not a valid identifier 2\n", str);
+			printf("shell: export: `%s': not a valid identifier\n", str);
 			free(str);
 			shell->exit_code = 1;
-			return (-1);
+			return (1);
 		}
 		i++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 15:53:33 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/30 19:13:13 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/12 16:33:43 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	mel = 0;
 	nel = 0;
-	while (s1[mel] != '\0')
+	while (s1[++mel] != '\0')
 	{
 		rts[mel] = s1[mel];
 		mel++;

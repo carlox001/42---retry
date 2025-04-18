@@ -3,20 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_command_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:30:14 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/05 17:30:01 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:28:19 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* char *args[2];
+// extern int	signals = 0;
 
-args[0] = "ls";
-args[1] = NULL;
-execve("/bin/ls", args, NULL); */
 
 void	ft_cd(t_program *shell)
 {
