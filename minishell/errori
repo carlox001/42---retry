@@ -1,8 +1,6 @@
 < file > file
-ls"|" grep main (gestire il paring)
+ls"|" grep main (gestire il parsing)
 unlink here_doc
 heredoc concatenati
-
 exit code con waitpid
-
-ctrl c e d con here doc 
+ctrl c e d con here doc

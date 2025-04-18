@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:53:39 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/17 19:02:30 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/04/18 11:21:56 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	child(t_program *shell, int i, int pipe_cmd, char ***mtx_hub)
 	else if (pipe_cmd == 0)
 	{
 		path = path_find(shell->env, shell->mtx_line[0]);
-		if (path == NULL)
+		if (path == NULL && shell->flag_builtin == 0)
 			printf("%s: command not found\n", shell->mtx_line[0]);
 		else if (shell->num_fd >= 0)
 			dup2(shell->out[shell->num_fd], STDOUT_FILENO);
@@ -135,7 +135,7 @@ void	child(t_program *shell, int i, int pipe_cmd, char ***mtx_hub)
 	{
 		free_matrix_pointer(mtx_hub);
 		if (shell->num_cmd != 1)
-			free_all(shell, 0);
+			free_all(shell, 1);
 		exit(1);
 	}
 }
