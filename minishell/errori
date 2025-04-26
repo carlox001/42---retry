@@ -1,6 +1,5 @@
-< file > file
-ls"|" grep main (gestire il parsing)
-unlink here_doc
-heredoc concatenati
-exit code con waitpid
-ctrl c e d con here doc
+//heredoc concatenati
+// exit code con waitpid
+ctrl c e d con here doc e unlink
+cat ctrl^\ core dumped
+<812154698>s deve dare syntax error

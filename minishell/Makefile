@@ -6,34 +6,40 @@ UTILS_DIR = utils/
 CC = cc
 CFLAGS = -Wall -Werror -Wextra -g 
 
-SRC = close.c \
-	  main.c \
-	  matrix_utils.c \
-	  parsing.c \
-	  count_words.c \
-	  matrix_handler.c \
-	  quotes_core.c \
-	  commands_hub.c \
-	  builtin_command_1.c \
-	  builtin_command_2.c \
-	  parsing_utils.c \
-	  exec.c \
-	  ft_export.c \
-	  ft_export_utils_1.c \
-	  ft_export_utils_2.c \
-	  ft_unset.c \
-	  ft_unset_utils.c \
-	  ft_echo.c \
-	  ft_echo_utils.c \
-	  ft_cd_utils_1.c \
-	  ft_cd_utils_2.c \
-	  ft_cd_utils_3.c \
-	  global.c \
-	  here_doc.c \
-	  signals.c \
-	  main_utils.c \
-	  manage_in_out.c \
-	  parsing_checks.c \
+SRC = other_utils/close.c \
+	main.c \
+	other_utils/matrix_utils.c \
+	parsing/parsing.c \
+	parsing/count_words.c \
+	parsing/matrix_handler.c \
+	parsing/quotes_core.c \
+	commands/commands_hub.c \
+	commands/builtin_commands/other_builtin.c \
+	commands/builtin_commands/cd/ft_cd.c \
+	parsing/parsing_utils.c \
+	commands/exec.c \
+	commands/exec_utils.c \
+	commands/builtin_commands/export/ft_export.c \
+	commands/builtin_commands/export/ft_export_utils_1.c \
+	commands/builtin_commands/export/ft_export_utils_2.c \
+	commands/builtin_commands/unset/ft_unset.c \
+	commands/builtin_commands/unset/ft_unset_utils.c \
+	commands/builtin_commands/echo/ft_echo.c \
+	commands/builtin_commands/echo/ft_echo_utils.c \
+	commands/builtin_commands/cd/ft_cd_utils_1.c \
+	commands/builtin_commands/cd/ft_cd_utils_2.c \
+	commands/builtin_commands/cd/ft_cd_utils_3.c \
+	commands/non_builtin_commands/fork.c \
+	globals/global.c \
+	redirections/here_doc.c \
+	redirections/here_doc_utils.c \
+	redirections/expansion_in_hd.c \
+	other_utils/signals.c \
+	main_utils.c \
+	redirections/manage_in_out.c \
+	redirections/manage_input.c \
+	redirections/manage_output.c \
+	parsing/parsing_checks.c \
 
 all: $(NAME)
 

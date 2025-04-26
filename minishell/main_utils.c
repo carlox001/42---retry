@@ -6,16 +6,16 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:43:40 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/17 18:43:58 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:06:44 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// restituisce il percorso della directory corrente
 char	*print_directory(t_program *shell)
 {
 	char	*str;
-	char	*tmp;
 
 	if (shell->home_path != NULL)
 	{
@@ -28,31 +28,28 @@ char	*print_directory(t_program *shell)
 			else
 				str = ft_strdup("shell:~");
 		}
-		tmp = str;
+		shell->tmp = str;
 		str = ft_strjoin(str, "$ ");
-		free(tmp);
+		free(shell->tmp);
 	}
 	else
 	{
 		str = ft_strjoin("shell:", shell->pwd);
-		tmp = str;
+		shell->tmp = str;
 		str = ft_strjoin(str, "$ ");
-		free(tmp);
+		free(shell->tmp);
 	}
 	return (str);
 }
 
-
+// inizzializza il programma
 int	initialize(t_program *shell)
 {
 	char	*str;
 
 	shell->exit_code = 0;
-	signals = 0;
-	// if (!str)
-		// return (1);
+	g_signals = 0;
 	str = getcwd(NULL, 1000);
-	
 	shell->pwd = ft_strdup(str);
 	shell->old_pwd = ft_strdup(str);
 	free(str);
@@ -60,7 +57,7 @@ int	initialize(t_program *shell)
 	if (str == NULL)
 	{
 		shell->home_path = NULL;
-		shell->curr_dir = ft_strdup(shell->pwd);	
+		shell->curr_dir = ft_strdup(shell->pwd);
 	}
 	else
 	{
@@ -71,7 +68,7 @@ int	initialize(t_program *shell)
 	return (0);
 }
 
-
+// libera il programma
 void	free_all(t_program *shell, int flag)
 {
 	if (flag == 0)
@@ -87,6 +84,6 @@ void	free_all(t_program *shell, int flag)
 		free(shell->home_path);
 	if (shell->curr_dir != NULL)
 		free(shell->curr_dir);
-	if (shell->old_pwd != NULL)	
+	if (shell->old_pwd != NULL)
 		free(shell->old_pwd);
 }

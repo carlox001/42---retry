@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:23:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/17 19:09:52 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/04/26 16:56:18 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # include "utils/utils.h"
 # include <wait.h>
 # include <signal.h>
-# include "global.h"
+# include "globals/global.h"
 
 
 typedef struct s_program
@@ -47,6 +47,7 @@ typedef struct s_program
 	// utils
 	int		i;
 	int		j;
+	int		k;
 	int		i_p;
 	int		num_hd;
 	int		words;
@@ -64,6 +65,8 @@ typedef struct s_program
 	char	*tmp;
 	int		fork_id;
 	int		num_fd;
+	int		flag_in_operator;
+	// int		exec_dollar_fd;
 
 }	t_program;
 
@@ -71,6 +74,9 @@ typedef struct s_program
 
 // global
 // int	signal_flag = 0;
+
+
+
 
 // builtin_command_1.c
 int		ft_pwd();
@@ -103,13 +109,22 @@ void	count_char(char *str, t_program *shell, int *words, int *flag);
 void	count_quotes(char *str, t_program *shell, int *words);
 void	count_operators(char *str, t_program *shell, int *words);
 
+// fork.c
+int		child(t_program *shell, int i, int pipe_cmd, char ***mtx_hub);
+int		open_files_in_child(t_program *shell, int i, char ***mtx_hub);
+void    redirect_in_out_child(t_program *shell, int pipe_cmd, char *path);
+void	father(t_program *shell, int j);
+
 // exec.c
 int		exec(t_program *shell);
 int		exec_core(t_program *shell, int j, int num_cmd, char ***mtx_hub);
-void	child(t_program *shell, int i, int pipe_cmd, char ***mtx_hub);
-void	father(t_program *shell, int j);
-char	***alloc_mtx(int num_commands, t_program *shell);
+int		exec_one_command(t_program *shell, int i, char ***mtx_hub);
+int		exec_more_commands(t_program *shell, int j, int i, char ***mtx_hub);
 int		count_commands(char **mtx_line, t_program *shell);
+
+// exec_utils.c
+char	***alloc_mtx(int num_commands, t_program *shell);
+void	alloc_mtx_core(t_program *shell, char ***mtx_hub);
 void	free_matrix_pointer(char ***mtx_hub);
 
 // ft_cd_utils_1.c
@@ -136,11 +151,11 @@ void	end_relative_cd(t_program *shell, char *path);
 
 // ft_echo.c
 void	ft_echo(t_program *shell);
-void	exec_dollar(char *str, t_program *shell, int i2, int len2);
-void	search_env(char *env_str, t_program *shell);
+void	ft_echo_core(t_program *shell, char *str2, int *i, int len);
 
 // ft_echo_utils.c
 char	*remove_external_quotes(char *old_str, char q);
+char	*remove_external_quotes_core(char *old_str, int c_l, int c_r, int i);
 int		count_args(char **mtx, int i);
 int		check_nflag(char *str, t_program *shell);
 int		check_dollar(char *str);
@@ -177,7 +192,20 @@ char	*split_dollar(char *old_str, t_program *shell);
 
 // here_doc.c
 int		open_here_doc(t_program *shell, char **mtx);
-void	write_in_file(int fd, char *limiter);
+void	write_in_file(int fd, char *limiter, t_program *shell);
+int		write_in_file_check(char **str, int *flag, t_program *shell, char *limiter);
+void	close_here_doc(t_program *shell);
+int		open_here_doc_core(int *i, char **file, int *num_hd);
+
+// here_doc_utils.c
+void	set_hd_g_signals(int flag);
+
+
+// expansion_in_hd.c
+void	exec_dollar(char *str, t_program *shell, int fd);
+int		exec_dollar_core(char *str, t_program *shell, int fd, int *i);
+int		exec_dollar_core_2(t_program *shell, char *str, int fd, int *i);
+void	search_env(char *env_str, t_program *shell, int fd);
 
 // main_utils.c
 char	*print_directory(t_program *shell);
@@ -187,6 +215,7 @@ void	free_all(t_program *shell, int flag);
 // main.c
 int		main_core(t_program *shell);
 int		open_here_doc(t_program *shell, char **mtx);
+int		readline_core(t_program *shell, char **str);
 
 // matrix_utils.c
 void	print_matrix(char **matrix);
@@ -197,11 +226,20 @@ char	**matrix_dup(char **old_mtx);
 
 // manage_in_out.c
 int		counter_in_out(char c, char **mtx);
-int		open_files_in(char **mtx, t_program *shell);
-int		open_files_out(char **mtx, t_program *shell);
-int		redir_input(t_program *shell, int i, char ***mtx_hub, int flag);
-int		redir_output(t_program *shell, int k, int i, char ***mtx_hub);
 char	**realloc_without_redir(char **mtx, int k, char c);
+int		open_files_out(char **mtx, t_program *shell);
+int		redir_output(t_program *shell, int k, int i, char ***mtx_hub);
+// manage_input.c
+int		redir_input(t_program *shell, int i, char ***mtx_hub, int flag);
+int		open_files_in(char **mtx, t_program *shell);
+int		open_file_in_hd(int *i, int *j, int *num_hd, int *shell_in);
+int 	open_file_in_fd(int *i, int *j, char **mtx, t_program *shell);
+void	initialize_files_in(int *i, int *j, int *num_hd, int flag);
+
+// manage_output.c
+int	double_redirection(int *i, int *j, char **mtx, int *shell_out);
+int	single_redirection(int *i, int *j, char **mtx, int *shell_out);
+
 
 // matrix_handler.c
 int		matrix_handler(char *str, t_program *shell);
@@ -236,8 +274,9 @@ int		double_quote(char *str, t_program *shell);
 int		single_quote(char *str, t_program *shell);
 int		alloc_quote(t_program *shell, int flag, char *str, char q);
 
-// signlals.c
+// g_signals.c
 void	sig_handler_child(int sig);
 void	sig_handler(int sig);
+void	sig_handler_hd(int sig);
 
 #endif
