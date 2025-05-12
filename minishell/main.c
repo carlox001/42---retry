@@ -6,21 +6,13 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:21:55 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/26 16:53:35 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:30:16 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+// "$HOME"'$USER"*.c'" ' ' "'"$USER"$HOME'"''*.c'''"$USER
 
-//make re && clear && valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=supp.supp --quiet ./minishell
-//make re && clear && valgrind --suppressions=supp.supp --leak-check=full --track-fds=yes --trace-children=yes ./minishell
-//make re && clear && valgrind --leak-check=full --show-leak-kinds=all --suppressions=supp.supp --quiet ./minishell
-
-// inseriamo le guardie alle allocazione
-// controllare gli exit code e scrivere commenti su come funzionano le funzioni
-// file errori
-
-//things done
 int	main(int ac, char **av, char **env)
 {
 	t_program	shell;
@@ -58,10 +50,24 @@ int	main_core(t_program *shell)
 			flag = open_here_doc(shell, shell->mtx_line);
 			if (flag == -1)
 				return (free_all(shell, 0), 1);
-			if (exec(shell) == 1)
-				return (free_all(shell, 0), 1);
+			else if (flag != -2 && main_core_2(shell) == 1)
+				return (1);
+			else if (flag == -2)
+				free_matrix(shell->mtx_line);
 		}
 	}
+	return (0);
+}
+
+int	main_core_2(t_program *shell)
+{
+	if (only_redir(shell->mtx_line) == 1)
+	{
+		shell->exit_code = 0;
+		close_here_doc(shell);
+	}
+	else if (exec(shell) == 1)
+		return (free_all(shell, 0), 1);
 	return (0);
 }
 
@@ -76,15 +82,35 @@ int	readline_core(t_program *shell, char **str)
 	*str = readline(print_str);
 	free(print_str);
 	if (!(*str))
-	{
-		//qui
 		return (printf("exit\n"), free_all(shell, 0), 1);
-	}
+	printf("g_signals: %d\n", g_signals);
 	if (g_signals == SIGINT)
 	{
 		g_signals = 0;
 		shell->exit_code = 130;
 	}
-	add_history((*str));
+	if (g_signals == SIGQUIT)
+	{
+		g_signals = 0;
+		shell->exit_code = 131;
+	}
+	if (*str[0] != '\0')
+		add_history((*str));
 	return (0);
+}
+
+int	only_redir(char **mtx)
+{
+	int	i;
+
+	i = 0;
+	while (mtx[i])
+	{
+		if (mtx[i][0] == '<' || mtx[i][0] == '>')
+			i += 2;
+		else
+			return (0);
+	}
+	free_matrix(mtx);
+	return (1);
 }

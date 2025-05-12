@@ -3,89 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_core.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:04:58 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/22 11:33:44 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/11 17:26:27 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
-int	quotes_core(char *str, t_program *shell, int *i_p)
+int	quotes_core(char *str, t_program *shell, int *i_p, int *flag)
 {
 	shell->i_p = (*i_p);
-	if (double_quote(str, shell) == 1)
+	if (double_quote(str, shell, flag) == 1)
 		return (1);
-	else if (single_quote(str, shell) == 1)
+	else if (single_quote(str, shell, flag) == 1)
 		return (1);
 	return (0);
 }
 
-int	double_quote(char *str, t_program *shell)
+int	double_quote(char *str, t_program *shell, int *flag)
 {
-	int	flag;
-
-	flag = 0;
-	if (str[shell->i] == '"')
+	if (str[shell->i] == '\"')
 	{
 		shell->i++;
-		while (str[shell->i] && str[shell->i] != '"')
-		{
-			flag = 1;
+		while (str[shell->i] && str[shell->i] != '\"')
 			shell->i++;
+		if (str[shell->i] && str[shell->i + 1] != '\0')
+			shell->i++;
+		if (str[shell->i] == ' ' || str[shell->i] == '\0')
+			*flag = 1;
+		else
+		{
+			while (str[shell->i] && isvalid(str, shell->i) == 1 && \
+			str[shell->i] != ' ')
+				shell->i++;
 		}
-		if (alloc_quote(shell, flag, str, '"') == 1)
-			return (1);
 	}
 	return (0);
 }
 
 //separa in funzioni e bella
-
-int	single_quote(char *str, t_program *shell)
+int	single_quote(char *str, t_program *shell, int *flag)
 {
-	int	flag;
-
-	flag = 0;
 	if (str[shell->i] == '\'')
 	{
 		shell->i++;
 		while (str[shell->i] && str[shell->i] != '\'')
-		{
-			flag = 1;
 			shell->i++;
-		}
-		if (alloc_quote(shell, flag, str, '\'') == 1)
-			return (1);
-	}
-	return (0);
-}
-
-
-int	alloc_quote(t_program *shell, int flag, char *str, char q)
-{	
-	if (flag == 1)
-	{
-		shell->mtx_line[shell->j] = ft_substr(str, shell->i_p, (shell->i - shell->i_p + 1));
-		if (shell->mtx_line[shell->j] == NULL)
-			return (1);
-		shell->j++;
-	}
-	else if ((shell->i - shell->i_p) != 0)
-	{
-		if (str[shell->i] == q && str[shell->i - 1] == q)
-			shell->i_p -= 2;
+		if (str[shell->i] && str[shell->i + 1] != '\0')
+			shell->i++;
+		if (str[shell->i] == ' ' || str[shell->i] == '\0')
+			*flag = 1;
 		else
 		{
-			shell->mtx_line[shell->j] = ft_substr(str, shell->i_p, (shell->i - shell->i_p));
-			printf("matrix_line: %s\n", shell->mtx_line[shell->j]);
-			if (shell->mtx_line[shell->j] == NULL)
-				return (1);
-			shell->j++;
+			while (str[shell->i] && isvalid(str, shell->i))
+				shell->i++;
 		}
 	}
-	shell->i_p = shell->i;
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:16:28 by cazerini          #+#    #+#             */
-/*   Updated: 2025/04/20 11:36:00 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:09:13 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,33 @@ int	count_args(char **mtx, int i)
 	return (len);
 }
 
-int	check_nflag(char *str, t_program *shell)
+void	check_nflag(char **mtx, t_program *shell)
 {
-	if (ft_strncmp(str, "-n", 2) == 0 && ft_strlen(str) == 2)
+	// char	*tmp;
+	int		i;
+	char	*str;
+
+	shell->nflag = 0;
+	while (mtx[shell->i + 1])
 	{
-		shell->i++;
-		return (1);
+		// tmp = mtx[shell->i + 1];
+		str = remove_couple_quotes(mtx[shell->i + 1]);
+		// free(tmp);
+		i = 0;
+		if (str[i] == '-')
+		{
+			i++;
+			while (str[i] && str[i] == 'n')
+				i++;
+			if (str[i] != 'n' && str[i] != '\0')
+				return ;
+			shell->i++;
+			shell->nflag = 1;
+		}
+		else
+			return (free(str));
 	}
-	return (0);
+	free(str);
 }
 
 // 1: trova dollar

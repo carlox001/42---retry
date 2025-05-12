@@ -3,10 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:53:39 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/25 14:57:54 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:36:55 by cazerini         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/26 14:53:39 by sfiorini          #+#    #+#             */
+/*   Updated: 2025/05/11 19:02:22 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +25,45 @@ int	exec(t_program *shell)
 	int		check;
 	char	***mtx_hub;
 
-	shell->output = dup(STDOUT_FILENO);
-	shell->input = dup(STDIN_FILENO);
-	shell->num_cmd = count_commands(shell->mtx_line, shell);
-	mtx_hub = alloc_mtx(shell->num_cmd, shell);
-	free_matrix(shell->mtx_line);
-	j = shell->num_cmd - 1;
-	shell->i = 0;
+	mtx_hub = NULL;
+	j = set_exec(shell, &mtx_hub);
 	check = exec_core(shell, j, shell->num_cmd, mtx_hub);
 	if (check == 1)
 		return (1);
 	if (check == -1)
-		return (1);
+	{
+		close(shell->input);
+		close(shell->output);
+		return (free_matrix_pointer(mtx_hub), -1);
+	}
 	close(shell->output);
 	close(shell->input);
 	while (wait(&shell->exit_code) > 0)
 	{
-		if (shell->exit_code >= 256)
-			shell->exit_code /= 256;
+		printf("faccio questo\n");
+		shell->exit_code /= 256;
+		shell->status = (unsigned char *)ft_itoa(shell->exit_code);
+		shell->exit_code = ft_atoi((const char *)shell->status);
+		free(shell->status);
 	}
 	close_here_doc(shell);
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, SIG_IGN);
+	set_exec_signals();
 	free_matrix_pointer(mtx_hub);
 	return (0);
+}
+
+int	set_exec(t_program *shell, char ****mtx_hub)
+{
+	int	j;
+
+	shell->output = dup(STDOUT_FILENO);
+	shell->input = dup(STDIN_FILENO);
+	shell->num_cmd = count_commands(shell->mtx_line, shell);
+	*mtx_hub = alloc_mtx(shell->num_cmd, shell);
+	free_matrix(shell->mtx_line);
+	j = shell->num_cmd - 1;
+	shell->i = 0;
+	return (j);
 }
 
 int	exec_core(t_program *shell, int j, int num_cmd, char ***mtx_hub)
@@ -51,7 +73,7 @@ int	exec_core(t_program *shell, int j, int num_cmd, char ***mtx_hub)
 
 	i = 0;
 	check = 0;
-	if (num_cmd == 1 && shell->flag_builtin == 1)
+	if (num_cmd == 1 && shell->flag_builtin >= 1)
 	{
 		check = exec_one_command(shell, i, mtx_hub);
 		if (check == 1)
@@ -61,6 +83,7 @@ int	exec_core(t_program *shell, int j, int num_cmd, char ***mtx_hub)
 	}
 	else
 	{
+		printf("check: %d\n", check);
 		check = exec_more_commands(shell, j, i, mtx_hub);
 		if (check == 1)
 			return (1);
@@ -80,15 +103,19 @@ int	exec_one_command(t_program *shell, int i, char ***mtx_hub)
 	if (redir_input(shell, i, mtx_hub, 1) == 1)
 		return (1);
 	k = open_files_out(mtx_hub[i], shell);
+	if (k == -1)
+		return (-1);
 	if (redir_output(shell, k, i, mtx_hub) == 1)
 		return (1);
 	if (k - 1 >= 0)
 		dup2(shell->out[k - 1], STDOUT_FILENO);
 	shell->mtx_line = matrix_dup(mtx_hub[i]);
-	check_commands(shell->mtx_line[0], shell, -1, 0);
+	if (check_commands(shell->mtx_line[0], shell, -1, mtx_hub) == 1)
+		return (1);
 	if (k - 1 >= 0)
 		close_in_out(shell->out, k - 1, 1);
 	dup2(shell->output, STDOUT_FILENO);
+	close(shell->output);
 	return (0);
 }
 
@@ -101,56 +128,22 @@ int	exec_more_commands(t_program *shell, int j, int i, char ***mtx_hub)
 	while (i < shell->num_cmd)
 	{
 		if (pipe(shell->fd) == -1)
+		{
+			close(shell->input);
+			close(shell->output);
 			return (1);
+		}
 		id = fork();
-		shell->fork_id = id;
 		if (id == -1)
 			return (1);
 		else if (id == 0)
 		{
 			if (child(shell, i, j, mtx_hub) == 1)
-			{
-				close(shell->fd[0]);
-				close(shell->fd[1]);
-				free_matrix_pointer(mtx_hub);
-				free_all(shell, 1);
-				exit(1);
-			}
-			
+				failed_child(shell, mtx_hub);
 		}
 		else
 			father(shell, j);
-		j--;
-		i++;
+		update_counter_exec(&j, &i);
 	}
 	return (0);
-}
-
-int	count_commands(char **mtx, t_program *shell)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 1;
-	shell->flag_builtin = 0;
-	while (mtx[i])
-	{
-		if (mtx[i][0] == '<' || mtx[i][0] == '>')
-			i += 2;
-		if (mtx[i] != NULL && mtx[i][0] == '|')
-			count++;
-		if (mtx[i] != NULL && \
-			((ft_strncmp(mtx[i], "echo", 4) == 0 && ft_strlen(mtx[i]) == 4) || \
-			(ft_strncmp(mtx[i], "pwd", 3) == 0 && ft_strlen(mtx[i]) == 3) || \
-			(ft_strncmp(mtx[i], "env", 3) == 0 && ft_strlen(mtx[i]) == 3) || \
-			(ft_strncmp(mtx[i], "cd", 2) == 0 && ft_strlen(mtx[i]) == 2) || \
-			(ft_strncmp(mtx[i], "export", 6) == 0 && ft_strlen(mtx[i]) == 6) || \
-			(ft_strncmp(mtx[i], "unset", 5) == 0 && ft_strlen(mtx[i]) == 5) || \
-			(ft_strncmp(mtx[i], "exit", 4) == 0 && ft_strlen(mtx[i]) == 4)))
-			shell->flag_builtin++;
-		if (mtx[i] != NULL)
-			i++;
-	}
-	return (count);
 }

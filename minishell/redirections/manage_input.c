@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_input.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:33:45 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/26 17:09:27 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/09 18:54:16 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,38 +55,37 @@ int	open_files_in(char **mtx, t_program *shell)
 	initialize_files_in(&i, &j, &shell->num_hd, 1);
 	while (mtx[i])
 	{
-		if (mtx[i][0] == '<' && mtx[i][1] == '<')
-		{
-			if (open_file_in_hd(&i, &j, &shell->num_hd, shell->in) == -1)
-				return (-1);
-		}
-		else if (mtx[i][0] == '<' && mtx[i][1] == '>')
-		{
-			shell->flag_in_operator = 1;
-			if (open_file_in_fd(&i, &j, mtx, shell) == -1)
-				return (-1);
-		}
-		else if (mtx[i][0] == '<')
-		{
-			if (open_file_in_fd(&i, &j, mtx, shell) == -1)
-			{
-				close(shell->input);
-				close(shell->output);
-				free(shell->in);
-				return (-1);
-			}
-		}
+		if (open_file_in_hub(&j, &i, mtx, shell) == -1)
+			return (-1);
 		i++;
 	}
 	return (j);
 }
 
-void	initialize_files_in(int *i, int *j, int *num_hd, int flag)
+int	open_file_in_hub(int *j, int *i, char **mtx, t_program *shell)
 {
-	(*i) = 0;
-	(*j) = 0;
-	if (flag == 1)
-		(*num_hd) = 0;
+	if (mtx[*i][0] == '<' && mtx[*i][1] == '<')
+	{
+		if (open_file_in_hd(i, j, &shell->num_hd, shell->in) == -1)
+			return (-1);
+	}
+	else if (mtx[*i][0] == '<' && mtx[*i][1] == '>')
+	{
+		shell->flag_in_operator = 1;
+		if (open_file_in_fd(i, j, mtx, shell) == -1)
+			return (-1);
+	}
+	else if (mtx[*i][0] == '<')
+	{
+		if (open_file_in_fd(i, j, mtx, shell) == -1)
+		{
+			close(shell->input);
+			close(shell->output);
+			free(shell->in);
+			return (-1);
+		}
+	}
+	return (0);
 }
 
 int	open_file_in_hd(int *i, int *j, int *num_hd, int *shell_in)
@@ -125,7 +124,9 @@ int	open_file_in_fd(int *i, int *j, char **mtx, t_program *shell)
 	shell->flag_in_operator = 0;
 	if (shell->in[*j] == -1)
 	{
-		printf("shell %s: No such file or directory\n", (mtx[*i]));
+		ft_putstr_fd("shell ", 2);
+		ft_putstr_fd(mtx[*i], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		return (-1);
 	}
 	(*j)++;

@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:54:56 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/23 15:31:15 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/04/27 12:56:38 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,12 @@ char	**realloc_without_redir(char **mtx, int k, char c)
 	}
 	new_mtx[j] = NULL;
 	return (new_mtx);
+}
+
+void	initialize_files_in(int *i, int *j, int *num_hd, int flag)
+{
+	(*i) = 0;
+	(*j) = 0;
+	if (flag == 1)
+		(*num_hd) = 0;
 }

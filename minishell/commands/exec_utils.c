@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 22:13:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/23 19:24:56 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:48:11 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,89 +15,60 @@
 char	***alloc_mtx(int num_commands, t_program *shell)
 {
 	char	***mtx_hub;
-	// char	**dup_mtx;
-	// int		i;
-	// int		j;
-	// int		k;
 
-	// initialize_files_in(&i, &j, &k, 1);
 	mtx_hub = (char ***)ft_calloc(sizeof(char **), (num_commands + 1));
 	if (mtx_hub == NULL)
 		return (NULL);
-	// while (shell->mtx_line[i])
-	// {
-	// 	if (k == 0)
-	// 	{
-	// 		dup_mtx = (char **)ft_calloc(sizeof(char *), (matrix_len(shell->mtx_line) + 1));
-	// 		if (dup_mtx == NULL)
-	// 			return (NULL);
-	// 	}
-	// 	if (shell->mtx_line[i][0] == '|')
-	// 	{
-	// 		mtx_hub[j] = matrix_dup(dup_mtx);
-	// 		j++;
-	// 		i++;
-	// 		free_matrix(dup_mtx);
-	// 		k = 0;
-	// 	}
-	// 	else
-	// 	{
-	// 		dup_mtx[k] = ft_strdup(shell->mtx_line[i]);
-	// 		k++; 
-	// 		i++;
-	// 	}
-	// }
-	// if (dup_mtx[0] != NULL || dup_mtx[0][0] != '\0')
-	// {
-	// 	mtx_hub[j] = matrix_dup(dup_mtx);
-	// 	j++;
-	// }
-	// free_matrix(dup_mtx);
 	alloc_mtx_core(shell, mtx_hub);
 	return (mtx_hub);
 }
 
+int	alloc_mtx_core_while(t_program *shell, int *i, int *j, char ***mtx_hub)
+{
+	int	k;
+
+	k = 0;
+	while (shell->mtx_line[*i])
+	{
+		if (k == 0)
+			shell->dup_mtx = (char **)ft_calloc(sizeof(char *), \
+			(matrix_len(shell->mtx_line) + 1));
+		if (shell->dup_mtx == NULL)
+			return (1);
+		if (shell->mtx_line[*i][0] == '|')
+		{
+			mtx_hub[*j] = matrix_dup(shell->dup_mtx);
+			increments(i, j);
+			free_matrix(shell->dup_mtx);
+			k = 0;
+		}
+		else
+		{
+			shell->dup_mtx[k] = ft_strdup(shell->mtx_line[*i]);
+			k++;
+			(*i)++;
+		}
+	}
+	return (0);
+}
 
 void	alloc_mtx_core(t_program *shell, char ***mtx_hub)
 {
 	int		i;
 	int		j;
-	int		k;
-	char	**dup_mtx;
 
-	initialize_files_in(&i, &j, &k, 1);
-	while (shell->mtx_line[i])
+	i = 0;
+	j = 0;
+	if (alloc_mtx_core_while(shell, &i, &j, mtx_hub) == 1)
+		return ;
+	if (shell->dup_mtx[0] != NULL || shell->dup_mtx[0][0] != '\0')
 	{
-		if (k == 0)
-		{
-			dup_mtx = (char **)ft_calloc(sizeof(char *), (matrix_len(shell->mtx_line) + 1));
-			if (dup_mtx == NULL)
-				return ;
-		}
-		if (shell->mtx_line[i][0] == '|')
-		{
-			mtx_hub[j] = matrix_dup(dup_mtx);
-			j++;
-			i++;
-			free_matrix(dup_mtx);
-			k = 0;
-		}
-		else
-		{
-			dup_mtx[k] = ft_strdup(shell->mtx_line[i]);
-			k++; 
-			i++;
-		}
-	}
-	if (dup_mtx[0] != NULL || dup_mtx[0][0] != '\0')
-	{
-		mtx_hub[j] = matrix_dup(dup_mtx);
+		mtx_hub[j] = matrix_dup(shell->dup_mtx);
 		j++;
 	}
-	free_matrix(dup_mtx);
+	free_matrix(shell->dup_mtx);
 	mtx_hub[j] = NULL;
 }
-
 
 void	free_matrix_pointer(char ***mtx_hub)
 {
@@ -110,4 +81,33 @@ void	free_matrix_pointer(char ***mtx_hub)
 		i++;
 	}
 	free(mtx_hub);
+}
+
+int	count_commands(char **mtx, t_program *shell)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 1;
+	shell->flag_builtin = 0;
+	while (mtx[i])
+	{
+		if (mtx[i][0] == '<' || mtx[i][0] == '>')
+			i += 2;
+		if (mtx[i] != NULL && mtx[i][0] == '|')
+			count++;
+		if (mtx[i] != NULL && (i == 0 || mtx[i - 1][0] == '|') && \
+			((ft_strncmp(mtx[i], "echo", 4) == 0 && ft_strlen(mtx[i]) == 4) || \
+			(ft_strncmp(mtx[i], "pwd", 3) == 0 && ft_strlen(mtx[i]) == 3) || \
+			(ft_strncmp(mtx[i], "env", 3) == 0 && ft_strlen(mtx[i]) == 3) || \
+			(ft_strncmp(mtx[i], "cd", 2) == 0 && ft_strlen(mtx[i]) == 2) || \
+			(ft_strncmp(mtx[i], "export", 6) == 0 && ft_strlen(mtx[i]) == 6) || \
+			(ft_strncmp(mtx[i], "unset", 5) == 0 && ft_strlen(mtx[i]) == 5) || \
+			(ft_strncmp(mtx[i], "exit", 4) == 0 && ft_strlen(mtx[i]) == 4)))
+			shell->flag_builtin++;
+		if (mtx[i] != NULL)
+			i++;
+	}
+	return (count);
 }

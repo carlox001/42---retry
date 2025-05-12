@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 10:55:57 by cazerini          #+#    #+#             */
-/*   Updated: 2025/04/19 20:46:58 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/04 13:25:17 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	count_backs(char *str, t_program *shell)
 			counter++;
 			if (str[i] == '.' && str[i] != '\0')
 			{
-				printf("bash: cd: %s: No such file or directory\n", str);
+				print_cd_error(str);
 				shell->exit_code = 1;
 				return (-1);
 			}

@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 13:52:42 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/19 20:46:58 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/10 17:04:42 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,20 +96,20 @@ int	exist_in_env(char *str, t_program *shell)
 void	print_export_env(t_program *shell, int i, int j)
 {
 	printf("declare -x ");
-	while (shell->env[i][j])
+	while (shell->cpy_exp[i][j])
 	{
-		while (shell->env[i][j] && shell->env[i][j] != '=')
+		while (shell->cpy_exp[i][j] && shell->cpy_exp[i][j] != '=')
 		{
-			printf("%c", shell->env[i][j]);
+			printf("%c", shell->cpy_exp[i][j]);
 			j++;
 		}
-		if (shell->env[i][j] == '=')
+		if (shell->cpy_exp[i][j] == '=')
 		{
 			j++;
 			printf("=\"");
-			while (shell->env[i][j])
+			while (shell->cpy_exp[i][j])
 			{
-				printf("%c", shell->env[i][j]);
+				printf("%c", shell->cpy_exp[i][j]);
 				j++;
 			}
 			printf("\"\n");
@@ -117,6 +117,29 @@ void	print_export_env(t_program *shell, int i, int j)
 		else
 			printf("\n");
 	}
+}
+
+int	there_is_a_plus(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '=')
+	{
+		if (str[i] == '+')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	update_plus(char **str)
+{
+	char	*tmp;
+
+	tmp = *str;
+	*str = remove_plus(*str);
+	free(tmp);
 }
 
 void	export_core(t_program *shell, int value, int i, char *str)
@@ -130,15 +153,21 @@ void	export_core(t_program *shell, int value, int i, char *str)
 	if (value == -2)
 	{
 		err = ft_substr(str, 0, i);
-		printf("shell: export: `%s': not a valid identifier\n", err);
+		ft_putstr_fd("shell: export: `", 2);
+		ft_putstr_fd(err, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
 		shell->exit_code = 1;
 		free(err);
-		return ;
 	}
 	if (value >= 0)
+	{
+		printf("lo faccio\n");
 		change_export_value(shell, i, value, str);
+	}
 	else
 	{
+		if (there_is_a_plus(str) == 1)
+			update_plus(&str);
 		if (realloc_env(shell, str) == 1)
 			return ;
 	}

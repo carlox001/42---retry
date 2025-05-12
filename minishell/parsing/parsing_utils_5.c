@@ -1,42 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   close.c                                            :+:      :+:    :+:   */
+/*   parsing_utils_5.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/17 18:51:52 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/07 16:55:25 by sfiorini         ###   ########.fr       */
+/*   Created: 2025/04/27 18:04:25 by sfiorini          #+#    #+#             */
+/*   Updated: 2025/05/11 19:30:33 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	close_in_out(int *fd, int k, int flag)
+void	check_flag(int *flag_s, int *flag_d, char c)
 {
-	while (k >= 0)
+	if (c == '\"')
 	{
-		close(fd[k]);
-		k--;
+		if (*flag_d == 0)
+			*flag_d = 1;
+		else
+			*flag_d = 0;
 	}
-	if (flag == 1)
-		free(fd);
+	if (c == '\'' && *flag_d == 0)
+	{
+		if (*flag_s == 0)
+			*flag_s = 1;
+		else
+			*flag_s = 0;
+	}
 }
 
-void	close_fds(int *fd, int flag, int input)
+int	check_pipe(char **mtx)
 {
-	if (flag == 1)
-		dup2(fd[0], STDIN_FILENO);
-	else
-		dup2(input, STDIN_FILENO);
-	close(fd[0]);
-	close(fd[1]);
-}
+	int	i;
 
-void	close_all_files(int *fd, int output, int input)
-{
-	close(fd[0]);
-	close(fd[1]);
-	close(output);
-	close(input);
+	i = 0;
+	while (mtx[i])
+	{
+		if (mtx[i][0] == '|' && mtx[i + 1][0] == '|')
+			return (1);
+		if (mtx[i] != NULL)
+			i++;
+	}
+	return (0);
 }

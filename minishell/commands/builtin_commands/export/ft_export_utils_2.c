@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:16:08 by cazerini          #+#    #+#             */
-/*   Updated: 2025/04/20 11:24:00 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/10 15:42:34 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@ int	only_export(t_program *shell)
 	i = 0;
 	if (shell->mtx_line[shell->i + 1] == NULL)
 	{
-		while (shell->env[i])
+		shell->cpy_exp = order_env(shell);
+		while (shell->cpy_exp[i])
 		{
 			j = 0;
 			print_export_env(shell, i, j);
 			i++;
 		}
+		free_matrix(shell->cpy_exp);
 		return (1);
 	}
 	return (0);
@@ -36,17 +38,18 @@ int	export_parsing(t_program *shell)
 {
 	char	*str;
 	int		j;
+	int		check;
 
-	// printf("shell->mtx_line[shell->i + 1]: %s\n", shell->mtx_line[shell->i + 1]);
 	j = 1;
 	while (shell->mtx_line[shell->i + j])
 	{
 		str = ft_strdup(shell->mtx_line[shell->i + j]);
-		if (export_parsing_2(shell, str) == 1)
+		check = export_parsing_2(shell, str);
+		if (check == 1)
 			return (1);
-		if (export_parsing_quote(str) == 1)
+		if (check != 2 && export_parsing_quote(str) == 1)
 		{
-			printf("shell: export: `%s': not a valid identifier\n", str);
+			print_export_error(str);
 			shell->exit_code = 1;
 			free(str);
 			return (1);
@@ -63,19 +66,18 @@ int	export_parsing_2(t_program *shell, char *str)
 	if (str[0] == '=' || (ft_isalpha(str[0]) != 1 && str[0] != '_' && \
 		str[0] != '\'' && str[0] != '"' && str[0] != '/'))
 	{
-		printf("shell: export: `%s': not a valid identifier\n", str);
-		free(str);
+		print_export_error(str);
 		shell->exit_code = 1;
-		return (1);
+		return (2);
 	}
 	while (str[shell->k] != '=' && str[shell->k])
 	{
 		if (str[shell->k] == '+' && str[shell->k + 1] == '=')
 			break ;
-		if (ft_isalnum(str[shell->k]) != 1  && str[shell->k] != '_' && \
+		if (ft_isalnum(str[shell->k]) != 1 && str[shell->k] != '_' && \
 			str[shell->k] != '\'' && str[shell->k] != '"')
 		{
-			printf("shell: export: `%s': not a valid identifier\n", str);
+			print_export_error(str);
 			free(str);
 			shell->exit_code = 1;
 			return (1);

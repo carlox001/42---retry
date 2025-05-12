@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:41:20 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/25 19:29:33 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/10 18:13:55 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,43 +15,66 @@
 int	open_here_doc(t_program *shell, char **mtx)
 {
 	int		i;
-	int		fd;
-	char	*file;
+	int		id;
 
-	file = NULL;
 	shell->num_hd = 0;
+	shell->check_hd = 0;
 	i = counter_in_out('<', mtx);
 	if (i == 0)
 		return (0);
 	i = 0;
-
-	int id;
-	id =fork();
+	id = fork();
 	if (id == 0)
 	{
-		while (mtx[i])
-		{
-			if (mtx[i][0] == '<' && mtx[i][1] == '<')
-			{
-				fd = open_here_doc_core(&i, &file, &shell->num_hd);
-				if (fd == -1)
-					return (-1);
-				write_in_file(fd, mtx[i], shell);
-				close(fd);
-				free(file);
-				shell->num_hd++;
-			}
-			i++;
-		}
-		free_all(shell, 0);
-		exit(shell->num_hd);
+		if (open_here_doc_while(&i, shell, mtx) == -1)
+			return (-1);
 	}
 	else
 	{
 		waitpid(id, &shell->num_hd, 0);
 		shell->num_hd /= 256;
+		if (shell->num_hd == 255)
+		{
+			shell->exit_code = 0;
+			return (-2);
+		}
+		if (g_signals == 2)
+		{
+			shell->exit_code = 130;
+			close_here_doc(shell);
+			return (-2);
+		}
 	}
 	return (shell->num_hd);
+}
+
+int	open_here_doc_while(int *i, t_program *shell, char **mtx)
+{
+	int		fd;
+	char	*file;
+
+	file = NULL;
+	while (mtx[*i])
+	{
+		if (mtx[*i][0] == '<' && mtx[*i][1] == '<')
+		{
+			fd = open_here_doc_core(i, &file, &shell->num_hd);
+			if (fd == -1)
+				return (-1);
+			write_in_file(fd, mtx[*i], shell);
+			close(fd);
+			free(file);
+			shell->num_hd++;
+		}
+		(*i)++;
+	}
+	free_all(shell, 0);
+	if (shell->check_hd == shell->num_hd)
+	{
+		close_here_doc(shell);
+		exit(-1);
+	}
+	exit(shell->num_hd);
 }
 
 int	open_here_doc_core(int *i, char **file, int *num_hd)
@@ -78,13 +101,14 @@ void	write_in_file(int fd, char *limiter, t_program *shell)
 	int		flag;
 
 	set_hd_g_signals(1);
-	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
+		rl_clear_history();
 		str = readline("> ");
-		if (write_in_file_check(&str, &flag, shell, limiter) == 1)
+		if (write_in_file_check(&str, &flag, limiter, shell) == 1)
 			break ;
-		if (ft_strncmp(str, limiter, ft_strlen(limiter)) == 0)
+		if (ft_strncmp(str, limiter, ft_strlen(limiter)) == 0 && \
+			ft_strlen(limiter) == ft_strlen(str))
 		{
 			free(str);
 			break ;
@@ -93,48 +117,32 @@ void	write_in_file(int fd, char *limiter, t_program *shell)
 			exec_dollar(str, shell, fd);
 		else
 			ft_putstr_fd(str, fd);
+		write(fd, "\n", 1);
 		free(str);
 	}
 	set_hd_g_signals(0);
 }
 
-int	write_in_file_check(char **str, int *flag, t_program *shell, char *limiter)
+int	write_in_file_check(char **str, int *flag, char *limiter, t_program *shell)
 {
 	if (*str == NULL)
 	{
 		if (g_signals == 0)
 		{
-			printf("shell: warning: here-document delimited \
-by end-of-file (wanted `%s')\n", limiter);
-				*str = ft_strdup(limiter);
-			}
+			ft_putstr_fd("shell: warning: here-document delimited \
+by end-of-file (wanted `", 2);
+			ft_putstr_fd(limiter, 2);
+			ft_putstr_fd("')\n", 2);
+			*str = ft_strdup(limiter);
+			shell->check_hd++;
 		}
-		if (g_signals == SIGINT)
-		{
-			g_signals = 0;
-			*flag = 1;
-			shell->exit_code = 130;
-			free(*str);
-			return (1);
-		}
-		return (0);
 	}
-
-void	close_here_doc(t_program *shell)
-{
-	int		i;
-	char	*num;
-	char	*file;
-
-	i = 0;
-	while (i < shell->num_hd)
+	if (g_signals == SIGINT)
 	{
-		num = ft_itoa(i);
-		file = ft_strjoin(".here_doc_", num);
-		unlink(file);
-		free(file);
-		free(num);
-		i++;
+		g_signals = 0;
+		*flag = 1;
+		free(*str);
+		return (1);
 	}
-	shell->num_hd = 0;
+	return (0);
 }

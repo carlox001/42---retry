@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 14:12:01 by cazerini          #+#    #+#             */
-/*   Updated: 2025/04/19 20:46:58 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/02 02:01:13 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	ft_unset(t_program *shell)
 {
 	char	*arg;
-	char	**env_tmp;
 	int		k;
 	int		j;
 	int		l;
@@ -23,7 +22,6 @@ void	ft_unset(t_program *shell)
 	arg = NULL;
 	if (shell->mtx_line[shell->i + 1] == NULL)
 		return ;
-	//tocca sapere se ce un dolalero dolala
 	l = 1;
 	while (shell->mtx_line[shell->i + l] != NULL)
 	{
@@ -32,48 +30,14 @@ void	ft_unset(t_program *shell)
 		if (check_dollar(shell->mtx_line[shell->i + l]) == 1)
 			arg = split_dollar(shell->mtx_line[shell->i + l], shell);
 		else
-		{
-			while (j < matrix_len(shell->env))
-			{
-				if (ft_strncmp(shell->env[j], shell->mtx_line[shell->i + l], ft_strlen(shell->mtx_line[shell->i + l])) == 0)
-				{
-					arg = ft_strdup(shell->env[j]);
-					break ;	
-				}
-				j++;
-			}	
-		}
-		//parsing arg (printf errore)
-		//mi raccomando e' importante
-		j = 0;
+			arg = search_unset(shell, l);
 		if (arg != NULL)
-		{
-			env_tmp = (char **)ft_calloc(sizeof(char *), (matrix_len(shell->env) + 1));
-			if (env_tmp == NULL)
-				return ;
-			while (shell->env[k])
-			{
-				if (ft_strncmp(shell->env[k], arg, ft_strlen(arg)) != 0)
-				{
-					env_tmp[j] = ft_strdup(shell->env[k]); 
-					j++;
-				}
-				k++;
-			}
-			env_tmp[j] = NULL;
-			free_matrix(shell->env);
-			shell->env = matrix_dup(env_tmp);
-			free_matrix(env_tmp);
-			if (arg != NULL)
-				free(arg);
-		}
+			arg_treatment(shell, arg, k, j);
 		l++;
 	}
 	shell->i += l;
 }
 
-
-// copiata da modificare
 char	*search_env_and_allocate(char *env_str, t_program *shell)
 {
 	int		i;
@@ -84,9 +48,7 @@ char	*search_env_and_allocate(char *env_str, t_program *shell)
 	j = 0;
 	while (shell->env[i])
 	{
-		//DEVE ESSERE SICUROP IL CHECK DAJE
-		if (ft_strncmp(shell->env[i], env_str, ft_strlen(env_str)) == 0 /* && \
-			shell->env[i][ft_strlen(env_str) + 1] == '=' */)
+		if (ft_strncmp(shell->env[i], env_str, ft_strlen(env_str)) == 0)
 		{
 			while (shell->env[i][j] != '=' && shell->env[i][j])
 				j++;
@@ -117,65 +79,25 @@ char	*expansion_variable(char *old_str, t_program *shell)
 	if ((int)ft_strlen(old_str) > i)
 	{
 		tmp = ft_substr(old_str, 0, i);
-		add_str = ft_substr(old_str, i, (int)ft_strlen(old_str));	
+		add_str = ft_substr(old_str, i, (int)ft_strlen(old_str));
 		new_str = search_env_and_allocate(tmp, shell);
 		free(tmp);
 	}
 	else
 		new_str = search_env_and_allocate(old_str, shell);
-	if (add_str != NULL)
-	{
-		tmp = new_str;
-		new_str = ft_strjoin(new_str, add_str);
-		free(add_str);
-		free(tmp);
-	}
+	expansion_variable_end(&new_str, add_str);
 	return (new_str);
 }
 
-char	*split_dollar(char *old_str, t_program *shell)
+void	expansion_variable_end(char **new_str, char *add_str)
 {
-	char	*new_str;
-	char	**mtx;
-	int		i;
-	int		flag;
 	char	*tmp;
 
-	mtx = NULL;
-	new_str = NULL;
-	if (old_str[0] == '$')
-		flag = 1;
-	else
-		flag = 0;
-	mtx = ft_split(old_str, '$');
-	if (mtx == NULL)
-		return (NULL);
-	i = 0;
-	while (mtx[i])
+	if (add_str != NULL)
 	{
-		if (!(flag == 1 && i == 0))
-		{
-			tmp = mtx[i];
-			mtx[i] = expansion_variable(mtx[i], shell);
-			if (mtx[i] == NULL)
-				return (free_matrix(mtx), NULL);
-			free(tmp);
-		}
-		i++;
+		tmp = *new_str;
+		*new_str = ft_strjoin(*new_str, add_str);
+		free(add_str);
+		free(tmp);
 	}
-	i = 1;
-	new_str = ft_strdup(mtx[0]);
-	while (mtx[i])
-	{
-		if (mtx[i] != NULL)
-		{
-			tmp = new_str;
-			new_str = ft_strjoin(new_str, mtx[i]);
-			free(tmp);
-		}	
-		i++;
-	}
-	free_matrix(mtx);
-	printf("E CORRETTO: %s\n", new_str);
-	return (new_str);
 }

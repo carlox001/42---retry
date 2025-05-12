@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   g_signals.c                                          :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/17 18:39:26 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/23 17:49:24 by sfiorini         ###   ########.fr       */
+/*   Created: 2025/05/01 17:13:33 by sfiorini          #+#    #+#             */
+/*   Updated: 2025/05/04 17:52:18 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,33 +36,26 @@ void	sig_handler(int sig)
 		g_signals = SIGINT;
 		printf("\n");
 		rl_on_new_line();
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 	if (sig == SIGQUIT)
 	{
 		g_signals = SIGQUIT;
-		// printf("\n");
-		// rl_on_new_line();
 		rl_redisplay();
 	}
 }
 
-
 void	sig_handler_hd(int sig)
 {
-	// char	*str;
-
-	// str = NULL;
 	if (sig == SIGINT)
 	{
 		g_signals = SIGINT;
 		close(0);
-		// exit(130);
 	}
 	if (sig == SIGQUIT)
 	{
 		g_signals = SIGQUIT;
-		// close(0);
 		rl_redisplay();
 	}
 }

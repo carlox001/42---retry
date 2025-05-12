@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 13:55:44 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/19 20:46:58 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/10 17:15:37 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,8 @@ int	replace(t_program *shell, int len, char *dup)
 	i = 0;
 	while (shell->env[i])
 	{
-		if (shell->equal == 0)
-		{
-			if (ft_strncmp(shell->env[i], dup, len) == 0)
-				return (free(dup), i);
-		}
-		else
-		{
-			if (ft_strncmp(shell->env[i], dup, len - 1) == 0)
-				return (free(dup), i);
-		}
+		if (ft_strncmp(shell->env[i], dup, len) == 0)
+			return (free(dup), i);
 		i++;
 	}
 	free(dup);
@@ -84,7 +76,6 @@ char	*remove_plus(char *old_str)
 	return (new_str);
 }
 
-
 // cambia il valore inserito all'interno 
 // di env senza la riallocazione
 void	change_export_value(t_program *shell, int i, int value, char *str)
@@ -96,7 +87,7 @@ void	change_export_value(t_program *shell, int i, int value, char *str)
 	{
 		dup = ft_strdup(shell->env[value]);
 		free(shell->env[value]);
-		dup2 = ft_substr(str, i, ft_strlen(str));
+		dup2 = ft_substr(str, i, ft_strlen(str) - i);
 		shell->env[value] = ft_strjoin(dup, dup2);
 		free(str);
 		free(dup);

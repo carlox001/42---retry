@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 10:55:57 by cazerini          #+#    #+#             */
-/*   Updated: 2025/04/19 21:19:28 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/04 13:23:35 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,23 @@ int	no_char(char *str)
 
 void	only_cd(t_program *shell)
 {
-	free(shell->old_pwd);
-	shell->old_pwd = ft_strdup(shell->pwd);
-	free(shell->pwd);
-	shell->pwd = ft_strdup(shell->home_path);
-	free(shell->curr_dir);
-	shell->curr_dir = ft_strdup("");
-	if (chdir(shell->home_path) == -1)
+	if (shell->home_path == NULL)
+	{
+		ft_putstr_fd("shell: cd: HOME not set\n", 2);
 		return ;
-	env_refresh_dir(shell);
+	}
+	else
+	{
+		free(shell->old_pwd);
+		shell->old_pwd = ft_strdup(shell->pwd);
+		free(shell->pwd);
+		shell->pwd = ft_strdup(shell->home_path);
+		free(shell->curr_dir);
+		shell->curr_dir = ft_strdup("");
+		if (chdir(shell->home_path) == -1)
+			return ;
+		env_refresh_dir(shell);
+	}
 }
 
 void	cd_root(t_program *shell)

@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:30:36 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/23 15:40:19 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/04 16:12:37 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ int	single_redirection(int *i, int *j, char **mtx, int *shell_out)
 	shell_out[*j] = open(mtx[*i], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (shell_out[*j] == -1)
 	{
-		printf("shell: %s: error\n", mtx[*i]);
+		ft_putstr_fd("shell: ", 2);
+		ft_putstr_fd(mtx[*i], 2);
+		ft_putstr_fd(": error\n", 2);
 		free(shell_out);
 		return (-1);
 	}
@@ -86,7 +88,9 @@ int	double_redirection(int *i, int *j, char **mtx, int *shell_out)
 	shell_out[*j] = open(mtx[*i], O_WRONLY | O_CREAT | O_APPEND, 0777);
 	if (shell_out[*j] == -1)
 	{
-		printf("shell: %s: error\n", mtx[*i]);
+		ft_putstr_fd("shell: ", 2);
+		ft_putstr_fd(mtx[*i], 2);
+		ft_putstr_fd(": error\n", 2);
 		free(shell_out);
 		return (-1);
 	}

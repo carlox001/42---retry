@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:43:40 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/23 19:06:44 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:19:32 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ int	initialize(t_program *shell)
 	char	*str;
 
 	shell->exit_code = 0;
+	shell->last_id = 0;
+	shell->flag_quotes = 0;
+	shell->flag_cmd_not_found = 0;
 	g_signals = 0;
 	str = getcwd(NULL, 1000);
 	shell->pwd = ft_strdup(str);

@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 10:15:02 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/19 20:43:34 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:51:56 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*remove_internal_quotes(char *old_str)
 	if (old_str[(int)ft_strlen(old_str) - 1] == '"' || \
 		old_str[(int)ft_strlen(old_str) - 1] == '\'')
 		j--;
-	new_str = remove_internal_quotes_core(old_str, i , &j);
+	new_str = remove_internal_quotes_core(old_str, i, &j);
 	if (new_str == NULL)
 		return (NULL);
 	new_str[j] = '\0';
@@ -66,8 +66,6 @@ char	*remove_internal_quotes_core(char *old_str, int i, int *j)
 	}
 	return (new_str);
 }
-
-
 
 char	*remove_all_quotes(char *old_str)
 {
@@ -112,4 +110,3 @@ char	*remove_all_quotes_core(char *old_str, int i, int j)
 	new_str[j] = '\0';
 	return (new_str);
 }
-

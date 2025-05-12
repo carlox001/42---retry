@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 10:48:43 by cazerini          #+#    #+#             */
-/*   Updated: 2025/04/19 21:20:05 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/04 13:30:04 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	cd_absolute_path(char *str, t_program *shell)
 		path = ft_strdup(str);
 		if (chdir(str) == -1)
 		{
-			printf("bash: cd: %s: No such file or directory\n", str);
+			print_cd_error(str);
 			shell->exit_code = 1;
 			free(path);
 		}

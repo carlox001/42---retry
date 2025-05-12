@@ -1,0 +1,26 @@
+/bins/ls no such file or directory (127) (risolto)
+
+cat su heredoc; (ctrl c) (risolto?)
+
+cat| cat | ls ha rotto il cazzo (risolto)
+
+cat ctrl c 130 cazo
+
+# ls | pwd | cat | ciao (funziona)
+
+echo '" "'
+
+echo -nnnn"nnn" (risolto)
+
+echo -nnnnn ciao (risolto)
+
+echo $_ (loop infinito)
+
+echo $-PWD (loop infinito)
+
+echo "$HOME c"iao 'pippo $U"S'ER $PWD "$"US""ER (stampa spazio in piu) (risolto)
+
+echo "$s" $HOME (stampa virgolette singole in piu)
+
+ctrl-c in HEREDOC -> se errno != EBADF eseguo comandi (altrimenti \
+termino il ciclo degli heredoc e non eseguo comandi)
