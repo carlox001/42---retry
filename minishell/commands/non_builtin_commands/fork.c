@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 21:48:35 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 17:29:56 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:27:39 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int	child(t_program *shell, int i, int pipe_cmd, char ***mtx_hub)
 	char	*path;
 	int		flag;
 
-	printf("lo faccio cavoll\n");
 	shell->flag_cmd_not_found = 0;
 	flag = 0;
 	if (open_files_in_child(shell, i, mtx_hub) == -1)
@@ -30,13 +29,15 @@ int	child(t_program *shell, int i, int pipe_cmd, char ***mtx_hub)
 		flag = 1;
 	if (check_commands(shell->mtx_line[0], shell, shell->num_fd, mtx_hub) == 1)
 	{
-		printf("si siamo qui\n");
 		free_matrix_pointer(mtx_hub);
 		if (flag == 1)
 			free_all(shell, 1);
 		close(shell->input);
 		if (shell->num_cmd != 1 && flag == 1)
-			exit(0);
+		{
+			printf("entro sio porko: %d\n", shell->exit_code);
+			exit(shell->exit_code);
+		}
 		exit(127);
 	}
 	return (0);

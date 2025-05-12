@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:04:25 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/11 17:32:58 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:21:39 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	end_expansion2(t_program *shell, char *old_str, int *i, char **new_str)
 	int	len;
 
 	len = 0;
+	printf("old_str[]: %c\n", old_str[*i + len]);
 	while (old_str[*i + len] && old_str[*i + len] != '\"' && \
 		old_str[*i + len] != '\'' && old_str[*i + len] != '$' && \
 		old_str[*i + len] != '\"' && old_str[*i + len] != '_' && \
@@ -28,10 +29,12 @@ void	end_expansion2(t_program *shell, char *old_str, int *i, char **new_str)
 	free(shell->path_expansion);
 	free(shell->sub_str);
 	if (len == 0 && *i != 0 && old_str[*i + len] != '\"' && \
-		old_str[*i + len] != '\'')
+		old_str[*i + len] != '\'' && old_str[*i - 1] != '$')
 		(*i)--;
-	else if (*i != 0 || len != 0)
+	else if ((*i != 0 || len != 0) && old_str[*i - len - 1] != '$')
 		(*i) += len - 1;
+	else
+		(*i)++;
 }
 
 int	first_expansion2_check(char *old_str, int *i)

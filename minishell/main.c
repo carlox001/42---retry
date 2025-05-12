@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:21:55 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/11 19:30:16 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/10 18:10:52 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-// "$HOME"'$USER"*.c'" ' ' "'"$USER"$HOME'"''*.c'''"$USER
 
+//"$HOME"'$USER"*.c'" ' ' "'"$USER"$HOME'"''*.c'''"$USER
 int	main(int ac, char **av, char **env)
 {
 	t_program	shell;
@@ -83,7 +83,6 @@ int	readline_core(t_program *shell, char **str)
 	free(print_str);
 	if (!(*str))
 		return (printf("exit\n"), free_all(shell, 0), 1);
-	printf("g_signals: %d\n", g_signals);
 	if (g_signals == SIGINT)
 	{
 		g_signals = 0;

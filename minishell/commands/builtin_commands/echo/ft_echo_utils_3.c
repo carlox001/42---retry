@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:45:59 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 18:11:49 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:26:30 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,8 @@ void	update_counter_and_i(int *i, int *counter)
 int	only_quotes(char *str, int *flag)
 {
 	int	i;
-	int	value;
 
 	i = 0;
-	value = 0;
 	while (str[i])
 	{
 		if (str[i] != '\'' && str[i] != '\"')
@@ -45,7 +43,7 @@ int	only_quotes(char *str, int *flag)
 		}
 		i++;
 	}
-	return (value);
+	return (0);
 }
 
 void	alloc_only_quote(char **sub_str, int flag)

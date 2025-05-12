@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:16:28 by cazerini          #+#    #+#             */
-/*   Updated: 2025/05/12 18:09:13 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:19:30 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,13 @@ int	count_args(char **mtx, int i)
 
 void	check_nflag(char **mtx, t_program *shell)
 {
-	// char	*tmp;
 	int		i;
 	char	*str;
 
 	shell->nflag = 0;
 	while (mtx[shell->i + 1])
 	{
-		// tmp = mtx[shell->i + 1];
 		str = remove_couple_quotes(mtx[shell->i + 1]);
-		// free(tmp);
 		i = 0;
 		if (str[i] == '-')
 		{

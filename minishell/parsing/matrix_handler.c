@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 10:22:24 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/11 19:30:33 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:59:36 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	matrix_handler_core_quotes(t_program *shell, char *str, int *i)
 			if (str[*i] == '\0' || str[*i] == ' ' || \
 				str[*i] == '|' || str[*i] == '<' || \
 				str[*i] == '>')
-					flag = 1;
+				flag = 1;
 		}
 		shell->mtx_line[shell->j] = \
 			ft_substr(str, shell->i_p, (shell->i - shell->i_p));

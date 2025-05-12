@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:23:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/11 19:30:33 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:54:26 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_program
 {
 	// prgorgam
 	int				exit_code;
+	int				id_to_wait;
 	char			**env;
 	char			**cpy_exp;
 	unsigned char	*status;
@@ -74,7 +75,6 @@ typedef struct s_program
 	int				flag_in_operator;
 	int				flag_cmd_not_found;
 	int				flag_quotes;
-	int				last_id;
 }	t_program;
 
 //	commands
@@ -267,7 +267,6 @@ void	expansion_variable2_else(int *i, char *old_str, char **new_str);
 char	*ft_getenv(t_program *shell, char **sub_str);
 int		only_spaces(char *str);
 	//	parsing_utils_5.c
-// void	check_flag(int *flag, char c);
 void	check_flag(int *flag_s, int *flag_d, char c);
 int		check_pipe(char **mtx);
 	//	parsing_utils.c

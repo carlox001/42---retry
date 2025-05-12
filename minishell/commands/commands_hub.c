@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 17:38:11 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/12 17:51:30 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	check_commands(char *cmd, t_program *shell, int k, char ***mtx_hub)
 	{
 		shell->flag_builtin = 1;
 		free_matrix(shell->mtx_line);
-		return (2);
+		return (1);
 	}
 	else if (exec_non_builtin(shell, 0, mtx_hub) == 1)
 		return (1);
@@ -63,9 +63,9 @@ int	exec_non_builtin(t_program *shell, int index, char ***mtx_hub)
 	if (execve(shell->path, full_cmd, shell->env) == -1)
 	{
 		shell->flag_cmd_not_found = 1;
-		// ft_putstr_fd("shell: ", 2);
-		// ft_putstr_fd(shell->mtx_line[0], 2);
-		// ft_putstr_fd(": no such file or directory", 2);
+		ft_putstr_fd("shell: ", 2);
+		ft_putstr_fd(shell->mtx_line[0], 2);
+		ft_putstr_fd(": no such file or directory\n", 2);
 		failed_execve(full_cmd, shell, mtx_hub);
 		exit(127);
 	}

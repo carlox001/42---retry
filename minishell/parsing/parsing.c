@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:45:00 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 17:58:00 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/12 18:43:21 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	parsing_core_expansion(t_program *shell, int *k)
 			tmp = shell->mtx_line[*k];
 			shell->mtx_line[*k] = expansion_variable2(tmp, shell);
 			free(tmp);
-			printf("mtx_line: %s\n", shell->mtx_line[*k]);
 		}
 	}
 }
@@ -76,7 +75,6 @@ int	check_parsing_start(t_program *shell, char *str)
 		return (1);
 	if (matrix_handler(str, shell) == 1)
 		return (1);
-	// print_matrix(shell->mtx_line);
 	if (matrix_len(shell->mtx_line) != 0 && \
 	(shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '<' || \
 		shell->mtx_line[matrix_len(shell->mtx_line) - 1][0] == '>'))

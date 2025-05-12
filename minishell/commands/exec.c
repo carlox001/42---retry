@@ -6,14 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:53:39 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 17:36:55 by cazerini         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/26 14:53:39 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/11 19:02:22 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/12 19:28:07 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +31,43 @@ int	exec(t_program *shell)
 	}
 	close(shell->output);
 	close(shell->input);
-	while (wait(&shell->exit_code) > 0)
+	// if (shell->num_cmd > 1)
+	// {
+	// 	waitpid(shell->id_to_wait, &shell->exit_code, 0);
+	// 	printf("LO faccio: %d\n", shell->id_to_wait);
+	// 	shell->exit_code /= 256;
+	// 	shell->status = (unsigned char *)ft_itoa(shell->exit_code);
+	// 	shell->exit_code = ft_atoi((const char *)shell->status);
+	// 	free(shell->status);
+	// 	printf("eccomi exit_core: %d\n", shell->exit_code);
+	// 	while (wait(NULL) > 0)
+	// 	{
+	// 		;
+	// 	}
+	// }
+	// printf("eccomi exit_core: %d\n", shell->exit_code);
+	printf("shell->numcmd: %d\n", shell->num_cmd);
+	if (shell->num_cmd != 1)
 	{
-		printf("faccio questo\n");
+		waitpid(shell->id_to_wait, &shell->exit_code, 0);
+		while (wait(NULL) > 0)
+			;
+		printf("LO faccio: %d\n", shell->id_to_wait);
 		shell->exit_code /= 256;
 		shell->status = (unsigned char *)ft_itoa(shell->exit_code);
 		shell->exit_code = ft_atoi((const char *)shell->status);
 		free(shell->status);
+		printf("becca l'exit code: %d\n", shell->exit_code);
+	}
+	else
+	{
+		while (wait(&shell->exit_code) > 0)
+		{
+			shell->exit_code /= 256;
+			shell->status = (unsigned char *)ft_itoa(shell->exit_code);
+			shell->exit_code = ft_atoi((const char *)shell->status);
+			free(shell->status);
+		}
 	}
 	close_here_doc(shell);
 	set_exec_signals();
@@ -77,13 +100,12 @@ int	exec_core(t_program *shell, int j, int num_cmd, char ***mtx_hub)
 	{
 		check = exec_one_command(shell, i, mtx_hub);
 		if (check == 1)
-			return (1);
+			return (2);
 		if (check == -1)
 			return (-1);
 	}
 	else
 	{
-		printf("check: %d\n", check);
 		check = exec_more_commands(shell, j, i, mtx_hub);
 		if (check == 1)
 			return (1);
@@ -111,7 +133,13 @@ int	exec_one_command(t_program *shell, int i, char ***mtx_hub)
 		dup2(shell->out[k - 1], STDOUT_FILENO);
 	shell->mtx_line = matrix_dup(mtx_hub[i]);
 	if (check_commands(shell->mtx_line[0], shell, -1, mtx_hub) == 1)
+	{
+		if (k - 1 >= 0)
+			close_in_out(shell->out, k - 1, 1);
+		dup2(shell->output, STDOUT_FILENO);
+		close(shell->output);
 		return (1);
+	}
 	if (k - 1 >= 0)
 		close_in_out(shell->out, k - 1, 1);
 	dup2(shell->output, STDOUT_FILENO);
@@ -122,7 +150,9 @@ int	exec_one_command(t_program *shell, int i, char ***mtx_hub)
 int	exec_more_commands(t_program *shell, int j, int i, char ***mtx_hub)
 {
 	int		id;
+	int		flag;
 
+	flag = 1;
 	signal(SIGINT, sig_handler_child);
 	signal(SIGQUIT, sig_handler_child);
 	while (i < shell->num_cmd)
@@ -142,7 +172,14 @@ int	exec_more_commands(t_program *shell, int j, int i, char ***mtx_hub)
 				failed_child(shell, mtx_hub);
 		}
 		else
+		{
+			if (i + 1 == shell->num_cmd)
+			{
+				shell->id_to_wait = id;
+				flag = 0;
+			}
 			father(shell, j);
+		}
 		update_counter_exec(&j, &i);
 	}
 	return (0);
