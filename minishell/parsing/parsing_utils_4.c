@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:04:25 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/05 15:41:08 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:48:28 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	expansion_variable2_else(int *i, char *old_str, char **new_str)
 	char	*tmp;
 	char	*chr;
 
-	chr = malloc(sizeof(char) * 2);
+	chr = (char *)malloc(sizeof(char) * 2);
 	chr[0] = old_str[*i];
 	chr[1] = '\0';
 	if (*new_str == NULL)

@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:45:00 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 18:43:21 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/16 10:57:11 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	parsing(char *str, t_program *shell)
 		shell->exit_code = 2;
 		return (0);
 	}
-	print_matrix(shell->mtx_line);
+	// print_matrix(shell->mtx_line);
 	return (1);
 }
 

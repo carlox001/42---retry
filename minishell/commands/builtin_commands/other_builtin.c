@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   other_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 21:17:19 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/09 17:10:58 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:12:04 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int	ft_env(t_program *shell)
 
 	if (shell->mtx_line[1] != NULL)
 	{
-		ft_putstr_fd("env: ", 2);
+		ft_putstr_fd("env: '", 2);
 		ft_putstr_fd(shell->mtx_line[1], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
+		ft_putstr_fd("': No such file or directory\n", 2);
 		shell->exit_code = 127;
 		shell->i = matrix_len(shell->mtx_line);
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 17:51:30 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/16 19:00:06 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,20 +54,22 @@ int	exec_non_builtin(t_program *shell, int index, char ***mtx_hub)
 	char	**full_cmd;
 
 	shell->path = path_find(shell->env, shell->mtx_line[index], shell);
-	if (shell->path == NULL)
+	if (shell->path == NULL && shell->mtx_line[0][0] != '.')
 	{
 		shell->i = matrix_len(shell->mtx_line);
 		return (free(shell->path), free_all(shell, 0), 1);
 	}
 	full_cmd = get_full_cmd(shell);
+	if (shell->path == NULL)
+	{
+		free(shell->path);
+		shell->path = ft_strdup(shell->mtx_line[0]);
+	}
+	print_matrix(full_cmd);
 	if (execve(shell->path, full_cmd, shell->env) == -1)
 	{
 		shell->flag_cmd_not_found = 1;
-		ft_putstr_fd("shell: ", 2);
-		ft_putstr_fd(shell->mtx_line[0], 2);
-		ft_putstr_fd(": no such file or directory\n", 2);
 		failed_execve(full_cmd, shell, mtx_hub);
-		exit(127);
 	}
 	return (0);
 }
@@ -85,7 +87,13 @@ void	failed_execve(char **full_cmd, t_program *shell, char ***mtx_hub)
 		exit(126);
 	}
 	else
+	{
+		ft_putstr_fd("shell: ", 2);
+		ft_putstr_fd(shell->mtx_line[0], 2);
+		ft_putstr_fd(": no such file or directory\n", 2);
 		clear_non_builtin(shell, mtx_hub, &shell->path, &full_cmd);
+		exit(127);
+	}
 }
 
 void	clear_non_builtin(t_program *shell, char ***mtx_hub, \
@@ -95,5 +103,5 @@ char **path, char ***full_cmd)
 	free_matrix(*full_cmd);
 	free_all(shell, 1);
 	free_matrix_pointer(mtx_hub);
-	free(shell->mtx_line);
+	free_matrix(shell->mtx_line);
 }

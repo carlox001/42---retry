@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:43:40 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 18:36:39 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/14 10:10:59 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	initialize(t_program *shell)
 {
 	char	*str;
 
+	shell->check_pipe_ex_co = 0;
 	shell->exit_code = 0;
 	shell->flag_quotes = 0;
 	shell->flag_cmd_not_found = 0;

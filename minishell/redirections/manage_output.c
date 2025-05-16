@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:30:36 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 18:14:29 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/16 19:18:29 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,22 @@ int	open_files_out(char **mtx, t_program *shell)
 
 int	single_redirection(int *i, int *j, char **mtx, int *shell_out)
 {
+	char	*tmp;
+
 	(*i)++;
-	shell_out[*j] = open(mtx[*i], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	tmp = remove_couple_quotes(mtx[*i]);
+	shell_out[*j] = open(tmp, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (shell_out[*j] == -1)
 	{
 		ft_putstr_fd("shell: ", 2);
-		ft_putstr_fd(mtx[*i], 2);
+		ft_putstr_fd(tmp, 2);
 		ft_putstr_fd(": error\n", 2);
 		free(shell_out);
+		free(tmp);
 		return (-1);
 	}
 	(*j)++;
+	free(tmp);
 	return (0);
 }
 

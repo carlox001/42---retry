@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:23:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 18:54:26 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:41:25 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ typedef struct s_program
 	// prgorgam
 	int				exit_code;
 	int				id_to_wait;
+	int				check_pipe_ex_co;
+	int				real_output;
 	char			**env;
 	char			**cpy_exp;
 	unsigned char	*status;
@@ -139,7 +141,6 @@ int		only_export(t_program *shell);
 int		export_parsing(t_program *shell);
 int		export_parsing_2(t_program *shell, char *str);
 int		export_parsing_quote(char *str);
-int		export_quote(char *str, int *i, char q1, char q2);
 		//	ft_export_utils_3.c
 char	**order_env(t_program *shell);
 void	print_export_error(char *str);

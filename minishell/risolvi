@@ -1,14 +1,10 @@
-"'$HOME'" espansiano deve avvenire
+$"'HOME'" espansiano deve avvenire
 
 /bins/ls no such file or directory
 
 '$s' $HOME
 
 cat su heredoc;
-
-cat| cat | ls ha rotto il cazzo
-
-cat ctrl c 130 cazo
 
 ls | pwd | cat | ciao
 
@@ -23,7 +19,7 @@ cat su heredoc; (ctrl c) (risolto?)
 
 cat| cat | ls ha rotto il cazzo (risolto)
 
-cat ctrl c 130 cazo
+cat ctrl c 130 cazo (risolto)
 
 # ls | pwd | cat | ciao (funziona)
 
@@ -33,9 +29,9 @@ echo -nnnn"nnn" (risolto)
 
 echo -nnnnn ciao (risolto)
 
-echo $_ (loop infinito, parsing)
+echo $_ (loop infinito, parsing) (risolto)
 
-echo $-PWD (loop infinito, parsing)
+echo $-PWD (loop infinito, parsing) (risolto)
 
 echo asdasdas (stampa spazio in piu) (risolto)
 
@@ -46,5 +42,52 @@ termino il ciclo degli heredoc e non eseguo comandi)
 
 echo ciao > file (risolto)
 
+$"HOME" (risolto)
 
-metti la flag pazza nel puzzo
+" ' $HOME ' " / $_ deve espandere (risolto)
+
+Cat ctrl c -> 130 (risolto)
+
+/bins/ls no such file or directory (127) (risolto)
+
+pippo+=bene (risolto)
+
+Invio nella history (risolto)
+
+Cat << hd ctrl c (completa il conando) 
+
+Ctrl c >> a (130) (risolto)
+
+cat << a << b | cat << c << d ctrlc non deve stampare shell 
+
+Echo / builtin con le pipe PKEEEEEEEEEÈ (risolto) 
+
+echo ciao "|" < a (risolto)
+
+echo ciao | cat a (prende echo) (risolto)
+
+echo ciao | cat<a invalid read (risolto)
+
+Ciao >>> a / <<< a syntax error (risolto)
+
+Echo > a con a senza permessi (dà errori) (risolto)
+
+"$USER" -> cazeriniR (risolto)
+
+./////.//././///.. (leak) (risolto)
+./ciao
+./minishell
+
+cd .qualcosa si bugga un pochino
+
+cat << a | cat <<b (scrive il primo al posto del secondo)
+
+export VA"=''la' "y''olo (valido) (risolto)
+
+export | cmd (leak, SIGPIPE)
+
+export | < a grep a / cat non funziona (le pipe / redir non funzionano) (risolto)
+
+$? -> 1? (risolto)
+
+echo test > $VAR (leak)

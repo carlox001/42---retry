@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_input.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:33:45 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/09 18:54:16 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/16 19:20:40 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,24 +111,29 @@ int	open_file_in_hd(int *i, int *j, int *num_hd, int *shell_in)
 
 int	open_file_in_fd(int *i, int *j, char **mtx, t_program *shell)
 {
+	char	*tmp;
+
 	(*i)++;
+	tmp = remove_couple_quotes(mtx[(*i)]);
 	if (shell->flag_in_operator == 1)
 	{
-		if (access(mtx[*i], F_OK) == -1)
-			shell->in[*j] = open((mtx[*i]), O_CREAT);
+		if (access(tmp, F_OK) == -1)
+			shell->in[*j] = open((tmp), O_CREAT);
 		else
-			shell->in[*j] = open((mtx[*i]), O_RDONLY);
+			shell->in[*j] = open((tmp), O_RDONLY);
 	}
 	else
-		shell->in[*j] = open((mtx[*i]), O_RDONLY);
+		shell->in[*j] = open((tmp), O_RDONLY);
 	shell->flag_in_operator = 0;
 	if (shell->in[*j] == -1)
 	{
 		ft_putstr_fd("shell ", 2);
-		ft_putstr_fd(mtx[*i], 2);
+		ft_putstr_fd(tmp, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
+		free(tmp);
 		return (-1);
 	}
 	(*j)++;
+	free(tmp);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matrix_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 10:22:24 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 17:59:36 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:47:27 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	matrix_handler(char *str, t_program *shell)
 int	alloc_mtx_line(t_program *shell, char *str)
 {
 	shell->words = count_words(str, shell) + 1;
-	printf("words: %d\n", shell->words);
 	if (shell->words == 0)
 	{
 		ft_putstr_fd(str, 2);

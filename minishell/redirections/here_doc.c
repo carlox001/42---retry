@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:41:20 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/10 18:13:55 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/16 19:19:17 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	open_here_doc_while(int *i, t_program *shell, char **mtx)
 {
 	int		fd;
 	char	*file;
+	char	*tmp;
 
 	file = NULL;
 	while (mtx[*i])
@@ -61,19 +62,21 @@ int	open_here_doc_while(int *i, t_program *shell, char **mtx)
 			fd = open_here_doc_core(i, &file, &shell->num_hd);
 			if (fd == -1)
 				return (-1);
-			write_in_file(fd, mtx[*i], shell);
+			tmp = remove_couple_quotes(mtx[*i]);
+			write_in_file(fd, tmp, shell);
 			close(fd);
 			free(file);
+			free(tmp);
 			shell->num_hd++;
 		}
 		(*i)++;
 	}
 	free_all(shell, 0);
-	if (shell->check_hd == shell->num_hd)
-	{
-		close_here_doc(shell);
-		exit(-1);
-	}
+	// if (shell->num_hd > 0 && shell->check_hd == shell->num_hd)
+	// {
+	// 	close_here_doc(shell);
+	// 	exit(-1);
+	// }
 	exit(shell->num_hd);
 }
 

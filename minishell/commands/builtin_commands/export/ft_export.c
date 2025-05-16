@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 13:52:42 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/10 17:04:42 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:44:19 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,10 +160,7 @@ void	export_core(t_program *shell, int value, int i, char *str)
 		free(err);
 	}
 	if (value >= 0)
-	{
-		printf("lo faccio\n");
 		change_export_value(shell, i, value, str);
-	}
 	else
 	{
 		if (there_is_a_plus(str) == 1)

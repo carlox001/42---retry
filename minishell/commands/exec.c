@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:53:39 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 19:28:07 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:46:11 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,33 +31,15 @@ int	exec(t_program *shell)
 	}
 	close(shell->output);
 	close(shell->input);
-	// if (shell->num_cmd > 1)
-	// {
-	// 	waitpid(shell->id_to_wait, &shell->exit_code, 0);
-	// 	printf("LO faccio: %d\n", shell->id_to_wait);
-	// 	shell->exit_code /= 256;
-	// 	shell->status = (unsigned char *)ft_itoa(shell->exit_code);
-	// 	shell->exit_code = ft_atoi((const char *)shell->status);
-	// 	free(shell->status);
-	// 	printf("eccomi exit_core: %d\n", shell->exit_code);
-	// 	while (wait(NULL) > 0)
-	// 	{
-	// 		;
-	// 	}
-	// }
-	// printf("eccomi exit_core: %d\n", shell->exit_code);
-	printf("shell->numcmd: %d\n", shell->num_cmd);
 	if (shell->num_cmd != 1)
 	{
 		waitpid(shell->id_to_wait, &shell->exit_code, 0);
 		while (wait(NULL) > 0)
 			;
-		printf("LO faccio: %d\n", shell->id_to_wait);
 		shell->exit_code /= 256;
 		shell->status = (unsigned char *)ft_itoa(shell->exit_code);
 		shell->exit_code = ft_atoi((const char *)shell->status);
 		free(shell->status);
-		printf("becca l'exit code: %d\n", shell->exit_code);
 	}
 	else
 	{
@@ -173,9 +155,12 @@ int	exec_more_commands(t_program *shell, int j, int i, char ***mtx_hub)
 		}
 		else
 		{
-			if (i + 1 == shell->num_cmd)
+			if (i + 1 == shell->num_cmd && shell->num_cmd > 1)
 			{
 				shell->id_to_wait = id;
+				if (!(ft_strncmp("sleep", mtx_hub[i][0], 5) == 0 && \
+				ft_strlen(mtx_hub[i][0]) == 5))
+					shell->check_pipe_ex_co = 1;
 				flag = 0;
 			}
 			father(shell, j);

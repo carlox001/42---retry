@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export_utils_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:16:08 by cazerini          #+#    #+#             */
-/*   Updated: 2025/05/10 15:42:34 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:45:40 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	export_parsing(t_program *shell)
 	j = 1;
 	while (shell->mtx_line[shell->i + j])
 	{
-		str = ft_strdup(shell->mtx_line[shell->i + j]);
+		str = remove_couple_quotes(shell->mtx_line[shell->i + j]);
 		check = export_parsing_2(shell, str);
 		if (check == 1)
 			return (1);
@@ -94,29 +94,10 @@ int	export_parsing_quote(char *str)
 	i = 0;
 	while (str[i] && str[i] != '=')
 	{
-		if (str[i] == '"')
-		{
-			if (export_quote(str, &i, '"', '\'') == 1)
-				return (1);
-		}
-		else if (str[i] == '\'')
-		{
-			if (export_quote(str, &i, '\'', '"') == 1)
-				return (1);
-		}
+		if (str[i] == '\"' || str[i] == '\'')
+			return (1);
 		else
 			i++;
-	}
-	return (0);
-}
-
-int	export_quote(char *str, int *i, char q1, char q2)
-{
-	while (str[(*i)] && (str[(*i)] != '=' || str[(*i)] != q1))
-	{
-		if (str[(*i)] == q2)
-			return (1);
-		(*i)++;
 	}
 	return (0);
 }

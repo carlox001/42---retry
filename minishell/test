@@ -1,0 +1,211 @@
+### Comandi semplici e builtins
+1. ls
+2. pwd
+3. echo ciao
+4. echo -n ciao
+5. echo "ciao mondo"
+6. echo 'ciao mondo'
+7. echo $USER
+8. echo "$USER"
+9. echo '$USER'
+10. cd .. (poi pwd)
+11. cd (senza argomenti)
+12. cd / (poi pwd)
+13. cd path/inesistente
+14. cd ./ (poi pwd)
+15. export VAR=ciao
+16. echo $VAR
+17. export VAR2="hello world"
+18. echo $VAR2
+19. unset VAR
+20. echo $VAR
+21. env
+22. export 123=ciao (errore)
+23. export VAR=
+24. unset VAR2
+25. exit
+26. exit 42
+27. exit -1
+28. exit 256
+29. exit ciao (errore)
+30. exit 1 2 (errore)
+
+### Redirezioni
+31. echo test > file.txt (controlla file.txt)
+32. cat > file.txt (controlla che aggiunga)
+34. cat  file1.txt > file2.txt (solo file2.txt deve avere output)
+36. cat  file2.txt
+37. echo test > "file con spazi.txt" (controlla file)
+38. echo test > $VAR (con VAR non definita) <----------
+39. echo test > (errore)
+40. cat  > file.txt
+65. cat << EOF (heredoc, se implementato)
+66. echo * (wildcard, se implementato)
+67. cd /////// (comportamento su path strani)
+68. cd ./minishell (se esiste la cartella)
+69. echo $PWD, $OLDPWD
+70. cd path/inesistente; echo $PWD, $OLDPWD
+71. cat /dev/random | head -n 1 | cat -e
+72. ls ; pwd ; echo fine
+
+### Segnali
+73. Prompt: premi *Ctrl+C* (deve andare a capo)
+74. Prompt: premi *Ctrl+D* (deve chiudere la shell)
+75. Prompt: premi *Ctrl+\\* (deve gestire il segnale correttamente)
+
+retifico:
+Comandi semplici e builtins
+ls
+
+pwd
+
+echo ciao
+
+echo -n ciao
+
+echo "ciao mondo"
+
+echo 'ciao mondo'
+
+echo $USER
+
+echo "$USER"
+
+echo '$USER'
+
+cd .. (poi pwd)
+
+cd (senza argomenti)
+
+cd / (poi pwd)
+
+cd path/inesistente
+
+cd ./ (poi pwd)
+
+export VAR=ciao
+
+echo $VAR
+
+export VAR2="hello world"
+
+echo $VAR2
+
+unset VAR
+
+echo $VAR
+
+env
+
+export 123=ciao (errore)
+
+export VAR=
+
+unset VAR2
+
+exit
+
+exit 42
+
+exit -1
+
+exit 256
+
+exit ciao (errore)
+
+exit 1 2 (errore)
+
+Redirezioni
+echo test > file.txt (controlla file.txt)
+
+cat < file.txt
+
+echo aggiunta >> file.txt (controlla che aggiunga)
+
+cat < file_che_non_esiste.txt (errore)
+
+ls > file1.txt > file2.txt (solo file2.txt deve avere output)
+
+cat < file.txt > file2.txt
+
+echo test > "file con spazi.txt" (controlla file)
+
+echo test > $VAR (con VAR non definita)
+
+echo test > (errore)
+
+cat < (errore)
+
+Pipe
+ls | cat -e
+
+cat file.txt | grep test
+
+ls | grep minishell | wc -l
+
+cat | cat | cat
+
+echo uno | echo due
+
+ls | | cat (errore)
+
+| ls (errore)
+
+Variabili e espansioni
+export TEST=ciao
+
+echo $TESTprova (variabile non definita)
+
+echo $TEST$USER
+
+echo "$TEST $USER"
+
+echo $TEST $USER
+
+echo $HOME$PATH
+
+echo $SHLVL
+
+echo $? (dopo comando valido e dopo comando sbagliato)
+
+Errori di sintassi e casi limite
+;;
+
+echo | | cat
+
+cd troppo molti argomenti
+
+echo "test
+
+echo test; ; echo test
+
+echo test ; echo test
+
+notacomando
+
+ls |
+
+echo > > file.txt
+
+cat << EOF (heredoc, se implementato)
+
+echo * (wildcard, se implementato)
+
+cd /////// (comportamento su path strani)
+
+cd ./minishell (se esiste la cartella)
+
+echo $PWD, $OLDPWD
+
+cd path/inesistente; echo $PWD, $OLDPWD
+
+cat /dev/random | head -n 1 | cat -e
+
+ls ; pwd ; echo fine
+
+Segnali
+Prompt: premi Ctrl+C (deve andare a capo)
+
+Prompt: premi Ctrl+D (deve chiudere la shell)
+
+Prompt: premi Ctrl+\ (deve gestire il segnale correttamente)

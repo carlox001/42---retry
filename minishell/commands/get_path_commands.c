@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path_commands.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/10 15:23:44 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/16 19:00:43 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ char	**get_full_cmd(t_program *shell)
 		return (NULL);
 	i = -1;
 	while (++i < len)
-		full_cmd[i] = remove_all_quotes(shell->mtx_line[i]);
+		full_cmd[i] = remove_couple_quotes(shell->mtx_line[i]);
 	full_cmd[i] = NULL;
 	return (full_cmd);
 }

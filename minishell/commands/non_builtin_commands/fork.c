@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 21:48:35 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 18:27:39 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:49:52 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ int	child(t_program *shell, int i, int pipe_cmd, char ***mtx_hub)
 			free_all(shell, 1);
 		close(shell->input);
 		if (shell->num_cmd != 1 && flag == 1)
-		{
-			printf("entro sio porko: %d\n", shell->exit_code);
 			exit(shell->exit_code);
-		}
 		exit(127);
 	}
 	return (0);
@@ -86,12 +83,15 @@ void	redirect_in_out_child(t_program *shell, int pipe_cmd, char *path)
 		shell->mtx_line[0] = remove_couple_quotes(shell->mtx_line[0]);
 		free(shell->tmp);
 		path = path_find(shell->env, shell->mtx_line[0], shell);
-		if (path == NULL && is_builtin(shell->mtx_line[0]) == 0)
+		if (path == NULL && is_builtin(shell->mtx_line[0]) == 0 && \
+		shell->mtx_line[0][0] != '.')
 			print_error_cringe(shell->mtx_line[0]);
 		else if (shell->num_fd >= 0)
 			dup2(shell->out[shell->num_fd], STDOUT_FILENO);
 		else
 			dup2(shell->output, STDOUT_FILENO);
+		if (path && shell->mtx_line[0][0] == '.')
+			free(path);
 		close_all_files(shell->fd, shell->output, shell->input);
 	}
 }
