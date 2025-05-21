@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path_commands.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/16 19:00:43 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/19 14:46:51 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-char	*path_find(char **envp, char *command, t_program *shell)
+char	*path_find(char **envp, char *command)
 {
 	int		i;
 	int		flag;
@@ -58,7 +58,6 @@ char	*path_find(char **envp, char *command, t_program *shell)
 	char	**paths;
 	char	*path_joined;
 
-	(void)shell;
 	if (command[0] == '/')
 		return (command);
 	i = 0;
@@ -77,8 +76,7 @@ char	*path_find(char **envp, char *command, t_program *shell)
 			return (free(path_joined), free_matrix(paths), path);
 		path_clear(path, path_joined, &i);
 	}
-	free_matrix(paths);
-	return (NULL);
+	return (free_matrix(paths), NULL);
 }
 
 void	path_clear(char *path, char *path_joined, int *i)

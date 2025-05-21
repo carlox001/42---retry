@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 14:49:48 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/10 16:14:53 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/19 18:23:09 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ int	count_words(char *str, t_program *shell)
 			if (str[shell->i] == '\"')
 				skip_quote(shell, str, '\"');
 			operator_count(shell, str, &words);
-			if (str[shell->i] != '\0')
-				shell->i++;
 			continue_count(shell, str, &flag, &words);
 		}
 		if (str[shell->i] != '\0')
@@ -52,6 +50,8 @@ void	skip_quote(t_program *shell, char *str, char q)
 
 void	continue_count(t_program *shell, char *str, int *flag, int *words)
 {
+	if (str[shell->i] != '\0')
+		shell->i++;
 	if (*flag == 1)
 	{
 		(*words)++;

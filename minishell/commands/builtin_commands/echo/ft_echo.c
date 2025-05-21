@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:16:28 by cazerini          #+#    #+#             */
-/*   Updated: 2025/05/12 18:40:15 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:29:06 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_echo(t_program *shell)
 	while (i < len)
 	{
 		if (get_printable_echo_str(&str2, shell) == 0)
-			ft_echo_core(shell, str2, &i, len);
+			echo_if(shell, &str2, &i, len);
 		else
 		{
 			i++;

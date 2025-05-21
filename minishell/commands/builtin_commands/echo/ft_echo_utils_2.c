@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:16:28 by cazerini          #+#    #+#             */
-/*   Updated: 2025/05/12 18:21:00 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:22:11 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,16 @@
 
 int	get_printable_echo_str(char **str2, t_program *shell)
 {
-	char	*tmp;
 	char	*str;
 	int		flag;
 
 	str = ft_strdup(shell->mtx_line[shell->i + 1]);
 	if (only_quotes(str, &flag) == 0)
-		return (1);
-	tmp = str;
-	*str2 = remove_couple_quotes(str);
-	free(tmp);
+		return (free(str), 1);
+	*str2 = ft_strdup(str);
 	if (*str2 == NULL)
 		*str2 = ft_strdup(str);
+	free(str);
 	return (0);
 }
 

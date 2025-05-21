@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 13:52:42 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/16 14:44:19 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:32:53 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_export(t_program *shell)
 	{
 		i = 0;
 		dup = ft_strdup(shell->mtx_line[shell->i + j]);
-		str = remove_all_quotes(dup);
+		str = remove_couple_quotes(dup);
 		free(dup);
 		value = 0;
 		i = export_cicle(str);
@@ -50,10 +50,7 @@ int	export_cicle(char *str)
 	while (str[i])
 	{
 		if (str[i] == '=')
-		{
-			i++;
 			break ;
-		}
 		if (str[i] == '>' || str[i] == '<')
 		{
 			dup = str;
@@ -119,29 +116,6 @@ void	print_export_env(t_program *shell, int i, int j)
 	}
 }
 
-int	there_is_a_plus(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] && str[i] != '=')
-	{
-		if (str[i] == '+')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-void	update_plus(char **str)
-{
-	char	*tmp;
-
-	tmp = *str;
-	*str = remove_plus(*str);
-	free(tmp);
-}
-
 void	export_core(t_program *shell, int value, int i, char *str)
 {
 	char	*err;
@@ -150,7 +124,7 @@ void	export_core(t_program *shell, int value, int i, char *str)
 	value = is_there_in_env(shell, i, str, &shell->flag);
 	if (value == -3)
 		return (free(str));
-	if (value == -2)
+	else if (value == -2)
 	{
 		err = ft_substr(str, 0, i);
 		ft_putstr_fd("shell: export: `", 2);
@@ -159,7 +133,7 @@ void	export_core(t_program *shell, int value, int i, char *str)
 		shell->exit_code = 1;
 		free(err);
 	}
-	if (value >= 0)
+	else if (value >= 0)
 		change_export_value(shell, i, value, str);
 	else
 	{

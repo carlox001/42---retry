@@ -26,6 +26,7 @@ SRC = other_utils/close.c \
 	commands/exec.c \
 	commands/exec_utils.c \
 	commands/exec_utils_2.c \
+	commands/exec_utils_3.c \
 	commands/get_path_commands.c \
 	commands/builtin_commands/export/ft_export.c \
 	commands/builtin_commands/export/ft_export_utils_1.c \
@@ -49,8 +50,12 @@ SRC = other_utils/close.c \
 	redirections/expansion_in_hd.c \
 	other_utils/signals.c \
 	main_utils.c \
+	main_utils_2.c \
+	main_utils_3.c \
+	main_utils_4.c \
 	redirections/manage_in_out.c \
 	redirections/manage_input.c \
+	redirections/manage_input_utils.c \
 	redirections/manage_output.c \
 	parsing/parsing_checks.c \
 	parsing/parsing_checks_utils.c \
@@ -65,6 +70,7 @@ $(UTILS):
 
 $(NAME): $(PRINTF) $(UTILS)
 	$(CC) $(CFLAGS) $(SRC) $(UTILS) -lreadline -o $(NAME)
+	@echo samugay
 
 clean:
 	rm -f

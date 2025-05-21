@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:45:00 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/16 10:57:11 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 12:56:32 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,11 @@ int	parsing(char *str, t_program *shell)
 		shell->exit_code = 2;
 		return (0);
 	}
-	// print_matrix(shell->mtx_line);
 	return (1);
 }
 
 void	parsing_core_expansion(t_program *shell, int *k)
 {
-	char	*tmp;
-
 	while (shell->mtx_line[*k])
 	{
 		if (shell->mtx_line[*k][0] == '\0' && shell->mtx_line[*k + 1] != NULL)
@@ -61,11 +58,7 @@ void	parsing_core_expansion(t_program *shell, int *k)
 		if (shell->mtx_line[*k] == NULL)
 			break ;
 		if (check_dollar(shell->mtx_line[*k]) == 1)
-		{
-			tmp = shell->mtx_line[*k];
-			shell->mtx_line[*k] = expansion_variable2(tmp, shell);
-			free(tmp);
-		}
+			if_dollar(shell, k);
 	}
 }
 

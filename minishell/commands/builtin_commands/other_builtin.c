@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 21:17:19 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/16 18:12:04 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 12:31:02 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	ft_exit(t_program *shell, char ***mtx_hub)
 {
 	int	value;
 
+	value = 0;
 	printf("exit\n");
 	if (shell->mtx_line[1] == NULL)
 	{
@@ -60,7 +61,7 @@ void	ft_exit(t_program *shell, char ***mtx_hub)
 		close(shell->output);
 		free_all(shell, 0);
 		free_matrix_pointer(mtx_hub);
-		exit(0);
+		correct_exit(0);
 	}
 	else
 		value = exit_core(shell, mtx_hub);
@@ -91,7 +92,7 @@ int	exit_core(t_program *shell, char ***mtx_hub)
 	free(tmp);
 	free_matrix_pointer(mtx_hub);
 	free_all(shell, 0);
-	exit(i);
+	correct_exit(i);
 	return (0);
 }
 

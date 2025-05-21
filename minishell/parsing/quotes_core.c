@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_core.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:04:58 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/09 11:36:04 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:56:20 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ int	double_quote(char *str, t_program *shell, int *flag)
 		shell->i++;
 		while (str[shell->i] && str[shell->i] != '\"')
 			shell->i++;
-		shell->i++;
-		if (str[shell->i] == ' ' || str[shell->i] == '\0')
+		if (str[shell->i] != '\0')
+			shell->i++;
+		if ((str[shell->i] == ' ' || str[shell->i] == '\0'))
 			*flag = 1;
 		else
 		{
@@ -50,7 +51,8 @@ int	single_quote(char *str, t_program *shell, int *flag)
 		shell->i++;
 		while (str[shell->i] && str[shell->i] != '\'')
 			shell->i++;
-		shell->i++;
+		if (str[shell->i] != '\0')
+			shell->i++;
 		if (str[shell->i] == ' ' || str[shell->i] == '\0')
 			*flag = 1;
 		else

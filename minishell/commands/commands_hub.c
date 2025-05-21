@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/16 19:00:06 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:38:09 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int	exec_non_builtin(t_program *shell, int index, char ***mtx_hub)
 {
 	char	**full_cmd;
 
-	shell->path = path_find(shell->env, shell->mtx_line[index], shell);
+	shell->path = NULL;
+	shell->path = path_find(shell->env, shell->mtx_line[index]);
 	if (shell->path == NULL && shell->mtx_line[0][0] != '.')
 	{
 		shell->i = matrix_len(shell->mtx_line);
@@ -65,9 +66,12 @@ int	exec_non_builtin(t_program *shell, int index, char ***mtx_hub)
 		free(shell->path);
 		shell->path = ft_strdup(shell->mtx_line[0]);
 	}
-	print_matrix(full_cmd);
 	if (execve(shell->path, full_cmd, shell->env) == -1)
 	{
+		if (shell->path)
+			free(shell->path);
+		else
+			shell->path = NULL;
 		shell->flag_cmd_not_found = 1;
 		failed_execve(full_cmd, shell, mtx_hub);
 	}
@@ -82,26 +86,27 @@ void	failed_execve(char **full_cmd, t_program *shell, char ***mtx_hub)
 	if (fd > 0)
 	{
 		printf("shell: %s: is a directory\n", full_cmd[0]);
-		clear_non_builtin(shell, mtx_hub, &shell->path, &full_cmd);
+		clear_non_builtin(shell, mtx_hub, &full_cmd);
 		close(fd);
-		exit(126);
+		correct_exit(126);
 	}
 	else
 	{
 		ft_putstr_fd("shell: ", 2);
-		ft_putstr_fd(shell->mtx_line[0], 2);
-		ft_putstr_fd(": no such file or directory\n", 2);
-		clear_non_builtin(shell, mtx_hub, &shell->path, &full_cmd);
-		exit(127);
+		ft_putstr_fd("no such file or directory\n", 2);
+		clear_non_builtin(shell, mtx_hub, &full_cmd);
+		correct_exit(127);
 	}
 }
 
 void	clear_non_builtin(t_program *shell, char ***mtx_hub, \
-char **path, char ***full_cmd)
+char ***full_cmd)
 {
-	free(*path);
-	free_matrix(*full_cmd);
+	if (*full_cmd[0][0] == '.')
+		free_matrix(shell->mtx_line);
+	else
+		free(shell->mtx_line);
 	free_all(shell, 1);
 	free_matrix_pointer(mtx_hub);
-	free_matrix(shell->mtx_line);
+	free_matrix(*full_cmd);
 }

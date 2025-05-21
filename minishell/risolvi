@@ -42,9 +42,9 @@ termino il ciclo degli heredoc e non eseguo comandi)
 
 echo ciao > file (risolto)
 
-$"HOME" (risolto)
+$"HOME" (risolto) leakka;
 
-" ' $HOME ' " / $_ deve espandere (risolto)
+" ' $HOME ' " / $_ deve espandere (RISOLVERE)
 
 Cat ctrl c -> 130 (risolto)
 
@@ -58,7 +58,7 @@ Cat << hd ctrl c (completa il conando)
 
 Ctrl c >> a (130) (risolto)
 
-cat << a << b | cat << c << d ctrlc non deve stampare shell 
+cat << a << b | cat << c << d ctrlc non deve stampare shell (risolto)
 
 Echo / builtin con le pipe PKEEEEEEEEEÈ (risolto) 
 
@@ -80,14 +80,16 @@ Echo > a con a senza permessi (dà errori) (risolto)
 
 cd .qualcosa si bugga un pochino
 
-cat << a | cat <<b (scrive il primo al posto del secondo)
+cat << a | cat <<b (scrive il primo al posto del secondo) (risolvi)
 
 export VA"=''la' "y''olo (valido) (risolto)
 
-export | cmd (leak, SIGPIPE)
+export | cmd (leak, SIGPIPE) (non e' vero);
 
-export | < a grep a / cat non funziona (le pipe / redir non funzionano) (risolto)
+export | < a grep a / cat non funziona (le pipe / redir non funzionano) (risolto)(DOUBLE LEAK)
 
 $? -> 1? (risolto)
 
-echo test > $VAR (leak)
+echo test > $VAR (leak) (e seg fault) (risolto)
+
+cd 42/minishell (da root, non fnziona)

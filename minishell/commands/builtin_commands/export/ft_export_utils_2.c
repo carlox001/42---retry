@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:16:08 by cazerini          #+#    #+#             */
-/*   Updated: 2025/05/16 12:45:40 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:13:51 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	export_parsing(t_program *shell)
 		str = remove_couple_quotes(shell->mtx_line[shell->i + j]);
 		check = export_parsing_2(shell, str);
 		if (check == 1)
-			return (1);
+			return (free(str), 1);
 		if (check != 2 && export_parsing_quote(str) == 1)
 		{
 			print_export_error(str);
@@ -68,7 +68,7 @@ int	export_parsing_2(t_program *shell, char *str)
 	{
 		print_export_error(str);
 		shell->exit_code = 1;
-		return (2);
+		return (1);
 	}
 	while (str[shell->k] != '=' && str[shell->k])
 	{
@@ -78,7 +78,6 @@ int	export_parsing_2(t_program *shell, char *str)
 			str[shell->k] != '\'' && str[shell->k] != '"')
 		{
 			print_export_error(str);
-			free(str);
 			shell->exit_code = 1;
 			return (1);
 		}

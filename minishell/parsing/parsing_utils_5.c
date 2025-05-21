@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:04:25 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 18:54:08 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:30:10 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,40 @@ int	check_pipe(char **mtx)
 			i++;
 	}
 	return (0);
+}
+
+void	update_expv(int *i, int flag, char *old_str)
+{
+	if (old_str[*i] != '\0' && ((old_str[*i] != '$' || \
+		flag == 1) || (old_str[*i] == '$' && \
+		(old_str[*i + 1] != '\'' && old_str[*i + 1] != '\"'))))
+		(*i)++;
+}
+
+void	if_dollar(t_program *shell, int *k)
+{
+	char	*tmp;
+
+	shell->expansion_flag = 1;
+	tmp = shell->mtx_line[*k];
+	shell->mtx_line[*k] = expansion_variable2(tmp, shell);
+	free(tmp);
+}
+
+void	add_quote(char **new_str)
+{
+	char	*tmp;
+
+	if (*new_str[0] == '\"')
+	{
+		tmp = *new_str;
+		*new_str = ft_strjoin(*new_str, "\"");
+		free(tmp);
+	}
+	else if (*new_str[0] == '\'')
+	{
+		tmp = *new_str;
+		*new_str = ft_strjoin(*new_str, "\'");
+		free(tmp);
+	}
 }

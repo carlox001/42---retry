@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:46:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/27 12:38:13 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/21 12:44:43 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,30 @@ void	close_here_doc(t_program *shell)
 		i++;
 	}
 	shell->num_hd = 0;
+}
+
+int	else_here_doc(t_program *shell, int id)
+{
+	waitpid(id, &shell->num_hd, 0);
+	shell->num_hd /= 256;
+	if (shell->num_hd == 255)
+	{
+		shell->exit_code = 0;
+		return (-2);
+	}
+	if (g_signals == 2)
+	{
+		shell->exit_code = 130;
+		close_here_doc(shell);
+		return (-2);
+	}
+	return (0);
+}
+
+void	false_heredoc(t_program *shell, char *str)
+{
+	matrix_handler(str, shell);
+	open_here_doc(shell, shell->mtx_line);
+	close_here_doc(shell);
+	free_matrix(shell->mtx_line);
 }

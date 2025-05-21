@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:04:25 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/16 18:24:54 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:29:51 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	end_expansion2(t_program *shell, char *old_str, int *i, char **new_str)
 	while (old_str[*i + len] && old_str[*i + len] != '\"' && \
 		old_str[*i + len] != '\'' && old_str[*i + len] != '$' && \
 		old_str[*i + len] != '\"' && old_str[*i + len] != '_' && \
+		old_str[*i + len] != ' ' && \
 		ft_isprint(old_str[*i + len]) == 1)
 		len++;
 	shell->sub_str = ft_substr(old_str, *i, len);
@@ -35,6 +36,9 @@ void	end_expansion2(t_program *shell, char *old_str, int *i, char **new_str)
 	if (old_str[*i] != '\0' && (old_str[*i + 1] == '\0' || \
 		old_str[*i + 1] == '\'' || old_str[*i + 1] == '\"'))
 		(*i)++;
+	if (old_str[*i] != '\0' && old_str[*i + 1] != '$' && \
+		old_str[*i + 1] != ' ' && len != 0)
+		(*i)++;
 }
 
 int	first_expansion2_check(char *old_str, int *i)
@@ -48,11 +52,19 @@ int	first_expansion2_check(char *old_str, int *i)
 	return (0);
 }
 
+void	else_expansion_variable2_core(char **new_str, char *tmp)
+{
+	char	*tmp2;
+
+	tmp2 = *new_str;
+	*new_str = ft_strjoin(*new_str, tmp);
+	free(tmp2);
+}
+
 int	expansion_variable2_core(t_program *shell, int *i, \
 char *old_str, char **new_str)
 {
 	char	*tmp;
-	char	*tmp2;
 
 	if (first_expansion2_check(old_str, i) == 1)
 		return (1);
@@ -64,11 +76,7 @@ char *old_str, char **new_str)
 		if (*new_str == NULL)
 			*new_str = ft_strdup(tmp);
 		else
-		{
-			tmp2 = *new_str;
-			*new_str = ft_strjoin(*new_str, tmp);
-			free(tmp2);
-		}
+			else_expansion_variable2_core(new_str, tmp);
 		free(tmp);
 		if (old_str[*i] != '\0' && (old_str[*i + 1] == '\0' || \
 			old_str[*i + 1] == '\'' || old_str[*i + 1] == '\"'))
@@ -101,12 +109,9 @@ char	*expansion_variable2(char *old_str, t_program *shell)
 			if (expansion_variable2_core(shell, &i, old_str, &new_str) == 1)
 				return (ft_strdup("\" \""));
 		}
-		expansion_variable2_else(&i, old_str, &new_str);
-		if (old_str[i] != '\0' && ((old_str[i] != '$' || flag == 1) || \
-			(old_str[i] == '$' && (old_str[i + 1] != '\'' && old_str[i + 1] != '\"'))))
-			i++;
+		else
+			expansion_variable2_else(&i, old_str, &new_str);
+		update_expv(&i, flag, old_str);
 	}
-	if (new_str[0] == '\0')
-		return (free(new_str), NULL);
 	return (new_str);
 }

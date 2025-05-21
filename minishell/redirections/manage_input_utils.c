@@ -1,38 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fork_2.c                                           :+:      :+:    :+:   */
+/*   manage_input_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/19 21:48:35 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 12:46:27 by cazerini         ###   ########.fr       */
+/*   Created: 2025/04/23 14:33:45 by sfiorini          #+#    #+#             */
+/*   Updated: 2025/05/21 12:29:24 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../minishell.h"
 
-void	print_error_cringe(char *str)
+void	redir_input_clear(t_program *shell, char ***tmp, char ****mtx_hub)
 {
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd(": command not found\n", 2);
-}
-
-void	close_child(int flag, t_program *shell, char ****mtx_hub)
-{
-	free_matrix_pointer(*mtx_hub);
-	if (flag == 1)
-		free_all(shell, 1);
+	close_in_out(shell->in, shell->num_fd - 1, 1);
+	close_in_out(shell->fd, 2, 0);
 	close(shell->input);
 	close(shell->output);
-	if (shell->num_cmd != 1 && flag == 1)
-		correct_exit(shell->exit_code);
-	correct_exit(127);
-}
-
-void	correct_exit(int code)
-{
-	close(1);
-	close(0);
-	exit(code);
+	free_matrix(*tmp);
+	free_all(shell, 1);
+	free_matrix_pointer(*mtx_hub);
+	correct_exit(1);
 }

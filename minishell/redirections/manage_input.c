@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_input.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 14:33:45 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/16 19:20:40 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/19 14:12:09 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,7 @@ int	redir_input(t_program *shell, int i, char ***mtx_hub, int flag)
 	{
 		tmp = realloc_without_redir(mtx_hub[i], shell->num_fd, '<');
 		if (tmp[0] == NULL)
-		{
-			close_in_out(shell->in, shell->num_fd - 1, 1);
-			close_in_out(shell->fd, 2, 0);
-			free_matrix(tmp);
-			free_all(shell, 1);
-			return (free_matrix_pointer(mtx_hub), exit(1), 1);
-		}
+			redir_input_clear(shell, &tmp, &mtx_hub);
 		free_matrix(mtx_hub[i]);
 		mtx_hub[i] = matrix_dup(tmp);
 		free_matrix(tmp);

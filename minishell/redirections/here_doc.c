@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:41:20 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/16 19:19:17 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 12:31:27 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,8 @@ int	open_here_doc(t_program *shell, char **mtx)
 	}
 	else
 	{
-		waitpid(id, &shell->num_hd, 0);
-		shell->num_hd /= 256;
-		if (shell->num_hd == 255)
-		{
-			shell->exit_code = 0;
+		if (else_here_doc(shell, id) == -2)
 			return (-2);
-		}
-		if (g_signals == 2)
-		{
-			shell->exit_code = 130;
-			close_here_doc(shell);
-			return (-2);
-		}
 	}
 	return (shell->num_hd);
 }
@@ -72,12 +61,8 @@ int	open_here_doc_while(int *i, t_program *shell, char **mtx)
 		(*i)++;
 	}
 	free_all(shell, 0);
-	// if (shell->num_hd > 0 && shell->check_hd == shell->num_hd)
-	// {
-	// 	close_here_doc(shell);
-	// 	exit(-1);
-	// }
-	exit(shell->num_hd);
+	correct_exit(shell->num_hd);
+	return (0);
 }
 
 int	open_here_doc_core(int *i, char **file, int *num_hd)
@@ -106,7 +91,6 @@ void	write_in_file(int fd, char *limiter, t_program *shell)
 	set_hd_g_signals(1);
 	while (1)
 	{
-		rl_clear_history();
 		str = readline("> ");
 		if (write_in_file_check(&str, &flag, limiter, shell) == 1)
 			break ;
@@ -142,7 +126,6 @@ by end-of-file (wanted `", 2);
 	}
 	if (g_signals == SIGINT)
 	{
-		g_signals = 0;
 		*flag = 1;
 		free(*str);
 		return (1);

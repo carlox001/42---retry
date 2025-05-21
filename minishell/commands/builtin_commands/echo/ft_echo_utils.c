@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:16:28 by cazerini          #+#    #+#             */
-/*   Updated: 2025/05/12 18:19:30 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:45:37 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	check_nflag(char **mtx, t_program *shell)
 	char	*str;
 
 	shell->nflag = 0;
+	str = NULL;
 	while (mtx[shell->i + 1])
 	{
 		str = remove_couple_quotes(mtx[shell->i + 1]);
@@ -93,14 +94,14 @@ void	check_nflag(char **mtx, t_program *shell)
 			while (str[i] && str[i] == 'n')
 				i++;
 			if (str[i] != 'n' && str[i] != '\0')
-				return ;
+				return (free(str));
 			shell->i++;
 			shell->nflag = 1;
 		}
 		else
 			return (free(str));
+		free(str);
 	}
-	free(str);
 }
 
 // 1: trova dollar

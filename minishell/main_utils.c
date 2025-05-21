@@ -3,14 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:43:40 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/14 10:10:59 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:34:38 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	update_shlvl(t_program *shell)
+{
+	int		i;
+	int		value;
+	char	*tmp;
+
+	i = 0;
+	value = ft_atoi(getenv("SHLVL"));
+	while (shell->env[i])
+	{
+		if (ft_strncmp(shell->env[i], "SHLVL=", 6) == 0)
+		{
+			free(shell->env[i]);
+			value++;
+			tmp = ft_itoa(value);
+			shell->env[i] = ft_strjoin("SHLVL=", tmp);
+			free(tmp);
+		}
+		i++;
+	}
+}
 
 // restituisce il percorso della directory corrente
 char	*print_directory(t_program *shell)
@@ -51,6 +73,7 @@ int	initialize(t_program *shell)
 	shell->exit_code = 0;
 	shell->flag_quotes = 0;
 	shell->flag_cmd_not_found = 0;
+	shell->expansion_flag = 0;
 	g_signals = 0;
 	str = getcwd(NULL, 1000);
 	shell->pwd = ft_strdup(str);
@@ -89,4 +112,6 @@ void	free_all(t_program *shell, int flag)
 		free(shell->curr_dir);
 	if (shell->old_pwd != NULL)
 		free(shell->old_pwd);
+	close(0);
+	close(1);
 }

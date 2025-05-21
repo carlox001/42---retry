@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_output.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 15:30:36 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/16 19:18:29 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/17 14:17:22 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ int	open_files_out(char **mtx, t_program *shell)
 	{
 		if (mtx[i][0] == '>' && mtx[i][1] == '>')
 		{
-			if (double_redirection(&i, &j, mtx, shell->out) == -1)
+			if (double_redirection(&i, &j, mtx, shell) == -1)
 				return (-1);
 		}
 		else if (mtx[i][0] == '>')
 		{
-			if (single_redirection(&i, &j, mtx, shell->out) == -1)
+			if (single_redirection(&i, &j, mtx, shell) == -1)
 				return (-1);
 		}
 		i++;
@@ -66,19 +66,20 @@ int	open_files_out(char **mtx, t_program *shell)
 	return (j);
 }
 
-int	single_redirection(int *i, int *j, char **mtx, int *shell_out)
+int	single_redirection(int *i, int *j, char **mtx, t_program *shell)
 {
 	char	*tmp;
 
 	(*i)++;
 	tmp = remove_couple_quotes(mtx[*i]);
-	shell_out[*j] = open(tmp, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (shell_out[*j] == -1)
+	shell->out[*j] = open(tmp, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (shell->out[*j] == -1)
 	{
 		ft_putstr_fd("shell: ", 2);
 		ft_putstr_fd(tmp, 2);
 		ft_putstr_fd(": error\n", 2);
-		free(shell_out);
+		shell->exit_code = 1;
+		free(shell->out);
 		free(tmp);
 		return (-1);
 	}
@@ -87,16 +88,17 @@ int	single_redirection(int *i, int *j, char **mtx, int *shell_out)
 	return (0);
 }
 
-int	double_redirection(int *i, int *j, char **mtx, int *shell_out)
+int	double_redirection(int *i, int *j, char **mtx, t_program *shell)
 {
 	(*i)++;
-	shell_out[*j] = open(mtx[*i], O_WRONLY | O_CREAT | O_APPEND, 0777);
-	if (shell_out[*j] == -1)
+	shell->out[*j] = open(mtx[*i], O_WRONLY | O_CREAT | O_APPEND, 0777);
+	if (shell->out[*j] == -1)
 	{
 		ft_putstr_fd("shell: ", 2);
 		ft_putstr_fd(mtx[*i], 2);
 		ft_putstr_fd(": error\n", 2);
-		free(shell_out);
+		shell->exit_code = 1;
+		free(shell->out);
 		return (-1);
 	}
 	(*j)++;

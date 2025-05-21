@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:23:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/16 12:41:25 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:28:15 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_program
 	int				i;
 	int				j;
 	int				k;
+	int				*z;
 	int				i_p;
 	int				check;
 	int				check_hd;
@@ -77,6 +78,7 @@ typedef struct s_program
 	int				flag_in_operator;
 	int				flag_cmd_not_found;
 	int				flag_quotes;
+	int				expansion_flag;
 }	t_program;
 
 //	commands
@@ -125,6 +127,7 @@ char	*remove_couple_quotes(char *old_str);
 void	update_counter_and_i(int *i, int *counter);
 int		only_quotes(char *str, int *flag);
 void	alloc_only_quote(char **sub_str, int flag);
+void	echo_if(t_program *shell, char **str2, int *i, int len);
 		//	ft_echo.c
 void	ft_echo(t_program *shell);
 void	ft_echo_core(t_program *shell, char *str2, int *i, int len);
@@ -144,6 +147,8 @@ int		export_parsing_quote(char *str);
 		//	ft_export_utils_3.c
 char	**order_env(t_program *shell);
 void	print_export_error(char *str);
+int		there_is_a_plus(char *str);
+void	update_plus(char **str);
 		//	ft_export.c
 void	ft_export(t_program *shell);
 int		export_cicle(char *str);
@@ -179,13 +184,21 @@ void	father(t_program *shell, int j);
 void	failed_child(t_program *shell, char ***mtx_hub);
 		//	fork_2.c
 void	print_error_cringe(char *str);
+void	close_child(int flag, t_program *shell, char ****mtx_hub);
+void	correct_exit(int code);
 	//	commands_hub.c
 int		check_commands(char *cmd, t_program *shell, int k, char ***mtx_hub);
 int		check_builtin(char *cmd, t_program *shell, char ***mtx_hub);
 int		exec_non_builtin(t_program *shell, int index, char ***mtx_hub);
 void	failed_execve(char **full_cmd, t_program *shell, char ***mtx_hub);
 void	clear_non_builtin(t_program *shell, char ***mtx_hub, \
-char **path, char ***full_cmd);
+char ***full_cmd);
+	//	exec_utils_3.c
+int		ambiguous_redirect(t_program *shell);
+void	update_exit_status(t_program *shell);
+void	waiting(t_program *shell);
+void	else_father(t_program *shell, int *i, int *j, char ***mtx_hub);
+int		exec_more_commands(t_program *shell, int j, int i, char ***mtx_hub);
 	//	exec_utils_2.c
 void	increments(int *i, int *j);
 void	set_exec_signals(void);
@@ -204,7 +217,7 @@ int		exec_one_command(t_program *shell, int i, char ***mtx_hub);
 int		exec_more_commands(t_program *shell, int j, int i, char ***mtx_hub);
 	//	get_path_commands.c
 char	*getpath(char **envp);
-char	*path_find(char **envp, char *command, t_program *shell);
+char	*path_find(char **envp, char *command);
 char	**get_full_cmd(t_program *shell);
 void	path_clear(char *path, char *path_joined, int *i);
 int		is_builtin(char *cmd);
@@ -270,6 +283,9 @@ int		only_spaces(char *str);
 	//	parsing_utils_5.c
 void	check_flag(int *flag_s, int *flag_d, char c);
 int		check_pipe(char **mtx);
+void	update_expv(int *i, int flag, char *old_str);
+void	if_dollar(t_program *shell, int *k);
+void	add_quote(char **new_str);
 	//	parsing_utils.c
 char	*remove_internal_quotes(char *old_str);
 char	*remove_internal_quotes_core(char *old_str, int i, int *j);
@@ -295,6 +311,8 @@ void	search_env(char *env_str, t_program *shell, int fd);
 	//	here_doc_utils.c
 void	set_hd_g_signals(int flag);
 void	close_here_doc(t_program *shell);
+int		else_here_doc(t_program *shell, int id);
+void	false_heredoc(t_program *shell, char *str);
 
 	//	here_doc.c
 int		open_here_doc(t_program *shell, char **mtx);
@@ -307,6 +325,8 @@ char *limiter, t_program *shell);
 int		counter_in_out(char c, char **mtx);
 char	**realloc_without_redir(char **mtx, int k, char c);
 void	initialize_files_in(int *i, int *j, int *num_hd, int flag);
+	//	manage_input_utils.c
+void	redir_input_clear(t_program *shell, char ***tmp, char ****mtx_hub);
 	//	manage_input.c
 int		redir_input(t_program *shell, int i, char ***mtx_hub, int flag);
 int		open_files_in(char **mtx, t_program *shell);
@@ -316,17 +336,32 @@ int		open_file_in_fd(int *i, int *j, char **mtx, t_program *shell);
 	//	manage_output.c
 int		redir_output(t_program *shell, int k, int i, char ***mtx_hub);
 int		open_files_out(char **mtx, t_program *shell);
-int		single_redirection(int *i, int *j, char **mtx, int *shell_out);
-int		double_redirection(int *i, int *j, char **mtx, int *shell_out);
+int		single_redirection(int *i, int *j, char **mtx, t_program *shell);
+int		double_redirection(int *i, int *j, char **mtx, t_program *shell);
+//	main_utils_4.c
+void	realloc_expansion(t_program *shell);
+void	skip_quotes(char *str, int *i);
+int		need_to_correct_expansion(char *str);
+//	main_utils_3.c
+void	case_space(char *str, int *i, int *init);
+void	case_pipe(int *i, int *init, int *j, char **new_mtx);
+void	update_realloc_2(char *str, int *i, int *init);
+char	**alloc_expansion(char **new_mtx, char *str, int *j);
+void	update_realloc(int j, t_program *shell, char **new_mtx);
+//	main_utils_2.c
+void	set_signals_pipe(t_program *shell);
+int		readline_core(t_program *shell, char **str);
+int		only_redir(char **mtx);
+void	search_word(char *str, int *i);
 //	main_utils.c
+void	update_shlvl(t_program *shell);
 char	*print_directory(t_program *shell);
 int		initialize(t_program *shell);
 void	free_all(t_program *shell, int flag);
-
 //	main.c
+void	correct_here_doc(t_program *shell);
+int		flag_hd_decision(t_program *shell, int flag);
 int		main_core(t_program *shell);
 int		main_core_2(t_program *shell);
-int		readline_core(t_program *shell, char **str);
-int		only_redir(char **mtx);
 
 #endif

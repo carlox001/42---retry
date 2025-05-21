@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:45:59 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/12 18:26:30 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/21 18:29:13 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,14 @@ void	alloc_only_quote(char **sub_str, int flag)
 	else
 		*sub_str = ft_strdup("\"\"");
 	free(tmp);
+}
+
+void	echo_if(t_program *shell, char **str2, int *i, int len)
+{
+	char	*tmp;
+
+	tmp = *str2;
+	*str2 = remove_couple_quotes(*str2);
+	free(tmp);
+	ft_echo_core(shell, *str2, i, len);
 }
