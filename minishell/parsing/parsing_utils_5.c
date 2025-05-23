@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:04:25 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 18:30:10 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/23 11:55:51 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,6 @@ int	check_pipe(char **mtx)
 			i++;
 	}
 	return (0);
-}
-
-void	update_expv(int *i, int flag, char *old_str)
-{
-	if (old_str[*i] != '\0' && ((old_str[*i] != '$' || \
-		flag == 1) || (old_str[*i] == '$' && \
-		(old_str[*i + 1] != '\'' && old_str[*i + 1] != '\"'))))
-		(*i)++;
 }
 
 void	if_dollar(t_program *shell, int *k)

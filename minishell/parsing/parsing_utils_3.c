@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils_3.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:04:25 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/09 11:35:37 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/23 11:57:38 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ int	only_dollar(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] != '$')
+		if (str[i] != '$' && str[i] != ' ' && \
+			str[i] != '\'' && str[i] != '\"' && \
+			str[i] != '_')
 			return (0);
 		i++;
 	}

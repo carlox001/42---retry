@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils_4.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:04:25 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/14 17:48:28 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/23 11:54:09 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	expansion_variable2_else(int *i, char *old_str, char **new_str)
 		free(tmp);
 	}
 	free(chr);
+	(*i)++;
 }
 
 char	*ft_getenv(t_program *shell, char **sub_str)

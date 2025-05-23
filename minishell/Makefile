@@ -34,6 +34,7 @@ SRC = other_utils/close.c \
 	commands/builtin_commands/export/ft_export_utils_3.c \
 	commands/builtin_commands/unset/ft_unset.c \
 	commands/builtin_commands/unset/ft_unset_utils.c \
+	commands/builtin_commands/unset/ft_unset_utils_2.c \
 	commands/builtin_commands/echo/ft_echo.c \
 	commands/builtin_commands/echo/ft_echo_utils.c \
 	commands/builtin_commands/echo/ft_echo_utils_2.c \
@@ -70,7 +71,6 @@ $(UTILS):
 
 $(NAME): $(PRINTF) $(UTILS)
 	$(CC) $(CFLAGS) $(SRC) $(UTILS) -lreadline -o $(NAME)
-	@echo samugay
 
 clean:
 	rm -f

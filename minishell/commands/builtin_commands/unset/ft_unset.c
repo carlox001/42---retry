@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 14:12:01 by cazerini          #+#    #+#             */
-/*   Updated: 2025/05/02 02:01:13 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/23 15:36:34 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	ft_unset(t_program *shell)
 
 	arg = NULL;
 	if (shell->mtx_line[shell->i + 1] == NULL)
+		return ;
+	if (unset_parsing(shell) == 1)
 		return ;
 	l = 1;
 	while (shell->mtx_line[shell->i + l] != NULL)

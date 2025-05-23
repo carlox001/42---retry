@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:53:39 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 10:46:07 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:02:33 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ int	exec(t_program *shell)
 
 int	set_exec(t_program *shell, char ****mtx_hub)
 {
-	int	j;
+	int		j;
 
 	shell->output = dup(STDOUT_FILENO);
 	shell->input = dup(STDIN_FILENO);
-	shell->num_cmd = count_commands(shell->mtx_line, shell);
+	shell->num_cmd = count_commands(shell);
 	*mtx_hub = alloc_mtx(shell->num_cmd, shell);
 	free_matrix(shell->mtx_line);
 	j = shell->num_cmd - 1;

@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 21:17:19 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 12:31:02 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:00:16 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	is_there_an_equal(char *str)
 
 void	ft_exit(t_program *shell, char ***mtx_hub)
 {
-	int	value;
+	int		value;
 
 	value = 0;
 	printf("exit\n");

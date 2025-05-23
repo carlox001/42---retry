@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 13:52:42 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 11:32:53 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/23 15:36:38 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,21 +118,10 @@ void	print_export_env(t_program *shell, int i, int j)
 
 void	export_core(t_program *shell, int value, int i, char *str)
 {
-	char	*err;
-
 	shell->flag = 0;
 	value = is_there_in_env(shell, i, str, &shell->flag);
 	if (value == -3)
 		return (free(str));
-	else if (value == -2)
-	{
-		err = ft_substr(str, 0, i);
-		ft_putstr_fd("shell: export: `", 2);
-		ft_putstr_fd(err, 2);
-		ft_putstr_fd("': not a valid identifier\n", 2);
-		shell->exit_code = 1;
-		free(err);
-	}
 	else if (value >= 0)
 		change_export_value(shell, i, value, str);
 	else

@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:04:25 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 18:29:51 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:07:22 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,14 @@ void	end_expansion2(t_program *shell, char *old_str, int *i, char **new_str)
 	len = 0;
 	while (old_str[*i + len] && old_str[*i + len] != '\"' && \
 		old_str[*i + len] != '\'' && old_str[*i + len] != '$' && \
-		old_str[*i + len] != '\"' && old_str[*i + len] != '_' && \
-		old_str[*i + len] != ' ' && \
-		ft_isprint(old_str[*i + len]) == 1)
+		old_str[*i + len] != ' ')
 		len++;
 	shell->sub_str = ft_substr(old_str, *i, len);
 	shell->path_expansion = ft_getenv(shell, &shell->sub_str);
 	path_fuond(&shell->path_expansion, new_str);
 	free(shell->path_expansion);
 	free(shell->sub_str);
-	if (len == 0 && *i != 0 && ((old_str[*i + len] != '\"' && \
-		old_str[*i + len] != '\'') && old_str[*i - 1] != '$'))
-		(*i)--;
-	else if ((*i != 0 && old_str[*i - 1] != '$') || len != 0)
-		(*i) += len - 1;
-	if (old_str[*i] != '\0' && (old_str[*i + 1] == '\0' || \
-		old_str[*i + 1] == '\'' || old_str[*i + 1] == '\"'))
-		(*i)++;
-	if (old_str[*i] != '\0' && old_str[*i + 1] != '$' && \
-		old_str[*i + 1] != ' ' && len != 0)
-		(*i)++;
+	*i += len;
 }
 
 int	first_expansion2_check(char *old_str, int *i)
@@ -78,9 +66,7 @@ char *old_str, char **new_str)
 		else
 			else_expansion_variable2_core(new_str, tmp);
 		free(tmp);
-		if (old_str[*i] != '\0' && (old_str[*i + 1] == '\0' || \
-			old_str[*i + 1] == '\'' || old_str[*i + 1] == '\"'))
-			(*i)++;
+		(*i)++;
 	}
 	else
 		end_expansion2(shell, old_str, i, new_str);
@@ -104,14 +90,15 @@ char	*expansion_variable2(char *old_str, t_program *shell)
 	while (old_str[i])
 	{
 		check_flag(&flag, &flag_d, old_str[i]);
-		if (old_str[i] == '$' && old_str[i + 1] != '\0' && flag == 0)
+		if (old_str[i] == '$' && old_str[i + 1] != '\0' \
+			&& old_str[i + 1] != ' ' && old_str[i + 1] != '\'' \
+			&& flag == 0)
 		{
 			if (expansion_variable2_core(shell, &i, old_str, &new_str) == 1)
 				return (ft_strdup("\" \""));
 		}
 		else
 			expansion_variable2_else(&i, old_str, &new_str);
-		update_expv(&i, flag, old_str);
 	}
 	return (new_str);
 }

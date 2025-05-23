@@ -8,7 +8,7 @@ cat su heredoc;
 
 ls | pwd | cat | ciao
 
-
+"$"
 
 
 /*****************era il file che si stava modificando**********************/
@@ -91,5 +91,3 @@ export | < a grep a / cat non funziona (le pipe / redir non funzionano) (risolto
 $? -> 1? (risolto)
 
 echo test > $VAR (leak) (e seg fault) (risolto)
-
-cd 42/minishell (da root, non fnziona)

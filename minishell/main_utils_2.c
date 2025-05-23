@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:21:55 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 16:36:16 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/23 10:58:05 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int	readline_core(t_program *shell, char **str)
 	*str = readline(print_str);
 	free(print_str);
 	if (!(*str))
-		return (printf("exit\n"), free_all(shell, 0), 1);
+		return (printf("exit\n"), free_all(shell, 0), \
+		correct_exit(shell->exit_code), 1);
 	set_signals_pipe(shell);
 	if (*str[0] != '\0')
 		add_history((*str));

@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:23:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 18:28:15 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:02:43 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,11 @@ int		exist_in_env(char *str, t_program *shell);
 void	print_export_env(t_program *shell, int i, int j);
 void	export_core(t_program *shell, int value, int i, char *str);	
 	//	unset
+		//	ft_unset_utils_2.c
+void	print_unset_error(char *str);
+int		unset_parsing(t_program *shell);
+int		unset_parsing_2(t_program *shell, char *str);
+int		unset_parsing_quote(char *str);
 		//	ft_unset_utils.c
 char	*search_unset(t_program *shell, int l);
 void	arg_treatment(t_program *shell, char *arg, int k, int j);
@@ -203,12 +208,14 @@ int		exec_more_commands(t_program *shell, int j, int i, char ***mtx_hub);
 void	increments(int *i, int *j);
 void	set_exec_signals(void);
 void	update_counter_exec(int *j, int *i);
+void	free_matrix_pointer(char ***mtx_hub);
+char	**alloc_builtin_mtx(t_program *shell);
 	//	exec_utils.c
 char	***alloc_mtx(int num_commands, t_program *shell);
 int		alloc_mtx_core_while(t_program *shell, int *i, int *j, char ***mtx_hub);
 void	alloc_mtx_core(t_program *shell, char ***mtx_hub);
-void	free_matrix_pointer(char ***mtx_hub);
-int		count_commands(char **mtx, t_program *shell);
+int		count_commands(t_program *shell);
+int		check_flag_builtin(char **mtx, int i);
 	//	exec.c
 int		exec(t_program *shell);
 int		set_exec(t_program *shell, char ****mtx_hub);
@@ -283,7 +290,6 @@ int		only_spaces(char *str);
 	//	parsing_utils_5.c
 void	check_flag(int *flag_s, int *flag_d, char c);
 int		check_pipe(char **mtx);
-void	update_expv(int *i, int flag, char *old_str);
 void	if_dollar(t_program *shell, int *k);
 void	add_quote(char **new_str);
 	//	parsing_utils.c

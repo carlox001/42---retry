@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 13:55:44 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 11:32:38 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/23 13:43:59 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	is_there_in_env(t_program *shell, int len, char *str, int *flag)
 		return (-3);
 	if (str[0] == '+')
 		return (-3);
-	if (len >= 2 && str[len - 2] == '+')
+	if (len >= 2 && str[len - 1] == '+')
 	{
 		(*flag) = 1;
 		dup = remove_plus(str);
@@ -29,8 +29,6 @@ int	is_there_in_env(t_program *shell, int len, char *str, int *flag)
 	}
 	else
 		dup = ft_strdup(str);
-	if (len >= 2 && ft_isalnum(dup[len - 2]) != 1 && dup[len - 2] != '+')
-		return (free(dup), -2);
 	value = replace(shell, len, dup);
 	return (value);
 }
@@ -86,8 +84,11 @@ void	change_export_value(t_program *shell, int i, int value, char *str)
 	if (shell->flag == 1)
 	{
 		dup = ft_strdup(shell->env[value]);
+		if (is_there_an_equal(shell->env[value]) == 1)
+			dup2 = ft_substr(str, i + 1, ft_strlen(str) - i);
+		else
+			dup2 = ft_substr(str, i, ft_strlen(str) - i);
 		free(shell->env[value]);
-		dup2 = ft_substr(str, i, ft_strlen(str) - i);
 		shell->env[value] = ft_strjoin(dup, dup2);
 		free(str);
 		free(dup);

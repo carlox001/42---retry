@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 17:38:09 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:49:07 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_commands(char *cmd, t_program *shell, int k, char ***mtx_hub)
 {
-	int	check;
+	int		check;
 
 	if (k != -1)
 		close_in_out(shell->out, k, 1);
@@ -32,21 +32,24 @@ int	check_commands(char *cmd, t_program *shell, int k, char ***mtx_hub)
 
 int	check_builtin(char *cmd, t_program *shell, char ***mtx_hub)
 {
-	if (ft_strncmp(cmd, "echo", 4) == 0 && ft_strlen(cmd) == 4)
-		return (ft_echo(shell), 1);
-	else if (ft_strncmp(cmd, "pwd", 3) == 0 && ft_strlen(cmd) == 3)
-		return (ft_pwd(), 1);
-	else if (ft_strncmp(cmd, "env", 3) == 0 && ft_strlen(cmd) == 3)
-		return (ft_env(shell), 1);
-	else if (ft_strncmp(cmd, "cd", 2) == 0 && ft_strlen(cmd) == 2)
-		return (ft_cd(shell), 1);
-	else if (ft_strncmp(cmd, "export", 6) == 0 && ft_strlen(cmd) == 6)
-		return (ft_export(shell), 1);
-	else if (ft_strncmp(cmd, "unset", 5) == 0 && ft_strlen(cmd) == 5)
-		return (ft_unset(shell), 1);
-	else if (ft_strncmp(cmd, "exit", 4) == 0 && ft_strlen(cmd) == 4)
-		return (ft_exit(shell, mtx_hub), 1);
-	return (0);
+	char	*tmp;
+
+	tmp = remove_couple_quotes(cmd);
+	if (ft_strncmp(tmp, "echo", 4) == 0 && ft_strlen(tmp) == 4)
+		return (free(tmp), ft_echo(shell), 1);
+	else if (ft_strncmp(tmp, "pwd", 3) == 0 && ft_strlen(tmp) == 3)
+		return (free(tmp), ft_pwd(), 1);
+	else if (ft_strncmp(tmp, "env", 3) == 0 && ft_strlen(tmp) == 3)
+		return (free(tmp), ft_env(shell), 1);
+	else if (ft_strncmp(tmp, "cd", 2) == 0 && ft_strlen(tmp) == 2)
+		return (free(tmp), ft_cd(shell), 1);
+	else if (ft_strncmp(tmp, "export", 6) == 0 && ft_strlen(tmp) == 6)
+		return (free(tmp), ft_export(shell), 1);
+	else if (ft_strncmp(tmp, "unset", 5) == 0 && ft_strlen(tmp) == 5)
+		return (free(tmp), ft_unset(shell), 1);
+	else if (ft_strncmp(tmp, "exit", 4) == 0 && ft_strlen(tmp) == 4)
+		return (free(tmp), ft_exit(shell, mtx_hub), 1);
+	return (free(tmp), 0);
 }
 
 int	exec_non_builtin(t_program *shell, int index, char ***mtx_hub)
