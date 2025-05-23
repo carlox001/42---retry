@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 21:48:35 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 12:29:20 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:39:53 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,19 @@ void	redirect_in_out_child(t_program *shell, int pipe_cmd, char *path)
 	}
 	else
 	{
-		shell->tmp = shell->mtx_line[0];
-		shell->mtx_line[0] = remove_couple_quotes(shell->mtx_line[0]);
-		free(shell->tmp);
-		path = path_find(shell->env, shell->mtx_line[0]);
-		if (path == NULL && is_builtin(shell->mtx_line[0]) == 0 && \
-		shell->mtx_line[0][0] != '.')
-			print_error_cringe(shell->mtx_line[0]);
+		shell->tmp = remove_couple_quotes(shell->mtx_line[0]);
+		path = path_find(shell->env, shell->tmp);
+		if (path == NULL && is_builtin(shell->tmp) == 0 && \
+		shell->tmp[0] != '.')
+			print_error_cringe(shell->tmp);
 		else if (shell->num_fd >= 0)
 			dup2(shell->out[shell->num_fd], STDOUT_FILENO);
 		else
 			dup2(shell->output, STDOUT_FILENO);
-		if (path && shell->mtx_line[0][0] == '.')
+		if (path && shell->tmp[0] == '.')
 			free(path);
 		close_all_files(shell->fd, shell->output, shell->input);
+		free(shell->tmp);
 	}
 }
 
