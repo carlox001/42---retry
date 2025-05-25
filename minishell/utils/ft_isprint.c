@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:00:52 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/22 10:44:14 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:37:35 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,3 @@ int	ft_isprint(int i)
 		return (1);
 	return (0);
 }
-
-// int	main()
-// {
-// 	printf("%d", ft_isprint('1'));
-// 	return(0);
-// }

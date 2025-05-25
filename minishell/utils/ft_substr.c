@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 14:33:49 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/02/03 17:04:47 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:39:39 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,3 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	rts[nel] = '\0';
 	return (rts);
 }
-
-// int main()
-// {
-// 	char *a = "i just want this part #############";
-// 	printf("%s", ft_substr(a, 5, 10));
-// 	return(0);
-// }

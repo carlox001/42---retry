@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 09:23:18 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/02/03 17:04:47 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:39:21 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,3 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 	rts[i] = '\0';
 	return (rts);
 }
-
-// static char to_uppercase(unsigned int index, char c)
-// {
-// 	(void)index;
-//     if (c >= 'a' && c <= 'z')
-//         return c - 'a' + 'A';
-//     return c;
-// }
-
-// int main()
-// {
-// 	char *cac = "override this !";
-// 	printf("%s", ft_strmapi(cac, *to_uppercase));
-// 	return(0);
-// }

@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/23 18:40:23 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/25 16:49:41 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	check_builtin(char *cmd, t_program *shell, char ***mtx_hub)
 	if (ft_strncmp(tmp, "echo", 4) == 0 && ft_strlen(tmp) == 4)
 		return (free(tmp), ft_echo(shell), 1);
 	else if (ft_strncmp(tmp, "pwd", 3) == 0 && ft_strlen(tmp) == 3)
-		return (free(tmp), ft_pwd(), 1);
+		return (free(tmp), ft_pwd(shell), 1);
 	else if (ft_strncmp(tmp, "env", 3) == 0 && ft_strlen(tmp) == 3)
 		return (free(tmp), ft_env(shell), 1);
 	else if (ft_strncmp(tmp, "cd", 2) == 0 && ft_strlen(tmp) == 2)

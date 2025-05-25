@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 17:20:03 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/30 19:02:11 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:39:18 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,3 @@ size_t	ft_strlen(const char *str)
 		i++;
 	return (i);
 }
-
-// int	main()
-// {
-// 	char a[] = "cacato nel puzzo";
-// 	printf("%ld", ft_strlen(a));
-// 	return(0);
-// }

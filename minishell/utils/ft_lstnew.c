@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:07:01 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/02/03 17:04:47 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:38:01 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,3 @@ t_list	*ft_lstnew(void *content)
 	new->next = NULL;
 	return (new);
 }
-
-// int main()
-// {
-// 	t_list *lst;
-// 	lst = ft_lstnew("ciao");
-// 	printf("content: %s, next: %s\n", (char *)lst->content, (char *)lst->next);
-// }

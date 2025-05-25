@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 09:09:06 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/02/03 17:04:47 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:38:13 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,3 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	}
 	return (dest);
 }
-
-// int	main()
-// {
-// 	char c[20] = "salvea  tutti";
-// 	char d[] = "cacca pup";
-// 	ft_memcpy(c, d, 3);
-// 	printf("%s", c);
-// 	return(0);
-// }

@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:16:28 by cazerini          #+#    #+#             */
-/*   Updated: 2025/05/21 18:29:06 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/25 15:50:20 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	ft_echo_core(t_program *shell, char *str2, int *i, int len)
 {
 	if (str2[0] != '>')
 	{
+		str2 = remove_couple_quotes(str2);
 		if (str2)
 			ft_echo_core_2(str2, i, shell, len);
 	}

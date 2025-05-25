@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 10:10:35 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/02/03 17:04:47 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:38:21 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,3 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	}
 	return (dest);
 }
-
-// int main()
-// {
-// 	char d[] = "cacata";
-// 	//char f[] = "cacata";
-// 	ft_memmove(d, d+1, 1);
-// 	printf("%s\n", d);
-// 	printf("%s", (char*)memmove(d, d+1, 1));
-// 	return(0);
-// }

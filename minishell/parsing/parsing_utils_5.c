@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils_5.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 18:04:25 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/23 11:55:51 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/25 12:17:48 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,21 @@ void	add_quote(char **new_str)
 		tmp = *new_str;
 		*new_str = ft_strjoin(*new_str, "\'");
 		free(tmp);
+	}
+}
+
+void	quotes_skips(char *str, int *i)
+{
+	if (str[*i] == '\"')
+	{
+		(*i)++;
+		while (str[*i] && str[*i] != '\"')
+			(*i)++;
+	}
+	if (str[*i] == '\'')
+	{
+		(*i)++;
+		while (str[*i] && str[*i] != '\'')
+			(*i)++;
 	}
 }

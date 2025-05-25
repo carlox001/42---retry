@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 16:58:26 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/02/03 17:04:47 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:38:41 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,35 +25,3 @@ void	ft_putendl_fd(char *s, int fd)
 			write(fd, "\n", 1);
 	}
 }
-
-// int main(void)
-// {
-// 	// Apertura del file di test
-// 	int fd = open("output.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 	if (fd == -1)
-// 	{
-// 		perror("Errore nell'aprire il file");
-// 		return 1;
-// 	}
-
-// 	// Test con stringa vuota
-// 	ft_putendl_fd("", fd);
-// 	write(fd, "\n", 1);  // Separatore per leggibilità
-
-// 	// Test con stringa normale
-// 	ft_putendl_fd("Hello, World!", fd);
-// 	write(fd, "\n", 1);
-
-// 	// Test con stringa contenente caratteri speciali
-// 	ft_putendl_fd("Line with newline\nand tab\tcharacters.", fd);
-// 	write(fd, "\n", 1);
-
-// 	// Test con stringa lunga
-// 	ft_putendl_fd("This is a very long string to test how the.", fd);
-// 	write(fd, "\n", 1);
-
-// 	// Chiudere il file
-// 	close(fd);
-
-// 	return 0;
-// }

@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 21:48:35 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/23 18:39:53 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/25 16:56:16 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,7 @@ int	open_files_in_child(t_program *shell, int i, char ***mtx_hub)
 void	redirect_in_out_child(t_program *shell, int pipe_cmd, char *path)
 {
 	if (pipe_cmd > 0)
-	{
-		if (shell->num_fd >= 0)
-			dup2(shell->out[shell->num_fd], STDOUT_FILENO);
-		else
-			dup2(shell->fd[1], STDOUT_FILENO);
-		close_all_files(shell->fd, shell->output, shell->input);
-	}
+		if_redirect(shell, &path);
 	else
 	{
 		shell->tmp = remove_couple_quotes(shell->mtx_line[0]);

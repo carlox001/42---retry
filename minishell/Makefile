@@ -27,7 +27,9 @@ SRC = other_utils/close.c \
 	commands/exec_utils.c \
 	commands/exec_utils_2.c \
 	commands/exec_utils_3.c \
+	commands/exec_utils_4.c \
 	commands/get_path_commands.c \
+	commands/get_path_commands_utils.c \
 	commands/builtin_commands/export/ft_export.c \
 	commands/builtin_commands/export/ft_export_utils_1.c \
 	commands/builtin_commands/export/ft_export_utils_2.c \
@@ -48,12 +50,14 @@ SRC = other_utils/close.c \
 	globals/global.c \
 	redirections/here_doc.c \
 	redirections/here_doc_utils.c \
+	redirections/here_doc_utils_2.c \
 	redirections/expansion_in_hd.c \
 	other_utils/signals.c \
 	main_utils.c \
 	main_utils_2.c \
 	main_utils_3.c \
 	main_utils_4.c \
+	ft_atol.c \
 	redirections/manage_in_out.c \
 	redirections/manage_input.c \
 	redirections/manage_input_utils.c \

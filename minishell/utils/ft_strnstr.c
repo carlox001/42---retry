@@ -32,11 +32,3 @@ char	*ft_strnstr(const char *big, const char *little, size_t len)
 	}
 	return (NULL);
 }
-
-// int main()
-// {
-// 	char a[] = "lorem ipsum dolor sit amen";
-// 	char b[] = "ipsumm";
-// 	printf("%s", ft_strnstr(a, b, 30));
-// 	return(0);
-// }

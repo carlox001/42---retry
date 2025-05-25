@@ -1,41 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/22 15:53:33 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/24 10:39:07 by sfiorini         ###   ########.fr       */
+/*   Created: 2024/11/22 09:02:43 by sfiorini          #+#    #+#             */
+/*   Updated: 2025/05/24 11:16:29 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "minishell.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+long long	ft_atol(char *ptr)
 {
-	char	*rts;
-	size_t	mel;
-	size_t	nel;
+	int			sign;
+	long long	res;
 
-	if (s2 == NULL)
-		return (NULL);
-	rts = (char *)malloc((sizeof(char)) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!rts)
-		return (NULL);
-	mel = 0;
-	nel = 0;
-	while (s1[++mel] != '\0')
+	sign = 1;
+	res = 0;
+	while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || \
+	*ptr == '\v' || *ptr == '\f' || *ptr == '\r')
+		ptr++;
+	if (*ptr == '+' || *ptr == '-')
 	{
-		rts[mel] = s1[mel];
-		mel++;
+		if (*ptr == '-')
+			sign = -1;
+		ptr++;
 	}
-	while (s2[nel] != '\0')
+	while (*ptr >= 48 && *ptr <= 57)
 	{
-		rts[mel] = s2[nel];
-		mel++;
-		nel++;
+		res = res * 10 + (*ptr - '0');
+		ptr++;
 	}
-	rts[mel] = '\0';
-	return (rts);
+	return (res * sign);
 }

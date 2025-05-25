@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 22:13:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/23 18:07:05 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/25 12:12:39 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,24 +70,22 @@ void	alloc_mtx_core(t_program *shell, char ***mtx_hub)
 	mtx_hub[j] = NULL;
 }
 
-int	count_commands(t_program *shell)
+int	count_commands2(t_program *shell)
 {
 	int		i;
 	int		count;
 	char	**tmp;
+	int		flag;
 
+	flag = 0;
 	i = 0;
 	count = 1;
 	shell->flag_builtin = 0;
 	tmp = alloc_builtin_mtx(shell);
 	while (tmp[i])
 	{
-		if (tmp[i][0] == '<' || tmp[i][0] == '>')
-			i += 2;
-		if (tmp[i] != NULL && tmp[i][0] == '|')
-			count++;
-		if (tmp[i] != NULL && check_flag_builtin(tmp, i) == 1)
-			shell->flag_builtin++;
+		if (flag == 0)
+			flag_cmds(shell, &flag, i, tmp);
 		if (tmp[i] != NULL)
 			i++;
 	}
@@ -97,14 +95,13 @@ int	count_commands(t_program *shell)
 
 int	check_flag_builtin(char **mtx, int i)
 {
-	if ((i == 0 || mtx[i - 1][0] == '|') && \
-	((ft_strncmp(mtx[i], "echo", 4) == 0 && ft_strlen(mtx[i]) == 4) || \
+	if ((ft_strncmp(mtx[i], "echo", 4) == 0 && ft_strlen(mtx[i]) == 4) || \
 	(ft_strncmp(mtx[i], "pwd", 3) == 0 && ft_strlen(mtx[i]) == 3) || \
 	(ft_strncmp(mtx[i], "env", 3) == 0 && ft_strlen(mtx[i]) == 3) || \
 	(ft_strncmp(mtx[i], "cd", 2) == 0 && ft_strlen(mtx[i]) == 2) || \
 	(ft_strncmp(mtx[i], "export", 6) == 0 && ft_strlen(mtx[i]) == 6) || \
 	(ft_strncmp(mtx[i], "unset", 5) == 0 && ft_strlen(mtx[i]) == 5) || \
-	(ft_strncmp(mtx[i], "exit", 4) == 0 && ft_strlen(mtx[i]) == 4)))
+	(ft_strncmp(mtx[i], "exit", 4) == 0 && ft_strlen(mtx[i]) == 4))
 		return (1);
 	return (0);
 }

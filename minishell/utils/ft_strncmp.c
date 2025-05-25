@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:48:43 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/02/03 17:04:47 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:39:23 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,3 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 		return (0);
 	return (a[i] - b[i]);
 }
-
-// int	main()
-// {
-// 	char	a[] = "ciaov";
-// 	char	b[] = "cazozooaooada";
-// 	int n = 2;
-// 	printf("%d", ft_strncmp(a, b, n));
-// 	return (0);
-// } 

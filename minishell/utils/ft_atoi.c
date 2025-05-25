@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 09:02:43 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/02/03 17:04:47 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:36:55 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,3 @@ int	ft_atoi(const char *nptr)
 	}
 	return (number * minus);
 }
-
-// int main()
-// {
-// 	char *a = "+-2367";
-// 	char *b = "-+4";
-// 	char *c = "--276";
-// 	char *d = "+32";
-// 	printf("%d\n", ft_atoi(a));
-// 	printf("%d\n", ft_atoi(b));
-// 	printf("%d\n", ft_atoi(c));
-// 	printf("%d\n", ft_atoi(d));
-// 	return(0);
-// }

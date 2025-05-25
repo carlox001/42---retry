@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 18:45:00 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 12:56:32 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/25 13:36:51 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	parsing(char *str, t_program *shell)
 	if (check_pipe(shell->mtx_line) == 1)
 	{
 		free_matrix(shell->mtx_line);
-		ft_putstr_fd("syntax error\n", 2);
+		ft_putstr_fd("syntax error parsing\n", 2);
 		shell->exit_code = 2;
 		return (0);
 	}

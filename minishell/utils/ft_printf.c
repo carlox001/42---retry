@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 10:30:31 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/02/03 17:05:21 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:38:27 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,3 @@ int	ft_printf(const char *str, ...)
 	va_end(arglist);
 	return (return_value + (int)i - whitespaces);
 }
-
-// int main(void)
-// {
-// 	ft_printf("%c%c%i%%%%%%%%%%%%%c%%%c%c%%%\n", 'A', 'A', 42, 'A', 'A', 'A');
-// 	printf("%c%c%i%%%%%%%%%%%%%c%%%c%c%%%\n", 'A', 'A', 42, 'A', 'A', 'A');
-
-// 	return (0);
-// }

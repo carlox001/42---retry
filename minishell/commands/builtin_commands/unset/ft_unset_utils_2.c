@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset_utils_2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:11:30 by cazerini          #+#    #+#             */
-/*   Updated: 2025/05/23 18:06:51 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/24 11:37:47 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,29 +19,23 @@ void	print_unset_error(char *str)
 	ft_putstr_fd("': not a valid identifier\n", 2);
 }
 
-int	unset_parsing(t_program *shell)
+int	unset_parsing(t_program *shell, int j)
 {
 	char	*str;
-	int		j;
 	int		check;
 
-	j = 1;
-	while (shell->mtx_line[shell->i + j])
+	str = remove_couple_quotes(shell->mtx_line[shell->i + j]);
+	check = unset_parsing_2(shell, str);
+	if (check == 1)
+		return (free(str), 1);
+	if (unset_parsing_quote(str) == 1)
 	{
-		str = remove_couple_quotes(shell->mtx_line[shell->i + j]);
-		check = unset_parsing_2(shell, str);
-		if (check == 1)
-			return (free(str), 1);
-		if (unset_parsing_quote(str) == 1)
-		{
-			print_unset_error(str);
-			shell->exit_code = 1;
-			free(str);
-			return (1);
-		}
+		print_unset_error(str);
+		shell->exit_code = 1;
 		free(str);
-		j++;
+		return (1);
 	}
+	free(str);
 	return (0);
 }
 

@@ -6,33 +6,22 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 21:17:19 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/23 17:00:16 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/25 16:20:15 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	ft_env(t_program *shell)
+void	numeric_argument(t_program *shell, char ***mtx_hub)
 {
-	int	i;
-
-	if (shell->mtx_line[1] != NULL)
-	{
-		ft_putstr_fd("env: '", 2);
-		ft_putstr_fd(shell->mtx_line[1], 2);
-		ft_putstr_fd("': No such file or directory\n", 2);
-		shell->exit_code = 127;
-		shell->i = matrix_len(shell->mtx_line);
-		return (0);
-	}
-	i = 0;
-	while (shell->env[i])
-	{
-		if (is_there_an_equal(shell->env[i]) == 1)
-			printf("%s\n", shell->env[i]);
-		i++;
-	}
-	return (0);
+	ft_putstr_fd("shell: exit: ", 2);
+	ft_putstr_fd(shell->mtx_line[1], 2);
+	ft_putstr_fd(": numeric argument required\n", 2);
+	close(shell->input);
+	close(shell->output);
+	free_all(shell, 0);
+	free_matrix_pointer(mtx_hub);
+	exit(2);
 }
 
 int	is_there_an_equal(char *str)
@@ -51,9 +40,9 @@ int	is_there_an_equal(char *str)
 
 void	ft_exit(t_program *shell, char ***mtx_hub)
 {
-	int		value;
+	int							value;
+	unsigned long long			num;
 
-	value = 0;
 	printf("exit\n");
 	if (shell->mtx_line[1] == NULL)
 	{
@@ -63,6 +52,12 @@ void	ft_exit(t_program *shell, char ***mtx_hub)
 		free_matrix_pointer(mtx_hub);
 		correct_exit(0);
 	}
+	num = 0;
+	if (shell->mtx_line[1][0] != '-')
+		num = ft_atol(shell->mtx_line[1]);
+	value = 0;
+	if (num >= LONG_MAX)
+		numeric_argument(shell, mtx_hub);
 	else
 		value = exit_core(shell, mtx_hub);
 	if (value != 1)

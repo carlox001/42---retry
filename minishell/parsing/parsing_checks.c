@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:46:05 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/05 18:26:50 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/25 13:46:13 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	near_operators(char *str)
 	i = 0;
 	while (str[i])
 	{
+		quotes_skips(str, &i);
 		op = 0;
 		if (str[i] == '|' || str[i] == '<' || str[i] == '>')
 		{

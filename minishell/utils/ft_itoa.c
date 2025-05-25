@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 14:55:33 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/02/03 17:04:47 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:37:39 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,3 @@ char	*ft_itoa(int n)
 		rts[0] = '-';
 	return (rts);
 }
-
-// int main()
-// {
-// 	int n = 2147483647;
-// 	printf("%s", ft_itoa(n));
-// 	return(0);
-// }

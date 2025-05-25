@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 13:52:42 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/23 15:36:38 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/24 11:32:51 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,19 @@ void	ft_export(t_program *shell)
 
 	if (only_export(shell) == 1)
 		return ;
-	if (export_parsing(shell) == 1)
-		return ;
 	j = 1;
 	while (shell->mtx_line[shell->i + j])
 	{
-		i = 0;
-		dup = ft_strdup(shell->mtx_line[shell->i + j]);
-		str = remove_couple_quotes(dup);
-		free(dup);
-		value = 0;
-		i = export_cicle(str);
-		export_core(shell, value, i, str);
+		if (export_parsing(shell, j) != 1)
+		{
+			i = 0;
+			dup = ft_strdup(shell->mtx_line[shell->i + j]);
+			str = remove_couple_quotes(dup);
+			free(dup);
+			value = 0;
+			i = export_cicle(str);
+			export_core(shell, value, i, str);
+		}
 		j++;
 	}
 	shell->i += j;

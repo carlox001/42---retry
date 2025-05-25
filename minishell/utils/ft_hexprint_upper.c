@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:02:16 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/02/03 17:05:21 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:37:19 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,35 +54,3 @@ int	ft_hexprint_upper(unsigned int nb)
 	free(temp);
 	return (ft_hexlen(result));
 }
-
-// int main(void)
-// {
-// 	unsigned int test_values[] = {
-// 		0,              // Caso base: 0
-// 		1,              // Il numero più piccolo non-zero
-// 		15,             // Caso limite: 0xF (15 in decimale)
-// 		16,             // Caso limite: 0x10 (16 in decimale)
-// 		255,            // Caso limite: 0xFF (255 in decimale)
-// 		256,            // Caso limite: 0x100 (256 in decimale)
-// 		4294967295,     // Il numero massimo per un unsigned int (0xFFFFFFFF)
-// 		123456789,      // Un numero casuale grande
-// 		0xABCDEF,       // Caso con un numero esadecimale noto
-// 	};
-
-// 	int num_tests = sizeof(test_values) / sizeof(test_values[0]);
-
-// 	for (int i = 0; i < num_tests; i++)
-// 	{
-// 		unsigned int test_value = test_values[i];
-// 		printf("Test case %d (Value: %u): ", i + 1, test_value);
-
-// 		// Chiama la funzione e stampa il risultato
-// 		int len = ft_hexprint_upper(test_value);
-
-// 		// Stampa la lunghezza ritornata dalla funzione
-// 		// (la funzione dovrebbe restituire il numero di caratteri stampati)
-// 		printf("\nNumber of characters printed: %d\n\n", len);
-// 	}
-
-// 	return 0;
-// }

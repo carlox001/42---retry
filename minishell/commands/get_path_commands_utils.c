@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   get_path_commands_utils.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/03 11:42:34 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/24 10:37:49 by sfiorini         ###   ########.fr       */
+/*   Created: 2025/03/26 14:32:04 by sfiorini          #+#    #+#             */
+/*   Updated: 2025/05/24 13:10:13 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "../minishell.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void*))
+int	if_access(char *path, int flag)
 {
-	if (!lst || !del)
-		return ;
-	del(lst->content);
-	free(lst);
+	if (access(path, F_OK) == 0 && access(path, X_OK) == 0 && \
+		flag == 0)
+		return (1);
+	return (0);
 }

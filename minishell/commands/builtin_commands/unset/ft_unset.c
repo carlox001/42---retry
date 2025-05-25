@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 14:12:01 by cazerini          #+#    #+#             */
-/*   Updated: 2025/05/23 15:36:34 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/24 12:30:05 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,20 @@ void	ft_unset(t_program *shell)
 	arg = NULL;
 	if (shell->mtx_line[shell->i + 1] == NULL)
 		return ;
-	if (unset_parsing(shell) == 1)
-		return ;
 	l = 1;
 	while (shell->mtx_line[shell->i + l] != NULL)
 	{
-		k = 0;
-		j = 0;
-		if (check_dollar(shell->mtx_line[shell->i + l]) == 1)
-			arg = split_dollar(shell->mtx_line[shell->i + l], shell);
-		else
-			arg = search_unset(shell, l);
-		if (arg != NULL)
-			arg_treatment(shell, arg, k, j);
+		if (unset_parsing(shell, l) != 1)
+		{
+			k = 0;
+			j = 0;
+			if (check_dollar(shell->mtx_line[shell->i + l]) == 1)
+				arg = split_dollar(shell->mtx_line[shell->i + l], shell);
+			else
+				arg = search_unset(shell, l);
+			if (arg != NULL)
+				arg_treatment(shell, arg, k, j);
+		}
 		l++;
 	}
 	shell->i += l;

@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 17:59:08 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/02/03 17:05:21 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:40:05 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,36 +100,3 @@ char	*get_next_line_bonus(int fd)
 	statik[fd] = ft_roll_and_print(result);
 	return (result);
 }
-
-// int main ()
-// {
-// 	char	*line;
-// 	int		fd;
-// 	int		i = 1; 
-// 	int		fd2; 
-// 	int		j = 0;
-
-// 	fd = open("g.txt", O_RDONLY);
-// 	fd2 = open("n.txt", O_RDONLY);
-// 	line = get_next_line(fd);
-// 	while (1)
-// 	{
-// 		if (line == NULL)
-// 		{
-// 			printf("	[FINE]	");
-// 			break ;
-// 		}
-// 		printf("riga f1le  %d: %s\n", i, line);
-// 		free(line);
-// 		line = get_next_line(fd2);
-// 		printf("riga f2le%d: %s\n", j, line);
-// 		free(line);
-// 		line = get_next_line(fd);
-// 		i++;
-// 		j++;
-// 	}
-// 	free(line);
-// 	close(fd);
-// 	close(fd2);
-// 	return (0);
-// }

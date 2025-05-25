@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:46:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/21 12:44:43 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/24 15:15:59 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,23 @@ void	close_here_doc(t_program *shell)
 	int		i;
 	char	*num;
 	char	*file;
+	int		flag;
+	int		fd;
 
 	i = 0;
-	while (i < shell->num_hd)
+	flag = 0;
+	while (flag == 0)
 	{
 		num = ft_itoa(i);
 		file = ft_strjoin(".here_doc_", num);
-		unlink(file);
+		fd = open(file, O_RDONLY);
+		if (fd == -1)
+			flag = 1;
+		else
+		{
+			close(fd);
+			unlink(file);
+		}
 		free(file);
 		free(num);
 		i++;
@@ -69,4 +79,18 @@ void	false_heredoc(t_program *shell, char *str)
 	open_here_doc(shell, shell->mtx_line);
 	close_here_doc(shell);
 	free_matrix(shell->mtx_line);
+}
+
+int	is_there_a_single_quote(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			return (1);
+		i++;
+	}
+	return (0);
 }

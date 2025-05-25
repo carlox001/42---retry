@@ -6,7 +6,7 @@
 /*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 15:52:22 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/03/17 18:15:18 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/24 10:38:54 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,80 +104,3 @@ char	**ft_split(char *s, char c)
 		matrix[words_number] = NULL;
 	return (matrix);
 }
-
-// void print_split_result(char **result)
-// {
-//     if (!result)
-//     {
-//         printf("Null pointer\n");
-//         return;
-//     }
-
-//     int i = 0;
-//     while (result[i])
-//     {
-//         printf("Word %d: '%s'\n", i, result[i]);
-//         i++;
-//     }
-// }
-
-// int main()
-// {
-//     // Test case 1: Stringa normale con spazio come delimitatore
-//     char *s1 = "Hello World Test String";
-//     char **result1 = ft_split(s1, ' ');
-//     printf("Test case 1 (normal string with spaces):\n");
-//     print_split_result(result1);
-//     free(result1);
-
-//     // Test case 2: Stringa con più delimitatori consecutivi
-//     char *s2 = "Hello  World  Test";
-//     char **result2 = ft_split(s2, ' ');
-//     printf("\nTest case 2 (multiple spaces between words):\n");
-//     print_split_result(result2);
-//     free(result2);
-
-//     // Test case 3: Stringa senza delimitatori
-//     char *s3 = "HelloWorld";
-//     char **result3 = ft_split(s3, ' ');
-//     printf("\nTest case 3 (no spaces):\n");
-//     print_split_result(result3);
-//     free(result3);
-
-//     // Test case 4: Stringa vuota
-//     char *s4 = "";
-//     char **result4 = ft_split(s4, ' ');
-//     printf("\nTest case 4 (empty string):\n");
-//     print_split_result(result4);
-//     free(result4);
-
-//     // Test case 5: Stringa con solo delimitatori
-//     char *s5 = "   ";
-//     char **result5 = ft_split(s5, ' ');
-//     printf("\nTest case 5 (string with only spaces):\n");
-//     print_split_result(result5);
-//     free(result5);
-
-//     // Test case 6: Stringa con delimitatori all'inizio e alla fine
-//     char *s6 = "   Hello   World   ";
-//     char **result6 = ft_split(s6, ' ');
-//     printf("\nTest case 6 (spaces at the beginning and end):\n");
-//     print_split_result(result6);
-//     free(result6);
-
-//     // Test case 7: Delimitatore non presente nella stringa
-//     char *s7 = "Hello,World,Test";
-//     char **result7 = ft_split(s7, ',');
-//     printf("\nTest case 7 (using ',' as delimiter):\n");
-//     print_split_result(result7);
-// 	free(result7);
-
-//     //Test case 8: Delimitatore uguale a 0 (no split)
-//     char *s8 = "\0cazzo\0\0\0\0\0cioa\0\0\0\0";
-//     char **result8 = ft_split(s8, 0);
-//     printf("\nTest case 8 (delimiter = 0):\n");
-//     print_split_result(result8); // Should print null pointer or sim.
-//     free(result8);
-
-//     return 0;
-// }

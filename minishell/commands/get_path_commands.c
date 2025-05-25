@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path_commands.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 14:32:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/23 18:31:33 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/24 12:49:56 by sfiorini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*path_find(char **envp, char *command)
 		if (is_builtin(command) == 1)
 			flag = 1;
 		path = ft_strjoin(path_joined, command);
-		if (access(path, F_OK) == 0 && flag == 0)
+		if (if_access(path, flag) == 1)
 			return (free(path_joined), free_matrix(paths), path);
 		path_clear(path, path_joined, &i);
 	}
