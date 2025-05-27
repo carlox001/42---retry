@@ -47,6 +47,7 @@ SRC = other_utils/close.c \
 	commands/builtin_commands/cd/ft_cd_utils_4.c \
 	commands/non_builtin_commands/fork.c \
 	commands/non_builtin_commands/fork_2.c \
+	commands/non_builtin_commands/fork_3.c \
 	globals/global.c \
 	redirections/here_doc.c \
 	redirections/here_doc_utils.c \

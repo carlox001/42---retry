@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 21:48:35 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/25 17:05:55 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:51:46 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,26 +31,25 @@ void	close_child(int flag, t_program *shell, char ****mtx_hub)
 	close(shell->output);
 	fd = open(tmp, __O_DIRECTORY);
 	if (shell->num_cmd != 1 && flag == 1)
-		correct_exit(shell->exit_code);
-	if (fd >= 0)
 	{
-		ft_putstr_fd("shell: ", 2);
-		ft_putstr_fd(tmp, 2);
-		ft_putstr_fd(": is a directory\n", 2);
-		close(fd);
 		free(tmp);
-		correct_exit(126);
+		correct_exit(shell->exit_code);
 	}
+	if (fd >= 0)
+		if_close_child(tmp, fd);
 	else
 		else_close_child(tmp);
 }
 
 void	else_close_child(char *tmp)
 {
-	ft_putstr_fd("shell: ", 2);
-	ft_putstr_fd(tmp, 2);
+	if (tmp[0] == '/')
+	{
+		ft_putstr_fd("shell: ", 2);
+		ft_putstr_fd(tmp, 2);
+		ft_putstr_fd(": no such file or directory\n", 2);
+	}
 	free(tmp);
-	ft_putstr_fd(": no such file or directory\n", 2);
 	correct_exit(127);
 }
 

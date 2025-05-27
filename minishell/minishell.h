@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:23:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/25 17:06:14 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:58:09 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@
 
 typedef struct s_program
 {
-	// prgorgam
 	int				exit_code;
 	int				id_to_wait;
 	int				check_pipe_ex_co;
@@ -49,7 +48,7 @@ typedef struct s_program
 	char			*home_path;
 	char			*old_pwd;
 	char			*path;
-	// utils
+
 	int				i;
 	int				j;
 	int				k;
@@ -197,6 +196,8 @@ void		close_child(int flag, t_program *shell, char ****mtx_hub);
 void		else_close_child(char *tmp);
 void		correct_exit(int code);
 void		if_redirect(t_program *shell, char **path);
+		//	fork_3.c
+void		if_close_child(char *tmp, int fd);
 	//	commands_hub.c
 int			check_commands(char *cmd, t_program *shell, int k, char ***mtx_hub);
 int			check_builtin(char *cmd, t_program *shell, char ***mtx_hub);
