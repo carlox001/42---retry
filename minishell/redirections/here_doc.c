@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 18:41:20 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/25 15:33:46 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:49:11 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	open_here_doc_while(int *i, t_program *shell, char **mtx)
 			fd = open_here_doc_core(i, &file, &shell->num_hd, mtx);
 			if (fd == -1)
 				return (-1);
-			if (is_there_a_single_quote(mtx[*i]) == 1)
+			if (is_there_a_quote(mtx[*i]) == 1)
 				shell->expansion_hd_flag = 1;
 			else
 				shell->expansion_hd_flag = 0;

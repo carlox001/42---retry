@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 16:46:04 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/24 15:15:59 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:49:58 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,14 @@ void	false_heredoc(t_program *shell, char *str)
 	free_matrix(shell->mtx_line);
 }
 
-int	is_there_a_single_quote(char *str)
+int	is_there_a_quote(char *str)
 {
 	int	i;
 
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'')
+		if (str[i] == '\'' || str[i] == '\"')
 			return (1);
 		i++;
 	}

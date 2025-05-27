@@ -6,7 +6,7 @@
 /*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 17:23:11 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/05/27 14:58:09 by cazerini         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:51:39 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,7 +338,7 @@ void		set_hd_g_signals(int flag);
 void		close_here_doc(t_program *shell);
 int			else_here_doc(t_program *shell, int id);
 void		false_heredoc(t_program *shell, char *str);
-int			is_there_a_single_quote(char *str);
+int			is_there_a_quote(char *str);
 	//	here_doc.c
 int			open_here_doc(t_program *shell, char **mtx);
 int			open_here_doc_while(int *i, t_program *shell, char **mtx);
