@@ -3,11 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   global.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sfiorini <sfiorini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cazerini <cazerini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 19:05:40 by sfiorini          #+#    #+#             */
-/*   Updated: 2025/04/23 19:07:01 by sfiorini         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:23:41 by cazerini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef GLOBAL_H
+# define GLOBAL_H
+
 extern int	g_signals;
+
+#endif
