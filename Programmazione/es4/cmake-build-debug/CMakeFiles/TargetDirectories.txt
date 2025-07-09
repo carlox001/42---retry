@@ -1,0 +1,3 @@
+/home/cazerini/CLionProjects/es4/cmake-build-debug/CMakeFiles/es4.dir
+/home/cazerini/CLionProjects/es4/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/cazerini/CLionProjects/es4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
